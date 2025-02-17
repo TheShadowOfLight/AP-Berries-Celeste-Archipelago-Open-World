@@ -23,18 +23,6 @@ using Newtonsoft.Json.Linq;
 
 namespace Celeste.Mod.Celeste_Multiworld
 {
-    [JsonSourceGenerationOptions(WriteIndented = true)]
-    [JsonSerializable(typeof(ArchipelagoConnectionInfo))]
-    public partial class ArchipelagoConnectionInfoContext : JsonSerializerContext { }
-    public record ArchipelagoConnectionInfo
-    {
-        //public string Url { get; init; } = "wss://archipelago.gg:38281";
-        //public string SlotName { get; init; } = "Madeline";
-        public string Url { get; init; } = "localhost:38281";
-        public string SlotName { get; init; } = "Pory";
-        public string Password { get; init; } = "";
-        public bool SeeGhosts { get; init; } = false;
-    }
     public struct ArchipelagoMessage
     {
         public string Text { get; init; } = "";
@@ -53,7 +41,6 @@ namespace Celeste.Mod.Celeste_Multiworld
 
         private static readonly Version _supportedArchipelagoVersion = new(7, 7, 7);
 
-        private ArchipelagoConnectionInfo _connectionInfo;
         private ArchipelagoSession? _session;
         private DeathLinkService? _deathLinkService;
         private DateTime _lastDeath;
@@ -82,12 +69,6 @@ namespace Celeste.Mod.Celeste_Multiworld
         {
             game.Components.Add(this);
             Instance = this;
-
-            var result = TryConnect().Result;
-            if (result == null)
-            {
-                Logger.Info("AP", "Login Success");
-            }
         }
 
         public override void Update(GameTime gameTime)
@@ -100,10 +81,8 @@ namespace Celeste.Mod.Celeste_Multiworld
 
         public async Task<LoginFailure> TryConnect()
         {
-            _connectionInfo = new ArchipelagoConnectionInfo();
-
             _lastDeath = DateTime.MinValue;
-            _session = ArchipelagoSessionFactory.CreateSession(_connectionInfo.Url);
+            _session = ArchipelagoSessionFactory.CreateSession(Celeste_MultiworldModule.Settings.Address);
 
             // (Re-)initialize state.
             DeathLinkData = null;
@@ -127,16 +106,16 @@ namespace Celeste.Mod.Celeste_Multiworld
             catch (Exception ex)
             {
                 Disconnect();
-                return new($"Unable to establish an initial connection to the Archipelago server @ {_connectionInfo.Url}");
+                return new($"Unable to establish an initial connection to the Archipelago server @ {Celeste_MultiworldModule.Settings.Address}");
             }
 
             var result = await _session.LoginAsync(
                 "Celeste",
-                _connectionInfo.SlotName,
+                Celeste_MultiworldModule.Settings.SlotName,
                 ItemsHandlingFlags.AllItems,
                 _supportedArchipelagoVersion,
                 uuid: Guid.NewGuid().ToString(),
-                password: _connectionInfo.Password
+                password: Celeste_MultiworldModule.Settings.Password
             );
 
             if (!result.Successful)
@@ -370,7 +349,7 @@ namespace Celeste.Mod.Celeste_Multiworld
 
         private static void OnError(Exception exception, string message)
         {
-
+            Logger.Error("AP", message);
         }
 
         public void CheckReceivedItemQueue()
@@ -391,7 +370,7 @@ namespace Celeste.Mod.Celeste_Multiworld
                     Audio.Play(SFX.game_gen_secret_revealed);
                 }
 
-                Logger.Info("Log", $"Received {Items.APItemData.ItemIDToString[item.ItemId]} from {GetPlayerName(item.Player)}.");
+                Logger.Info("AP", $"Received {Items.APItemData.ItemIDToString[item.ItemId]} from {GetPlayerName(item.Player)}.");
                 MessageLog.Add(new ArchipelagoMessage($"Received {Items.APItemData.ItemIDToString[item.ItemId]} from {GetPlayerName(item.Player)}."));
 
                 switch (item.ItemId)
@@ -401,9 +380,9 @@ namespace Celeste.Mod.Celeste_Multiworld
                         Celeste_MultiworldModule.SaveData.Strawberries += 1;
                         break;
                     }
-                    case 0xCA1201:
+                    case long id when id >= 0xCA1200 && id <= 0xCA1220:
                     {
-                        Celeste_MultiworldModule.SaveData.Springs = true;
+                        Celeste_MultiworldModule.SaveData.Interactables[id] = true;
                         break;
                     }
                 }

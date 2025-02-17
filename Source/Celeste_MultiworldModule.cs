@@ -1,5 +1,7 @@
 ﻿using System;
+using Celeste.Mod.Celeste_Multiworld.Aesthetics;
 using Celeste.Mod.Celeste_Multiworld.Items;
+using Celeste.Mod.Celeste_Multiworld.UI;
 
 namespace Celeste.Mod.Celeste_Multiworld;
 
@@ -33,14 +35,20 @@ public class Celeste_MultiworldModule : EverestModule
         new ArchipelagoManager(Celeste.Instance);
 
         // TODO: apply any hooks that should always be active
-        spring = new modSpring();
-        spring.Load();
+        foreach (modItemBase item in APItemData.modItems)
+        {
+            item.Load();
+        }
+
+        modMainMenu menu = new modMainMenu();
+        menu.Load();
+
+        modAudio audio = new modAudio();
+        audio.Load();
     }
 
     public override void Unload()
     {
         // TODO: unapply any hooks applied in Load()
     }
-
-    modSpring spring;
 }

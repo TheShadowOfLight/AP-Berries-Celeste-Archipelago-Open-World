@@ -11,12 +11,14 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
         public static List<modItemBase> modItems { get; } = new List<modItemBase>()
         {
             new modSpring(),
+            new modTrafficBlock(),
         };
 
         public static Dictionary<long, string> ItemIDToString { get; set; } = new Dictionary<long, string>
         {
             { 0xCA1000, "Strawberry" },
             { 0xCA1200, "Springs" },
+            { 0xCA1201, "Traffic Blocks" },
         };
     }
 }

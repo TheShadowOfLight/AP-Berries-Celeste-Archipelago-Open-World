@@ -6,39 +6,39 @@ using System.Threading.Tasks;
 
 namespace Celeste.Mod.Celeste_Multiworld.Items
 {
-    public class modSpring : modItemBase
+    public class modTrafficBlock : modItemBase
     {
         public override void Load()
         {
-            On.Celeste.Spring.Render += modSpring_Render;
-            On.Celeste.Spring.OnCollide += modSpring_OnCollide;
+            On.Celeste.ZipMover.Render += modZipMover_Render;
+            On.Celeste.ZipMover.Update += modZipMover_Update;
         }
 
         public override void Unload()
         {
-            On.Celeste.Spring.Render -= modSpring_Render;
-            On.Celeste.Spring.OnCollide -= modSpring_OnCollide;
+            On.Celeste.ZipMover.Render -= modZipMover_Render;
+            On.Celeste.ZipMover.Update -= modZipMover_Update;
         }
 
         public override bool HaveReceived()
         {
             bool haveReceived = false;
-            Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA1200, out haveReceived);
+            Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA1201, out haveReceived);
             return haveReceived;
         }
 
-        private void modSpring_Render(On.Celeste.Spring.orig_Render orig, Spring self)
+        private void modZipMover_Render(On.Celeste.ZipMover.orig_Render orig, ZipMover self)
         {
             orig(self);
 
-            HandleSprite(self.sprite);
+            self.Visible = HaveReceived();
         }
 
-        private void modSpring_OnCollide(On.Celeste.Spring.orig_OnCollide orig, Spring self, Player player)
+        private void modZipMover_Update(On.Celeste.ZipMover.orig_Update orig, ZipMover self)
         {
             if (HaveReceived())
             {
-                orig(self, player);
+                orig(self);
             }
             else
             {
