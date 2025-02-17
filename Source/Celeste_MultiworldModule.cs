@@ -43,6 +43,9 @@ public class Celeste_MultiworldModule : EverestModule
         modMainMenu menu = new modMainMenu();
         menu.Load();
 
+        modChapterMenu chapterPanel = new modChapterMenu();
+        chapterPanel.Load();
+
         modAudio audio = new modAudio();
         audio.Load();
     }

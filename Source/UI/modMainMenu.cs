@@ -25,7 +25,7 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
         private void modMainMenuClimb_Render(On.Celeste.MainMenuClimb.orig_Render orig, MainMenuClimb self)
         {
             orig(self);
-            self.label = "Connection Menu";
+            self.label = "Connect";
         }
 
         private void modMainMenuClimb_Confirm(On.Celeste.MainMenuClimb.orig_Confirm orig, MainMenuClimb self)
