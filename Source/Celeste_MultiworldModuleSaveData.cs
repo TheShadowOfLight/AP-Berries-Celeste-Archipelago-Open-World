@@ -12,10 +12,9 @@ public class Celeste_MultiworldModuleSaveData : EverestModuleSaveData
     public int Strawberries { get; set; } = 0;
 
     public Dictionary<long, bool> Interactables { get; set; } = new Dictionary<long, bool>();
+    #endregion
 
-    public bool Springs { get; set; } = false;
-    public bool TrafficBlocks { get; set; } = false;
-    public bool DreamBlocks { get; set; } = false;
-    public bool MovingPlatforms { get; set; } = false;
+    #region AP Locations
+    public HashSet<string> CheckpointLocations { get; set; } = new HashSet<string>();
     #endregion
 }

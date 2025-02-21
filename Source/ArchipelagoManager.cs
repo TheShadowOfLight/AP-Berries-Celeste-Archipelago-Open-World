@@ -76,6 +76,8 @@ namespace Celeste.Mod.Celeste_Multiworld
             if (Ready)
             {
                 CheckReceivedItemQueue();
+                CheckLocationsToSend();
+                HandleCollectedLocations();
             }
         }
 
@@ -160,6 +162,7 @@ namespace Celeste.Mod.Celeste_Multiworld
         public void Disconnect()
         {
             Ready = false;
+            SentLocations.Clear();
 
             // Clear DeathLink events.
             if (_deathLinkService != null)
@@ -380,6 +383,12 @@ namespace Celeste.Mod.Celeste_Multiworld
                         Celeste_MultiworldModule.SaveData.Strawberries += 1;
                         break;
                     }
+                    case long id when id >= 0xCA1100 && id < 0xCA1200:
+                    {
+                        Items.CheckpointItemData cp_data = Items.APItemData.CheckpointData[id];
+                        SaveData.Instance.Areas_Safe[cp_data.Area].Modes[cp_data.Mode].Checkpoints.Add(cp_data.Room);
+                        break;
+                    }
                     case long id when id >= 0xCA1200 && id <= 0xCA1220:
                     {
                         Celeste_MultiworldModule.SaveData.Interactables[id] = true;
@@ -393,75 +402,35 @@ namespace Celeste.Mod.Celeste_Multiworld
 
         public void CheckLocationsToSend()
         {
-            //List<long> locationsToCheck = new List<long>();
-            //foreach (var strawbID in Save.CurrentRecord.Strawberries)
-            //{
-            //    if (LocationStringToID.ContainsKey(strawbID))
-            //    {
-            //        long locationID = LocationStringToID[strawbID];
-            //        if (!SentLocations.Contains(locationID))
-            //        {
-            //            locationsToCheck.Add(locationID);
-            //        }
-            //    }
-            //    else
-            //    {
-            //        Log.Info($"Untracked Strawberry: {strawbID}");
-            //    }
-            //}
-            //
-            //foreach (var nameIDPair in LocationStringToID)
-            //{
-            //    if (Save.CurrentRecord.Strawberries.Contains(nameIDPair.Key))
-            //    {
-            //        continue;
-            //    }
-            //
-            //    if (Save.CurrentRecord.GetFlag(nameIDPair.Key) > 0)
-            //    {
-            //        long locationID = nameIDPair.Value;
-            //        if (!SentLocations.Contains(locationID))
-            //        {
-            //            locationsToCheck.Add(locationID);
-            //        }
-            //    }
-            //}
-            //
-            //CheckLocations(locationsToCheck.ToArray());
+            List<long> locationsToCheck = new List<long>();
+            foreach (KeyValuePair<string, long> checkpointIDPair in Locations.APLocationData.CheckpointStringToID)
+            {
+                if (Celeste_MultiworldModule.SaveData.CheckpointLocations.Contains(checkpointIDPair.Key))
+                {
+                    long locationID = checkpointIDPair.Value;
+                    if (!SentLocations.Contains(locationID))
+                    {
+                        locationsToCheck.Add(locationID);
+                    }
+                }
+            }
+
+            CheckLocations(locationsToCheck.ToArray());
         }
 
         public void HandleCollectedLocations()
         {
-            //// Change this if we need to !collect non-Strawberry locations
-            //foreach (var newLoc in CollectedLocations)
-            //{
-            //    if (LocationIDToString.ContainsKey((int)newLoc))
-            //    {
-            //        if (newLoc < 0xCA0400)
-            //        {
-            //            string strawberryLocID = LocationIDToString[(int)newLoc];
-            //            if (!Save.CurrentRecord.Strawberries.Contains(strawberryLocID))
-            //            {
-            //                Save.CurrentRecord.Strawberries.Add(strawberryLocID);
-            //            }
-            //
-            //            if (strawberryLocID.Contains("-"))
-            //            {
-            //                string subMapID = strawberryLocID.Split("/")[0];
-            //                if (!Save.CurrentRecord.CompletedSubMaps.Contains(subMapID))
-            //                {
-            //                    Save.CurrentRecord.CompletedSubMaps.Add(subMapID);
-            //                }
-            //            }
-            //        }
-            //        else if (newLoc < 0xCA0500)
-            //        {
-            //            string locID = LocationIDToString[(int)newLoc];
-            //
-            //            Save.CurrentRecord.SetFlag(locID);
-            //        }
-            //    }
-            //}
+            foreach (long newLoc in CollectedLocations)
+            {
+                if (Locations.APLocationData.CheckpointIDToString.ContainsKey(newLoc))
+                {
+                    string checkpointLocString = Locations.APLocationData.CheckpointIDToString[newLoc];
+
+                    Celeste_MultiworldModule.SaveData.CheckpointLocations.Add(checkpointLocString);
+                }
+            }
+
+            CollectedLocations.Clear();
         }
 
         //public void HandleMessageQueue(Batcher batch, SpriteFont font, Rect bounds)

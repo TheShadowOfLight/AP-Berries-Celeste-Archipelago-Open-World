@@ -13,11 +13,44 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
         {
             On.Celeste.OuiChapterPanel.IsStart += modOuiChapterPanel_IsStart;
             On.Celeste.OuiChapterPanel.Reset += modOuiChapterPanel_Reset;
+
+            On.Celeste.SaveData.SetCheckpoint += modSaveData_SetCheckpoint;
+        }
+
+        private bool modSaveData_SetCheckpoint(On.Celeste.SaveData.orig_SetCheckpoint orig, SaveData self, AreaKey area, string level)
+        {
+            string checkpointString = area.ID.ToString() + "_" + ((int)area.Mode).ToString() + "_" + level;
+
+            if (Celeste_MultiworldModule.SaveData.CheckpointLocations.Contains(checkpointString))
+            {
+                return false;
+            }
+
+            Celeste_MultiworldModule.SaveData.CheckpointLocations.Add(checkpointString);
+            return true;
+        }
+
+        private HashSet<string> modSaveData_GetCheckpoints(On.Celeste.SaveData.orig_GetCheckpoints orig, SaveData self, AreaKey area)
+        {
+            HashSet<string> checkpoints = new HashSet<string>();
+
+            ModeProperties modeProperties = AreaData.Areas[area.ID].Mode[(int)area.Mode];
+            if (modeProperties.Checkpoints != null)
+            {
+                foreach (CheckpointData checkpointData in modeProperties.Checkpoints)
+                {
+                    checkpoints.Add(checkpointData.Level);
+                }
+            }
+            checkpoints.RemoveWhere((string a) => !modeProperties.Checkpoints.Any((CheckpointData b) => b.Level == a));
+
+            return checkpoints;
         }
 
         public bool modOuiChapterPanel_IsStart(On.Celeste.OuiChapterPanel.orig_IsStart orig, OuiChapterPanel self, Overworld overworld, Overworld.StartMode start)
         {
-            Logger.Error("AP", "AAAAAAAAA IS START");
+            // TODO: Farewell is displaying B & C Sides because of this hook
+
             MonoMod.Utils.DynamicData dynamicUI = MonoMod.Utils.DynamicData.For(self);
             if (SaveData.Instance != null && SaveData.Instance.LastArea_Safe.ID == AreaKey.None.ID)
             {
@@ -46,12 +79,10 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
             bool flag = dynamicUI.Invoke<bool>("orig_IsStart", overworld, start);
             if (true && self.option >= self.options.Count && self.options.Count == 1)
             {
-                Logger.Error("AP", "AAAAAAAAA B SIDE");
                 self.AddRemixButton();
             }
             if (true && self.option >= self.options.Count && self.options.Count == 2)
             {
-                Logger.Error("AP", "AAAAAAAAA C SIDE");
                 self.options.Add(new OuiChapterPanel.Option
                 {
                     Label = Dialog.Clean("overworld_remix2", null),
@@ -82,11 +113,11 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
             self.height = (float)self.GetModeHeight();
             self.modes.Clear();
             bool flag = false;
-            if (!self.Data.Interlude_Safe)
+            if (!self.Data.Interlude_Safe && self.Area.ID < 10)
             {
                 flag = true; // TODO: THIS ENABLES B-SIDES
             }
-            bool flag2 = !self.Data.Interlude_Safe && Celeste.PlayMode != Celeste.PlayModes.Event;  // TODO: THIS ENABLES C-SIDES
+            bool flag2 = !self.Data.Interlude_Safe && Celeste.PlayMode != Celeste.PlayModes.Event && self.Area.ID < 10;  // TODO: THIS ENABLES C-SIDES
             self.modes.Add(new OuiChapterPanel.Option
             {
                 Bg = GFX.Gui[dynamicUI.Invoke<string>("_ModAreaselectTexture", "areaselect/tab")],

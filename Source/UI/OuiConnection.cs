@@ -181,26 +181,6 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
             {
                 SaveData.Instance.Areas_Safe[0].Modes[0].Completed = true;
                 SaveData.Instance.UnlockedAreas = 10;
-                foreach (AreaStats areaStats in SaveData.Instance.Areas_Safe)
-                {
-                    AreaData areaData = AreaData.Areas[areaStats.ID];
-
-                    for (int i = 0; i < areaData.Mode.Length; i++)
-                    {
-                        ModeProperties modeProperties = areaData.Mode[i];
-
-                        if (modeProperties == null || modeProperties.Checkpoints == null)
-                        {
-                            continue;
-                        }
-
-                        foreach (CheckpointData cp in modeProperties.Checkpoints)
-                        {
-                            areaStats.Modes[i].Checkpoints.Add(cp.Name);
-                        }
-                        areaStats.Modes[i].Completed = true;
-                    }
-                }
             }
 
             (Scene as Overworld).Goto<OuiChapterSelect>();
