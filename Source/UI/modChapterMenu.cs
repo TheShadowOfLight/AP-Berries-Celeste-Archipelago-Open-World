@@ -13,8 +13,34 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
         {
             On.Celeste.OuiChapterPanel.IsStart += modOuiChapterPanel_IsStart;
             On.Celeste.OuiChapterPanel.Reset += modOuiChapterPanel_Reset;
+            On.Celeste.OuiChapterPanel.Start += modOuiChapterPanel_Start;
+            On.Celeste.OuiChapterPanel.Swap += modOuiChapterPanel_Swap;
 
             On.Celeste.SaveData.SetCheckpoint += modSaveData_SetCheckpoint;
+        }
+
+        private void modOuiChapterPanel_Start(On.Celeste.OuiChapterPanel.orig_Start orig, OuiChapterPanel self, string checkpoint)
+        {
+            if (self.Area.Mode == AreaMode.BSide && !ArchipelagoManager.Instance.IncludeBSides)
+            {
+                Audio.Play("event:/ui/main/button_back");
+            }
+            else
+            {
+                orig(self, checkpoint);
+            }
+        }
+
+        private void modOuiChapterPanel_Swap(On.Celeste.OuiChapterPanel.orig_Swap orig, OuiChapterPanel self)
+        {
+            if (self.Area.Mode == AreaMode.BSide && !ArchipelagoManager.Instance.IncludeBSides)
+            {
+                Audio.Play("event:/ui/main/button_back");
+            }
+            else
+            {
+                orig(self);
+            }
         }
 
         private bool modSaveData_SetCheckpoint(On.Celeste.SaveData.orig_SetCheckpoint orig, SaveData self, AreaKey area, string level)
@@ -115,9 +141,9 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
             bool flag = false;
             if (!self.Data.Interlude_Safe && self.Area.ID < 10)
             {
-                flag = true; // TODO: THIS ENABLES B-SIDES
+                flag = ArchipelagoManager.Instance.IncludeBSides || ArchipelagoManager.Instance.IncludeCSides;
             }
-            bool flag2 = !self.Data.Interlude_Safe && Celeste.PlayMode != Celeste.PlayModes.Event && self.Area.ID < 10;  // TODO: THIS ENABLES C-SIDES
+            bool flag2 = !self.Data.Interlude_Safe && Celeste.PlayMode != Celeste.PlayModes.Event && self.Area.ID < 10 && ArchipelagoManager.Instance.IncludeCSides;
             self.modes.Add(new OuiChapterPanel.Option
             {
                 Bg = GFX.Gui[dynamicUI.Invoke<string>("_ModAreaselectTexture", "areaselect/tab")],

@@ -48,6 +48,7 @@ namespace Celeste.Mod.Celeste_Multiworld
         public bool GoalSent = false;
 
         public DeathLink? DeathLinkData { get; private set; }
+        public int DeathsCounted = 0;
         public bool IsDeathLinkSafe { get; set; }
         public bool Ready { get; private set; }
         public List<Tuple<int, ItemInfo>> ItemQueue { get; private set; } = new();
@@ -62,8 +63,11 @@ namespace Celeste.Mod.Celeste_Multiworld
         public int HintCost => _session.RoomState.HintCost;
         public Hint[] Hints => _session.DataStorage.GetHints();
 
+        #region Slot Data
         public int DeathLinkAmnesty { get; set; }
-        public int DeathsCounted = 0;
+        public bool IncludeBSides = false;
+        public bool IncludeCSides = false;
+        #endregion
 
         public ArchipelagoManager(Game game) : base(game)
         {
@@ -138,6 +142,8 @@ namespace Celeste.Mod.Celeste_Multiworld
             Player.FlyPowerHairColor = new Microsoft.Xna.Framework.Color((featherHairInt >> 16) & 0xFF, (featherHairInt >> 8) & 0xFF, (featherHairInt) & 0xFF);
 
             DeathLinkAmnesty = Convert.ToInt32(((LoginSuccessful)result).SlotData.TryGetValue("death_link_amnesty", out value) ? value : 10);
+            IncludeBSides = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("include_b_sides", out value) ? value : false);
+            IncludeCSides = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("include_c_sides", out value) ? value : false);
             bool DeathLinkEnabled = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("death_link", out value) ? value : false);
 
             // Initialize DeathLink service.
