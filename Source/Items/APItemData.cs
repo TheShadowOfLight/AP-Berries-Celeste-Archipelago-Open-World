@@ -26,11 +26,15 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
         {
             new modSpring(),
             new modTrafficBlock(),
+
+
+            new modDreamBlock(),
         };
 
         public static Dictionary<long, string> ItemIDToString { get; set; } = new Dictionary<long, string>
         {
             { 0xCA1000, "Strawberry" },
+            { 0xCA1001, "Raspberry" },
 
 
             { 0xCA1100, "Forsaken City A - Crossing" },
@@ -114,6 +118,35 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
 
             { 0xCA1200, "Springs" },
             { 0xCA1201, "Traffic Blocks" },
+            { 0xCA1202, "Pink Cassette Blocks" },
+            { 0xCA1203, "Blue Cassette Blocks" },
+            { 0xCA1204, "Dream Blocks" },
+            { 0xCA1205, "Coins" },
+            { 0xCA1206, "Moving Platforms" },
+            { 0xCA1207, "Blue Boosters" },
+            { 0xCA1208, "Blue Clouds" },
+            { 0xCA1209, "Move Blocks" },
+            { 0xCA120A, "Swap Blocks" },
+            { 0xCA120B, "Red Boosters" },
+            { 0xCA120C, "Theo Crystal" },
+            { 0xCA120D, "Feathers" },
+            { 0xCA120E, "Bumpers" },
+            { 0xCA120F, "Kevins" },
+            { 0xCA1210, "Pink Clouds" },
+            { 0xCA1211, "Badeline Boosters" },
+            { 0xCA1212, "Fire and Ice Balls" },
+            { 0xCA1213, "Core Toggles" },
+            { 0xCA1214, "Core Blocks" },
+            { 0xCA1215, "Pufferfish" },
+            { 0xCA1216, "Jellyfish" },
+            { 0xCA1217, "Breaker Boxes" },
+            { 0xCA1218, "Dash Refills" },
+            { 0xCA1219, "Double Dash Refills" },
+            { 0xCA121A, "Yellow Cassette Blocks" },
+            { 0xCA121B, "Green Cassette Blocks" },
+            { 0xCA121C, "Dash Switches" },
+            { 0xCA121D, "Seekers" },
+            { 0xCA121E, "Keys" },
         };
 
         public static Dictionary<long, CheckpointItemData> CheckpointData { get; set; } = new Dictionary<long, CheckpointItemData>
