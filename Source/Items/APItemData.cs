@@ -26,6 +26,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
         {
             new modSpring(),
             new modTrafficBlock(),
+            new modCassetteBlock(),
 
 
             new modDreamBlock(),
