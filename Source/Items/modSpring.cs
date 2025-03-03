@@ -8,6 +8,9 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
 {
     public class modSpring : modItemBase
     {
+        Microsoft.Xna.Framework.Color originalColor;
+        bool setColor = false;
+
         public override void Load()
         {
             On.Celeste.Spring.Render += modSpring_Render;
@@ -31,7 +34,20 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
         {
             orig(self);
 
-            HandleSprite(self.sprite);
+            if (!setColor)
+            {
+                originalColor = self.sprite.Color;
+                setColor = true;
+            }
+
+            if (!HaveReceived())
+            {
+                self.sprite.Color = Microsoft.Xna.Framework.Color.DarkMagenta;
+            }
+            else
+            {
+                self.sprite.Color = originalColor;
+            }
         }
 
         private void modSpring_OnCollide(On.Celeste.Spring.orig_OnCollide orig, Spring self, Player player)

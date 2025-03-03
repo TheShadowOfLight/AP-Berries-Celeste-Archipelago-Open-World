@@ -395,7 +395,7 @@ namespace Celeste.Mod.Celeste_Multiworld
                         SaveData.Instance.Areas_Safe[cp_data.Area].Modes[cp_data.Mode].Checkpoints.Add(cp_data.Room);
                         break;
                     }
-                    case long id when id >= 0xCA1200 && id <= 0xCA1220:
+                    case long id when id >= 0xCA1200 && id <= 0xCA1230:
                     {
                         Celeste_MultiworldModule.SaveData.Interactables[id] = true;
                         break;

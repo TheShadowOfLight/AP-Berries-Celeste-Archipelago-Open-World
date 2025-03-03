@@ -8,10 +8,14 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
 {
     public class modTrafficBlock : modItemBase
     {
+        Microsoft.Xna.Framework.Color originalColor;
+        bool setColor = false;
+
         public override void Load()
         {
             On.Celeste.ZipMover.Render += modZipMover_Render;
             On.Celeste.ZipMover.Update += modZipMover_Update;
+            setColor = false;
         }
 
         public override void Unload()
@@ -31,7 +35,20 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
         {
             orig(self);
 
-            self.Visible = HaveReceived();
+            if (!setColor)
+            {
+                originalColor = self.streetlight.Color;
+                setColor = true;
+            }
+
+            if (!HaveReceived())
+            {
+                self.streetlight.Color = Microsoft.Xna.Framework.Color.DarkMagenta;
+            }
+            else
+            {
+                self.streetlight.Color = originalColor;
+            }
         }
 
         private void modZipMover_Update(On.Celeste.ZipMover.orig_Update orig, ZipMover self)
@@ -39,10 +56,6 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             if (HaveReceived())
             {
                 orig(self);
-            }
-            else
-            {
-                //Audio.Play(SFX.game_03_forcefield_bump);
             }
         }
     }
