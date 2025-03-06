@@ -363,6 +363,7 @@ namespace Celeste.Mod.Celeste_Multiworld
 
         public void CheckReceivedItemQueue()
         {
+            SaveData.Instance.TotalStrawberries_Safe = Celeste_MultiworldModule.SaveData.Strawberries;
             int audioGuard = 0;
             if (Celeste_MultiworldModule.SaveData == null)
             {
@@ -389,7 +390,7 @@ namespace Celeste.Mod.Celeste_Multiworld
                         Celeste_MultiworldModule.SaveData.Strawberries += 1;
                         break;
                     }
-                    case long id when id >= 0xCA1100 && id < 0xCA1200:
+                    case long id when id >= 0xCA1400 && id < 0xCA1500:
                     {
                         Items.CheckpointItemData cp_data = Items.APItemData.CheckpointData[id];
                         SaveData.Instance.Areas_Safe[cp_data.Area].Modes[cp_data.Mode].Checkpoints.Add(cp_data.Room);
@@ -420,6 +421,17 @@ namespace Celeste.Mod.Celeste_Multiworld
                     }
                 }
             }
+            foreach (KeyValuePair<string, long> strawberryIDPair in Locations.APLocationData.StrawberryIDToAP)
+            {
+                if (Celeste_MultiworldModule.SaveData.StrawberryLocations.Contains(strawberryIDPair.Key))
+                {
+                    long locationID = strawberryIDPair.Value;
+                    if (!SentLocations.Contains(locationID))
+                    {
+                        locationsToCheck.Add(locationID);
+                    }
+                }
+            }
 
             CheckLocations(locationsToCheck.ToArray());
         }
@@ -433,6 +445,13 @@ namespace Celeste.Mod.Celeste_Multiworld
                     string checkpointLocString = Locations.APLocationData.CheckpointIDToString[newLoc];
 
                     Celeste_MultiworldModule.SaveData.CheckpointLocations.Add(checkpointLocString);
+                }
+
+                if (Locations.APLocationData.StrawberryAPToID.ContainsKey(newLoc))
+                {
+                    string strawberryLocString = Locations.APLocationData.StrawberryAPToID[newLoc];
+
+                    Celeste_MultiworldModule.SaveData.StrawberryLocations.Add(strawberryLocString);
                 }
             }
 

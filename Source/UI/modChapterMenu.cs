@@ -15,6 +15,8 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
             On.Celeste.OuiChapterPanel.Reset += modOuiChapterPanel_Reset;
             On.Celeste.OuiChapterPanel.Start += modOuiChapterPanel_Start;
             On.Celeste.OuiChapterPanel.Swap += modOuiChapterPanel_Swap;
+            On.Celeste.OuiChapterPanel.UpdateStats += modOuiChapterPanel_UpdateStats;
+            On.Celeste.OuiChapterPanel.GetModeHeight += modOuiChapterPanel_GetModeHeight;
 
             On.Celeste.SaveData.SetCheckpoint += modSaveData_SetCheckpoint;
         }
@@ -75,8 +77,6 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
 
         public bool modOuiChapterPanel_IsStart(On.Celeste.OuiChapterPanel.orig_IsStart orig, OuiChapterPanel self, Overworld overworld, Overworld.StartMode start)
         {
-            // TODO: Farewell is displaying B & C Sides because of this hook
-
             MonoMod.Utils.DynamicData dynamicUI = MonoMod.Utils.DynamicData.For(self);
             if (SaveData.Instance != null && SaveData.Instance.LastArea_Safe.ID == AreaKey.None.ID)
             {
@@ -175,6 +175,32 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
             self.chapter = Dialog.Get("area_chapter", null).Replace("{x}", self.Area.ChapterIndex.ToString().PadLeft(2));
             self.contentOffset = new Vector2(440f, 120f);
             self.initialized = true;
+        }
+
+        private void modOuiChapterPanel_UpdateStats(On.Celeste.OuiChapterPanel.orig_UpdateStats orig, OuiChapterPanel self, bool wiggle, bool? overrideStrawberryWiggle, bool? overrideDeathWiggle, bool? overrideHeartWiggle)
+        {
+            // TODO: Make this orig function use AP Location berries instead of the save data ones
+
+            orig(self, wiggle, overrideStrawberryWiggle, overrideDeathWiggle, overrideHeartWiggle);
+
+            self.strawberries.ShowOutOf = self.Area.Mode == AreaMode.Normal;
+            self.strawberries.Visible = !self.Data.Interlude_Safe;
+            self.deaths.Visible = !self.Data.Interlude_Safe;
+        }
+
+        private int modOuiChapterPanel_GetModeHeight(On.Celeste.OuiChapterPanel.orig_GetModeHeight orig, OuiChapterPanel self)
+        {
+            AreaModeStats areaModeStats = self.RealStats.Modes[(int)self.Area.Mode];
+            bool flag = self.Data.Interlude_Safe;
+            if (!self.Data.Interlude_Safe && ((areaModeStats.Deaths > 0 && self.Area.Mode != AreaMode.Normal) || areaModeStats.Completed || areaModeStats.HeartGem))
+            {
+                flag = false;
+            }
+            if (!flag)
+            {
+                return 540;
+            }
+            return 300;
         }
     }
 }

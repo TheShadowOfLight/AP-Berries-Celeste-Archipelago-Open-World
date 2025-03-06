@@ -1,6 +1,7 @@
 ﻿using System;
 using Celeste.Mod.Celeste_Multiworld.Aesthetics;
 using Celeste.Mod.Celeste_Multiworld.Items;
+using Celeste.Mod.Celeste_Multiworld.Locations;
 using Celeste.Mod.Celeste_Multiworld.UI;
 
 namespace Celeste.Mod.Celeste_Multiworld;
@@ -38,6 +39,11 @@ public class Celeste_MultiworldModule : EverestModule
         foreach (modItemBase item in APItemData.modItems)
         {
             item.Load();
+        }
+
+        foreach (modLocationBase location in APLocationData.modLocations)
+        {
+            location.Load();
         }
 
         modMainMenu menu = new modMainMenu();

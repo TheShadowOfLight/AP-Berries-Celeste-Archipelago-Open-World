@@ -13,17 +13,17 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             On.Celeste.Torch.OnPlayer += modTorch_OnPlayer;
         }
 
+        public override void Unload()
+        {
+            On.Celeste.Torch.OnPlayer -= modTorch_OnPlayer;
+        }
+
         private void modTorch_OnPlayer(On.Celeste.Torch.orig_OnPlayer orig, Torch self, Player player)
         {
             if (HaveReceived())
             {
                 orig(self, player);
             }
-        }
-
-        public override void Unload()
-        {
-            On.Celeste.Torch.OnPlayer -= modTorch_OnPlayer;
         }
 
         public override bool HaveReceived()
