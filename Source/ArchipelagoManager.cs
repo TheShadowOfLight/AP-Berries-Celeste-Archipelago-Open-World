@@ -452,6 +452,15 @@ namespace Celeste.Mod.Celeste_Multiworld
                     string strawberryLocString = Locations.APLocationData.StrawberryAPToID[newLoc];
 
                     Celeste_MultiworldModule.SaveData.StrawberryLocations.Add(strawberryLocString);
+
+                    string[] area_mode_levelEntityID = strawberryLocString.Split(new char[]{'_'}, 3);
+                    int area = Int32.Parse(area_mode_levelEntityID[0]);
+                    int mode = Int32.Parse(area_mode_levelEntityID[1]);
+                    string[] level_EntityID = area_mode_levelEntityID[2].Split(":");
+                    int ID = Int32.Parse(level_EntityID[1]);
+
+                    SaveData.Instance.Areas_Safe[area].Modes[mode].TotalStrawberries += 1;
+                    SaveData.Instance.Areas_Safe[area].Modes[mode].Strawberries.Add(new EntityID(level_EntityID[0], ID));
                 }
             }
 

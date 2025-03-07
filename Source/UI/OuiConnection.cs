@@ -177,10 +177,27 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
                 VariantMode = false
             }, 0);
 
+
             if (SaveData.Instance != null)
             {
-                SaveData.Instance.Areas_Safe[0].Modes[0].Completed = true;
+                foreach(AreaStats area in SaveData.Instance.Areas_Safe)
+                {
+                    AreaData areaData = AreaData.Areas[area.ID];
+                    foreach(AreaModeStats areaMode in area.Modes)
+                    {
+                        areaMode.Completed = true;
+                    }
+
+                    // TODO: This enables Goldens. Try to find a cleaner way eventually
+                    if (areaData.HasMode(AreaMode.BSide) && areaData.Mode[(int)AreaMode.BSide].MapData.DetectedHeartGem)
+                    {
+                        area.Modes[(int)AreaMode.BSide].HeartGem = true;
+                    }
+                }
+
                 SaveData.Instance.UnlockedAreas = 10;
+
+                SaveData.Instance.AssistMode = true;
             }
 
             (Scene as Overworld).Goto<OuiChapterSelect>();

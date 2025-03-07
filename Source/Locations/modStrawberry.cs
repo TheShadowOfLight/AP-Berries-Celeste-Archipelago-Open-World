@@ -23,15 +23,15 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
         private void modStrawberry_OnCollect(On.Celeste.Strawberry.orig_OnCollect orig, Strawberry self)
         {
             orig(self);
-            string strawberryString = $"{SaveData.Instance.CurrentSession_Safe.Area.ID}_{self.ID}";
+            string strawberryString = $"{SaveData.Instance.CurrentSession_Safe.Area.ID}_{(int)SaveData.Instance.CurrentSession_Safe.Area.Mode}_{self.ID}";
 
             Celeste_MultiworldModule.SaveData.StrawberryLocations.Add(strawberryString);
-            Logger.Error("AP", $"{SaveData.Instance.CurrentSession_Safe.Area.ID}_{self.ID}");
+            Logger.Error("AP", strawberryString);
         }
 
         private bool modSaveData_CheckStrawberry_EntityID(On.Celeste.SaveData.orig_CheckStrawberry_EntityID orig, SaveData self, EntityID strawberry)
         {
-            string AP_ID = $"{self.CurrentSession_Safe.Area.ID}_{strawberry}";
+            string AP_ID = $"{self.CurrentSession_Safe.Area.ID}_{(int)SaveData.Instance.CurrentSession_Safe.Area.Mode}_{strawberry}";
             return Celeste_MultiworldModule.SaveData.StrawberryLocations.Contains(AP_ID);
         }
     }
