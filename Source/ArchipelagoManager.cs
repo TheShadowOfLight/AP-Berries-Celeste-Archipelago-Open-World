@@ -65,6 +65,10 @@ namespace Celeste.Mod.Celeste_Multiworld
 
         #region Slot Data
         public int DeathLinkAmnesty { get; set; }
+        public bool Roomsanity = false;
+        public bool IncludeGoldens = false;
+        public bool IncludeCore = false;
+        public bool IncludeFarewell = false;
         public bool IncludeBSides = false;
         public bool IncludeCSides = false;
         #endregion
@@ -142,6 +146,10 @@ namespace Celeste.Mod.Celeste_Multiworld
             Player.FlyPowerHairColor = new Microsoft.Xna.Framework.Color((featherHairInt >> 16) & 0xFF, (featherHairInt >> 8) & 0xFF, (featherHairInt) & 0xFF);
 
             DeathLinkAmnesty = Convert.ToInt32(((LoginSuccessful)result).SlotData.TryGetValue("death_link_amnesty", out value) ? value : 10);
+            Roomsanity = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("roomsanity", out value) ? value : false);
+            IncludeGoldens = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("include_goldens", out value) ? value : false);
+            IncludeCore = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("include_core", out value) ? value : false);
+            IncludeFarewell = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("include_farewell", out value) ? value : false);
             IncludeBSides = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("include_b_sides", out value) ? value : false);
             IncludeCSides = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("include_c_sides", out value) ? value : false);
             bool DeathLinkEnabled = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("death_link", out value) ? value : false);
@@ -373,12 +381,6 @@ namespace Celeste.Mod.Celeste_Multiworld
             for (int index = Celeste_MultiworldModule.SaveData.ItemRcv; index < ItemQueue.Count; index++)
             {
                 var item = ItemQueue[index].Item2;
-            
-                if (audioGuard < 3)
-                {
-                    audioGuard++;
-                    Audio.Play(SFX.game_gen_secret_revealed);
-                }
 
                 Logger.Info("AP", $"Received {Items.APItemData.ItemIDToString[item.ItemId]} from {GetPlayerName(item.Player)}.");
                 MessageLog.Add(new ArchipelagoMessage($"Received {Items.APItemData.ItemIDToString[item.ItemId]} from {GetPlayerName(item.Player)}."));
@@ -394,11 +396,23 @@ namespace Celeste.Mod.Celeste_Multiworld
                     {
                         Items.CheckpointItemData cp_data = Items.APItemData.CheckpointData[id];
                         SaveData.Instance.Areas_Safe[cp_data.Area].Modes[cp_data.Mode].Checkpoints.Add(cp_data.Room);
+
+                        if (audioGuard < 3)
+                        {
+                            audioGuard++;
+                            Audio.Play(SFX.game_07_checkpointconfetti);
+                        }
                         break;
                     }
                     case long id when id >= 0xCA1200 && id <= 0xCA1230:
                     {
                         Celeste_MultiworldModule.SaveData.Interactables[id] = true;
+
+                        if (audioGuard < 3)
+                        {
+                            audioGuard++;
+                            Audio.Play(SFX.game_gen_secret_revealed);
+                        }
                         break;
                     }
                 }

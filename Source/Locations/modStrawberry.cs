@@ -10,6 +10,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
     {
         public override void Load()
         {
+            On.Celeste.Strawberry.ctor += modStrawberry_ctor;
             On.Celeste.Strawberry.OnCollect += modStrawberry_OnCollect;
             On.Celeste.SaveData.CheckStrawberry_EntityID += modSaveData_CheckStrawberry_EntityID;
         }
@@ -18,6 +19,18 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
         {
             On.Celeste.Strawberry.OnCollect -= modStrawberry_OnCollect;
             On.Celeste.SaveData.CheckStrawberry_EntityID -= modSaveData_CheckStrawberry_EntityID;
+        }
+
+        private void modStrawberry_ctor(On.Celeste.Strawberry.orig_ctor orig, Strawberry self, EntityData data, Microsoft.Xna.Framework.Vector2 offset, EntityID gid)
+        {
+            orig(self, data, offset, gid);
+
+            if (self.Golden && !ArchipelagoManager.Instance.IncludeGoldens)
+            {
+                self.Active = false;
+                self.Visible = false;
+                self.Collidable = false;
+            }
         }
 
         private void modStrawberry_OnCollect(On.Celeste.Strawberry.orig_OnCollect orig, Strawberry self)
