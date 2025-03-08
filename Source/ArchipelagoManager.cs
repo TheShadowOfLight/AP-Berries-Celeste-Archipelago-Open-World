@@ -197,6 +197,15 @@ namespace Celeste.Mod.Celeste_Multiworld
             }
         }
 
+        private void OnDeathLink(DeathLink deathLink)
+        {
+            // If we receive a DeathLink that is after our last death, let's set it.
+            if (!IsDeathLinkSafe && DateTime.Compare(deathLink.Timestamp, _lastDeath) > 0)
+            {
+                DeathLinkData = deathLink;
+            }
+        }
+
         public void ClearDeathLink()
         {
             DeathLinkData = null;
@@ -323,15 +332,6 @@ namespace Celeste.Mod.Celeste_Multiworld
             foreach (var newLoc in newCheckedLocations)
             {
                 CollectedLocations.Add(newLoc);
-            }
-        }
-
-        private void OnDeathLink(DeathLink deathLink)
-        {
-            // If we receive a DeathLink that is after our last death, let's set it.
-            if (!IsDeathLinkSafe && DateTime.Compare(deathLink.Timestamp, _lastDeath) > 0)
-            {
-                DeathLinkData = deathLink;
             }
         }
 
@@ -504,21 +504,21 @@ namespace Celeste.Mod.Celeste_Multiworld
 
         private void OnPacketReceived(ArchipelagoPacketBase packet)
         {
-            //if (packet.PacketType == ArchipelagoPacketType.Retrieved)
-            //{
-            //    if (_connectionInfo.SeeGhosts)
-            //    {
-            //        RetrievedPacket retPacket = packet as RetrievedPacket;
-            //
-            //        foreach (KeyValuePair<string, JToken> entry in retPacket.Data)
-            //        {
-            //            if (entry.Key.StartsWith("Celeste_OtherPlayer_"))
-            //            {
-            //                PlayerUpdated(entry.Key, entry.Value);
-            //            }
-            //        }
-            //    }
-            //}
+            if (packet.PacketType == ArchipelagoPacketType.Retrieved)
+            {
+                //if (_connectionInfo.SeeGhosts)
+                {
+                    RetrievedPacket retPacket = packet as RetrievedPacket;
+
+                    foreach (KeyValuePair<string, JToken> entry in retPacket.Data)
+                    {
+                        if (entry.Key.StartsWith("Celeste_OtherPlayer_"))
+                        {
+                            //PlayerUpdated(entry.Key, entry.Value);
+                        }
+                    }
+                }
+            }
         }
     }
 }

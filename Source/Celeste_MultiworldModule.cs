@@ -1,5 +1,6 @@
 ﻿using System;
 using Celeste.Mod.Celeste_Multiworld.Aesthetics;
+using Celeste.Mod.Celeste_Multiworld.General;
 using Celeste.Mod.Celeste_Multiworld.Items;
 using Celeste.Mod.Celeste_Multiworld.Locations;
 using Celeste.Mod.Celeste_Multiworld.UI;
@@ -54,6 +55,9 @@ public class Celeste_MultiworldModule : EverestModule
 
         modAudio audio = new modAudio();
         audio.Load();
+
+        modPlayer player = new modPlayer();
+        player.Load();
     }
 
     public override void Unload()
