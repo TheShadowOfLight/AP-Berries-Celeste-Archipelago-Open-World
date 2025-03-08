@@ -17,5 +17,6 @@ public class Celeste_MultiworldModuleSaveData : EverestModuleSaveData
     #region AP Locations
     public HashSet<string> CheckpointLocations { get; set; } = new HashSet<string>();
     public HashSet<string> StrawberryLocations { get; set; } = new HashSet<string>();
+    public HashSet<string> RoomLocations { get; set; } = new HashSet<string>();
     #endregion
 }

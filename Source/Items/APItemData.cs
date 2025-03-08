@@ -42,6 +42,8 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
 
             { 0xCA1400, "Forsaken City A - Crossing" },
             { 0xCA1401, "Forsaken City A - Chasm" },
+            { 0xCA1402, "Forsaken City B - Contraption" },
+            { 0xCA1403, "Forsaken City B - Scrap Pit" },
 
 
             { 0xCA1200, "Springs" },

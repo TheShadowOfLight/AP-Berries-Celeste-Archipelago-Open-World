@@ -39,11 +39,20 @@ namespace Celeste.Mod.Celeste_Multiworld.General
             if (ArchipelagoManager.Instance.DeathLinkData != null)
             {
                 // TODO: Check for valid status to die
-                if (self.InControl)
+                if (self.InControl && !self.Dead)
                 {
                     self.Die(Vector2.Zero, true, false);
 
                     ArchipelagoManager.Instance.ClearDeathLink();
+                }
+            }
+
+            if (ArchipelagoManager.Instance.Roomsanity)
+            {
+                if (self.InControl && !self.Dead)
+                {
+                    string AP_ID = $"{SaveData.Instance.CurrentSession_Safe.Area.ID}_{(int)SaveData.Instance.CurrentSession_Safe.Area.Mode}_{SaveData.Instance.CurrentSession_Safe.Level}";
+                    Celeste_MultiworldModule.SaveData.RoomLocations.Add(AP_ID);
                 }
             }
         }

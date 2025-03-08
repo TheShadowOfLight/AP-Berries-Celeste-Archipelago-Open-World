@@ -446,6 +446,17 @@ namespace Celeste.Mod.Celeste_Multiworld
                     }
                 }
             }
+            foreach (KeyValuePair<string, long> roomIDPair in Locations.APLocationData.RoomNameToAP)
+            {
+                if (Celeste_MultiworldModule.SaveData.RoomLocations.Contains(roomIDPair.Key))
+                {
+                    long locationID = roomIDPair.Value;
+                    if (!SentLocations.Contains(locationID))
+                    {
+                        locationsToCheck.Add(locationID);
+                    }
+                }
+            }
 
             CheckLocations(locationsToCheck.ToArray());
         }
@@ -473,8 +484,16 @@ namespace Celeste.Mod.Celeste_Multiworld
                     string[] level_EntityID = area_mode_levelEntityID[2].Split(":");
                     int ID = Int32.Parse(level_EntityID[1]);
 
+                    // TODO: This count is getting doubled on a single-session (finish level, all berries counted twice)
                     SaveData.Instance.Areas_Safe[area].Modes[mode].TotalStrawberries += 1;
                     SaveData.Instance.Areas_Safe[area].Modes[mode].Strawberries.Add(new EntityID(level_EntityID[0], ID));
+                }
+
+                if (Locations.APLocationData.APToRoomName.ContainsKey(newLoc))
+                {
+                    string roomLocString = Locations.APLocationData.APToRoomName[newLoc];
+
+                    Celeste_MultiworldModule.SaveData.RoomLocations.Add(roomLocString);
                 }
             }
 
