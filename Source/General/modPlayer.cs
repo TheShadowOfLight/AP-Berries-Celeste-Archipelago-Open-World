@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Celeste.Mod.Celeste_Multiworld.UI;
+
 namespace Celeste.Mod.Celeste_Multiworld.General
 {
     internal class modPlayer
@@ -13,6 +15,7 @@ namespace Celeste.Mod.Celeste_Multiworld.General
         {
             On.Celeste.Player.Die += modPlayer_Die;
             On.Celeste.Player.Update += modPlayer_Update;
+            On.Celeste.Level.LoadLevel += modLevel_LoadLevel;
         }
 
         public void Unload()
@@ -54,6 +57,16 @@ namespace Celeste.Mod.Celeste_Multiworld.General
                     string AP_ID = $"{SaveData.Instance.CurrentSession_Safe.Area.ID}_{(int)SaveData.Instance.CurrentSession_Safe.Area.Mode}_{SaveData.Instance.CurrentSession_Safe.Level}";
                     Celeste_MultiworldModule.SaveData.RoomLocations.Add(AP_ID);
                 }
+            }
+        }
+
+        private void modLevel_LoadLevel(On.Celeste.Level.orig_LoadLevel orig, Level self, Player.IntroTypes playerIntro, bool isFromLoader)
+        {
+            orig(self, playerIntro, isFromLoader);
+
+            if (ArchipelagoManager.Instance.DeathLinkActive && self.Entities.FindFirst<DeathDisplay>() == null)
+            {
+                self.Entities.Add(new DeathDisplay());
             }
         }
     }

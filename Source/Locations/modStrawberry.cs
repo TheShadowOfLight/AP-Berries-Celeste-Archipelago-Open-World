@@ -13,12 +13,15 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             On.Celeste.Strawberry.ctor += modStrawberry_ctor;
             On.Celeste.Strawberry.OnCollect += modStrawberry_OnCollect;
             On.Celeste.SaveData.CheckStrawberry_EntityID += modSaveData_CheckStrawberry_EntityID;
+            On.Celeste.TotalStrawberriesDisplay.Update += modTotalStrawberriesDisplay_Update;
         }
 
         public override void Unload()
         {
             On.Celeste.Strawberry.OnCollect -= modStrawberry_OnCollect;
             On.Celeste.SaveData.CheckStrawberry_EntityID -= modSaveData_CheckStrawberry_EntityID;
+            On.Celeste.SaveData.CheckStrawberry_EntityID -= modSaveData_CheckStrawberry_EntityID;
+            On.Celeste.TotalStrawberriesDisplay.Update -= modTotalStrawberriesDisplay_Update;
         }
 
         private void modStrawberry_ctor(On.Celeste.Strawberry.orig_ctor orig, Strawberry self, EntityData data, Microsoft.Xna.Framework.Vector2 offset, EntityID gid)
@@ -46,6 +49,13 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
         {
             string AP_ID = $"{self.CurrentSession_Safe.Area.ID}_{(int)SaveData.Instance.CurrentSession_Safe.Area.Mode}_{strawberry}";
             return Celeste_MultiworldModule.SaveData.StrawberryLocations.Contains(AP_ID);
+        }
+
+        private void modTotalStrawberriesDisplay_Update(On.Celeste.TotalStrawberriesDisplay.orig_Update orig, TotalStrawberriesDisplay self)
+        {
+            self.strawberries.showOutOf = true;
+            self.strawberries.OutOf = ArchipelagoManager.Instance.StrawberriesRequired;
+            orig(self);
         }
     }
 }

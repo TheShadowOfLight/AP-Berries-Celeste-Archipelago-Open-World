@@ -64,6 +64,8 @@ namespace Celeste.Mod.Celeste_Multiworld
         public Hint[] Hints => _session.DataStorage.GetHints();
 
         #region Slot Data
+        public int StrawberriesRequired { get; set; }
+        public bool DeathLinkActive { get; set; }
         public int DeathLinkAmnesty { get; set; }
         public bool Roomsanity = false;
         public bool IncludeGoldens = false;
@@ -145,6 +147,8 @@ namespace Celeste.Mod.Celeste_Multiworld
             Player.UsedHairColor = new Microsoft.Xna.Framework.Color((noDashHairInt >> 16) & 0xFF, (noDashHairInt >> 8) & 0xFF, (noDashHairInt) & 0xFF);
             Player.FlyPowerHairColor = new Microsoft.Xna.Framework.Color((featherHairInt >> 16) & 0xFF, (featherHairInt >> 8) & 0xFF, (featherHairInt) & 0xFF);
 
+            StrawberriesRequired = Convert.ToInt32(((LoginSuccessful)result).SlotData.TryGetValue("strawberries_required", out value) ? value : 100);
+            DeathLinkActive = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("death_link", out value) ? value : false);
             DeathLinkAmnesty = Convert.ToInt32(((LoginSuccessful)result).SlotData.TryGetValue("death_link_amnesty", out value) ? value : 10);
             Roomsanity = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("roomsanity", out value) ? value : false);
             IncludeGoldens = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("include_goldens", out value) ? value : false);
