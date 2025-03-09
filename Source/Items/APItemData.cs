@@ -30,6 +30,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
 
             new modDreamBlock(),
             new modCoin(),
+            new modStrawberrySeeds(),
 
             new modTorch(),
         };
