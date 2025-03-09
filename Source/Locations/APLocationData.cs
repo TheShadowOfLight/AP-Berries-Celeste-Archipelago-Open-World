@@ -204,6 +204,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             { "1_0_1:12",  0xCA1100 },
             { "1_0_end:4", 0xCA1101 },
             { "1_1_00:25", 0xCA1102 },
+            { "1_2_00:50", 0xCA1103 },
         };
         public static Dictionary<long, string> StrawberryAPToID { get; set; } = new Dictionary<long, string>
         {
@@ -233,6 +234,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             { 0xCA1100, "1_0_1:12" },
             { 0xCA1101, "1_0_end:4" },
             { 0xCA1102, "1_1_00:25" },
+            { 0xCA1103, "1_2_00:50" },
         };
 
         public static Dictionary<string, long> RoomNameToAP { get; set; } = new Dictionary<string, long>
@@ -299,6 +301,10 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             { "1_1_10", 0xCA1839 },
             { "1_1_11", 0xCA183A },
             { "1_1_end", 0xCA183B },
+
+            { "1_2_00", 0xCA183C },
+            { "1_2_01", 0xCA183D },
+            { "1_2_02", 0xCA183E },
         };
 
         public static Dictionary<long, string> APToRoomName { get; set; } = new Dictionary<long, string>
@@ -365,6 +371,10 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             { 0xCA1839, "1_1_10" },
             { 0xCA183A, "1_1_11" },
             { 0xCA183B, "1_1_end" },
+
+            { 0xCA183C, "1_2_00" },
+            { 0xCA183D, "1_2_01" },
+            { 0xCA183E, "1_2_02" },
         };
     }
 }
