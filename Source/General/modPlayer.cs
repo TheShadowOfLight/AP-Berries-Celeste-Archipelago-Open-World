@@ -64,6 +64,13 @@ namespace Celeste.Mod.Celeste_Multiworld.General
         {
             orig(self, playerIntro, isFromLoader);
 
+            if (self.Session.Area.ID == 2 && self.Session.Area.Mode == 0)
+            {
+                // Always start Old Site A with Mirror Pre-Broken, for Logic reasons
+                self.Session.Inventory.DreamDash = true;
+            }
+
+            // Pause UI Entities
             if (ArchipelagoManager.Instance.DeathLinkActive && self.Entities.FindFirst<DeathDisplay>() == null)
             {
                 self.Entities.Add(new DeathDisplay());
