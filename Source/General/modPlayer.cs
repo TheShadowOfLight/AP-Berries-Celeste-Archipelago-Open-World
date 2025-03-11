@@ -29,7 +29,7 @@ namespace Celeste.Mod.Celeste_Multiworld.General
         {
             PlayerDeadBody result = orig(self, direction, evenIfInvincible, registerDeathInStats);
 
-            if (registerDeathInStats)
+            if (registerDeathInStats && !SaveData.Instance.Assists.Invincible)
             {
                 ArchipelagoManager.Instance.SendDeathLinkIfEnabled("couldn't climb the mountain");
             }

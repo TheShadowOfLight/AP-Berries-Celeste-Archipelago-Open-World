@@ -15,8 +15,10 @@ using Archipelago.MultiClient.Net.Packets;
 using Archipelago.MultiClient.Net.Models;
 using Archipelago.MultiClient.Net.MessageLog.Messages;
 using Microsoft.Xna.Framework;
+using M_Color = Microsoft.Xna.Framework.Color;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json.Linq;
+using System.Reflection;
 
 
 
@@ -75,10 +77,16 @@ namespace Celeste.Mod.Celeste_Multiworld
         public bool IncludeCSides = false;
         #endregion
 
+        private static string commandHolder = null;
+        private static FieldInfo currentText = typeof(Monocle.Commands).GetField("currentText", BindingFlags.NonPublic | BindingFlags.Instance);
+
         public ArchipelagoManager(Game game) : base(game)
         {
             game.Components.Add(this);
             Instance = this;
+
+            On.Monocle.Commands.EnterCommand += copyConsoleCommandToHolder;
+            On.Monocle.Commands.ExecuteCommand += customParseDisplayMessageCommandConsole;
         }
 
         public override void Update(GameTime gameTime)
@@ -118,7 +126,9 @@ namespace Celeste.Mod.Celeste_Multiworld
             catch (Exception ex)
             {
                 Disconnect();
-                return new($"Unable to establish an initial connection to the Archipelago server @ {Celeste_MultiworldModule.Settings.Address} : {ex.Message}");
+                string message = $"Unable to establish an initial connection to the Archipelago server @ {Celeste_MultiworldModule.Settings.Address} : {ex.Message}";
+                Monocle.Engine.Commands.Log(message, M_Color.Red);
+                return new(message);
             }
 
             var result = await _session.LoginAsync(
@@ -133,6 +143,7 @@ namespace Celeste.Mod.Celeste_Multiworld
             if (!result.Successful)
             {
                 Disconnect();
+                Monocle.Engine.Commands.Log((result as LoginFailure).ToString(), M_Color.Red);
                 return result as LoginFailure;
             }
 
@@ -142,10 +153,10 @@ namespace Celeste.Mod.Celeste_Multiworld
             int twoDashHairInt = Convert.ToInt32(((LoginSuccessful)result).SlotData.TryGetValue("madeline_two_dash_hair_color", out value) ? value : 0xfa91ff);
             int noDashHairInt = Convert.ToInt32(((LoginSuccessful)result).SlotData.TryGetValue("madeline_no_dash_hair_color", out value) ? value : 0x6ec0ff);
             int featherHairInt = Convert.ToInt32(((LoginSuccessful)result).SlotData.TryGetValue("madeline_feather_hair_color", out value) ? value : 0xf2d450);
-            Player.NormalHairColor = new Microsoft.Xna.Framework.Color((normalHairInt >> 16) & 0xFF, (normalHairInt >> 8) & 0xFF, (normalHairInt) & 0xFF);
-            Player.TwoDashesHairColor = new Microsoft.Xna.Framework.Color((twoDashHairInt >> 16) & 0xFF, (twoDashHairInt >> 8) & 0xFF, (twoDashHairInt) & 0xFF);
-            Player.UsedHairColor = new Microsoft.Xna.Framework.Color((noDashHairInt >> 16) & 0xFF, (noDashHairInt >> 8) & 0xFF, (noDashHairInt) & 0xFF);
-            Player.FlyPowerHairColor = new Microsoft.Xna.Framework.Color((featherHairInt >> 16) & 0xFF, (featherHairInt >> 8) & 0xFF, (featherHairInt) & 0xFF);
+            Player.NormalHairColor = new M_Color((normalHairInt >> 16) & 0xFF, (normalHairInt >> 8) & 0xFF, (normalHairInt) & 0xFF);
+            Player.TwoDashesHairColor = new M_Color((twoDashHairInt >> 16) & 0xFF, (twoDashHairInt >> 8) & 0xFF, (twoDashHairInt) & 0xFF);
+            Player.UsedHairColor = new M_Color((noDashHairInt >> 16) & 0xFF, (noDashHairInt >> 8) & 0xFF, (noDashHairInt) & 0xFF);
+            Player.FlyPowerHairColor = new M_Color((featherHairInt >> 16) & 0xFF, (featherHairInt >> 8) & 0xFF, (featherHairInt) & 0xFF);
 
             StrawberriesRequired = Convert.ToInt32(((LoginSuccessful)result).SlotData.TryGetValue("strawberries_required", out value) ? value : 100);
             DeathLinkActive = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("death_link", out value) ? value : false);
@@ -349,20 +360,77 @@ namespace Celeste.Mod.Celeste_Multiworld
             }
         }
 
+
+        #region AP Messaging
+        private static void copyConsoleCommandToHolder(On.Monocle.Commands.orig_EnterCommand orig, Monocle.Commands self)
+        {
+            commandHolder = (string)currentText.GetValue(self);
+            orig(self);
+            commandHolder = null;
+        }
+
+        private static void customParseDisplayMessageCommandConsole(On.Monocle.Commands.orig_ExecuteCommand orig, Monocle.Commands self, string command, string[] args)
+        {
+            if (commandHolder != null && command == "!ap")
+            {
+                string[] split = commandHolder.Split(new char[] { ' ' }, 2, StringSplitOptions.RemoveEmptyEntries);
+
+                args = new string[split.Length - 1];
+                for (int i = 1; i < split.Length; i++)
+                {
+                    args[i - 1] = split[i];
+                }
+            }
+
+            orig(self, command, args);
+        }
+
+        [Monocle.Command("!ap", "Send a message to the AP server.")]
+        private static void CmdAP(string ap_command)
+        {
+            if (ArchipelagoManager.Instance.Ready)
+            {
+                string final_command = string.Join(" ", ap_command);
+                ArchipelagoManager.Instance._session.Say(final_command);
+            }
+            else
+            {
+                Monocle.Engine.Commands.Log("Archipelago connection is not established.", M_Color.Red);
+            }
+        }
+
         private void OnMessageReceived(LogMessage message)
         {
             switch (message)
             {
+                case HintItemSendLogMessage:
+                    HintItemSendLogMessage hintItemSendMessage = (HintItemSendLogMessage)message;
+
+                    if (hintItemSendMessage.IsRelatedToActivePlayer)
+                    {
+                        MessageLog.Add(new ArchipelagoMessage(message.ToString()));
+                        Logger.Log("AP", message.ToString());
+                        Monocle.Engine.Commands.Log(message.ToString(), M_Color.Orange);
+                    }
+                    break;
                 case ItemSendLogMessage:
                     ItemSendLogMessage itemSendMessage = (ItemSendLogMessage)message;
 
                     if (itemSendMessage.IsRelatedToActivePlayer && !itemSendMessage.IsReceiverTheActivePlayer)
                     {
                         MessageLog.Add(new ArchipelagoMessage(message.ToString()));
+                        Logger.Log("AP", message.ToString());
+                        Monocle.Engine.Commands.Log(message.ToString(), M_Color.Lime);
                     }
                     break;
+                case ServerChatLogMessage:
+                case ChatLogMessage:
                 case CountdownLogMessage:
+                    Monocle.Engine.Commands.Log(message.ToString());
+                    MessageLog.Add(new ArchipelagoMessage(message.ToString()));
+                    break;
                 case GoalLogMessage:
+                    Monocle.Engine.Commands.Log(message.ToString(), M_Color.Gold);
                     MessageLog.Add(new ArchipelagoMessage(message.ToString()));
                     break;
             }
@@ -371,7 +439,11 @@ namespace Celeste.Mod.Celeste_Multiworld
         private static void OnError(Exception exception, string message)
         {
             Logger.Error("AP", message);
+            Monocle.Engine.Commands.Log(message, M_Color.Red);
         }
+        #endregion
+
+
 
         public void CheckReceivedItemQueue()
         {
@@ -386,8 +458,11 @@ namespace Celeste.Mod.Celeste_Multiworld
             {
                 var item = ItemQueue[index].Item2;
 
-                Logger.Info("AP", $"Received {Items.APItemData.ItemIDToString[item.ItemId]} from {GetPlayerName(item.Player)}.");
+                string receivedMessage = $"Received {Items.APItemData.ItemIDToString[item.ItemId]} from {GetPlayerName(item.Player)}.";
+
+                Logger.Info("AP", receivedMessage);
                 MessageLog.Add(new ArchipelagoMessage($"Received {Items.APItemData.ItemIDToString[item.ItemId]} from {GetPlayerName(item.Player)}."));
+                Monocle.Engine.Commands.Log(receivedMessage, M_Color.DeepPink);
 
                 switch (item.ItemId)
                 {

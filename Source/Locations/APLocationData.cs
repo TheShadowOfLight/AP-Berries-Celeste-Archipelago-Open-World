@@ -283,7 +283,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             { 0xCA1025, "2_0_end_3c:13" },
 
             { 0xCA1104, "2_0_start:5" },
-            { 0xCA1105, "2_2_start:5" },
+            { 0xCA1105, "2_1_start:5" },
             { 0xCA1106, "2_2_00:6" },
         };
 
