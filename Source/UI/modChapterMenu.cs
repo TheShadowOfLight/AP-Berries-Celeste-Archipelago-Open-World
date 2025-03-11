@@ -20,8 +20,19 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
 
             On.Celeste.SaveData.SetCheckpoint += modSaveData_SetCheckpoint;
         }
+        public void Unload()
+        {
+            On.Celeste.OuiChapterPanel.IsStart -= modOuiChapterPanel_IsStart;
+            On.Celeste.OuiChapterPanel.Reset -= modOuiChapterPanel_Reset;
+            On.Celeste.OuiChapterPanel.Start -= modOuiChapterPanel_Start;
+            On.Celeste.OuiChapterPanel.Swap -= modOuiChapterPanel_Swap;
+            On.Celeste.OuiChapterPanel.UpdateStats -= modOuiChapterPanel_UpdateStats;
+            On.Celeste.OuiChapterPanel.GetModeHeight -= modOuiChapterPanel_GetModeHeight;
 
-        private void modOuiChapterPanel_Start(On.Celeste.OuiChapterPanel.orig_Start orig, OuiChapterPanel self, string checkpoint)
+            On.Celeste.SaveData.SetCheckpoint -= modSaveData_SetCheckpoint;
+        }
+
+        private static void modOuiChapterPanel_Start(On.Celeste.OuiChapterPanel.orig_Start orig, OuiChapterPanel self, string checkpoint)
         {
             if (self.Area.Mode == AreaMode.BSide && !ArchipelagoManager.Instance.IncludeBSides)
             {
@@ -33,7 +44,7 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
             }
         }
 
-        private void modOuiChapterPanel_Swap(On.Celeste.OuiChapterPanel.orig_Swap orig, OuiChapterPanel self)
+        private static void modOuiChapterPanel_Swap(On.Celeste.OuiChapterPanel.orig_Swap orig, OuiChapterPanel self)
         {
             if (self.Area.Mode == AreaMode.BSide && !ArchipelagoManager.Instance.IncludeBSides)
             {
@@ -45,7 +56,7 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
             }
         }
 
-        private bool modSaveData_SetCheckpoint(On.Celeste.SaveData.orig_SetCheckpoint orig, SaveData self, AreaKey area, string level)
+        private static bool modSaveData_SetCheckpoint(On.Celeste.SaveData.orig_SetCheckpoint orig, SaveData self, AreaKey area, string level)
         {
             string checkpointString = area.ID.ToString() + "_" + ((int)area.Mode).ToString() + "_" + level;
 
@@ -58,7 +69,7 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
             return true;
         }
 
-        private HashSet<string> modSaveData_GetCheckpoints(On.Celeste.SaveData.orig_GetCheckpoints orig, SaveData self, AreaKey area)
+        private static HashSet<string> modSaveData_GetCheckpoints(On.Celeste.SaveData.orig_GetCheckpoints orig, SaveData self, AreaKey area)
         {
             HashSet<string> checkpoints = new HashSet<string>();
 
@@ -75,7 +86,7 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
             return checkpoints;
         }
 
-        public bool modOuiChapterPanel_IsStart(On.Celeste.OuiChapterPanel.orig_IsStart orig, OuiChapterPanel self, Overworld overworld, Overworld.StartMode start)
+        public static bool modOuiChapterPanel_IsStart(On.Celeste.OuiChapterPanel.orig_IsStart orig, OuiChapterPanel self, Overworld overworld, Overworld.StartMode start)
         {
             MonoMod.Utils.DynamicData dynamicUI = MonoMod.Utils.DynamicData.For(self);
             if (SaveData.Instance != null && SaveData.Instance.LastArea_Safe.ID == AreaKey.None.ID)
@@ -120,7 +131,7 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
             return true;
         }
 
-        private void modOuiChapterPanel_Reset(On.Celeste.OuiChapterPanel.orig_Reset orig, OuiChapterPanel self)
+        private static void modOuiChapterPanel_Reset(On.Celeste.OuiChapterPanel.orig_Reset orig, OuiChapterPanel self)
         {
             MonoMod.Utils.DynamicData dynamicUI = MonoMod.Utils.DynamicData.For(self);
 
@@ -177,10 +188,8 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
             self.initialized = true;
         }
 
-        private void modOuiChapterPanel_UpdateStats(On.Celeste.OuiChapterPanel.orig_UpdateStats orig, OuiChapterPanel self, bool wiggle, bool? overrideStrawberryWiggle, bool? overrideDeathWiggle, bool? overrideHeartWiggle)
+        private static void modOuiChapterPanel_UpdateStats(On.Celeste.OuiChapterPanel.orig_UpdateStats orig, OuiChapterPanel self, bool wiggle, bool? overrideStrawberryWiggle, bool? overrideDeathWiggle, bool? overrideHeartWiggle)
         {
-            // TODO: Make this orig function use AP Location berries instead of the save data ones
-
             orig(self, wiggle, overrideStrawberryWiggle, overrideDeathWiggle, overrideHeartWiggle);
 
             self.strawberries.ShowOutOf = self.Area.Mode == AreaMode.Normal;
@@ -188,7 +197,7 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
             self.deaths.Visible = !self.Data.Interlude_Safe;
         }
 
-        private int modOuiChapterPanel_GetModeHeight(On.Celeste.OuiChapterPanel.orig_GetModeHeight orig, OuiChapterPanel self)
+        private static int modOuiChapterPanel_GetModeHeight(On.Celeste.OuiChapterPanel.orig_GetModeHeight orig, OuiChapterPanel self)
         {
             AreaModeStats areaModeStats = self.RealStats.Modes[(int)self.Area.Mode];
             bool flag = self.Data.Interlude_Safe;

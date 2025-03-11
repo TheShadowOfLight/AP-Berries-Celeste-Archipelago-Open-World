@@ -22,7 +22,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             On.Celeste.StrawberrySeed.OnPlayer -= modStrawberrySeed_OnPlayer;
         }
 
-        private void modStrawberrySeed_Awake(On.Celeste.StrawberrySeed.orig_Awake orig, StrawberrySeed self, Monocle.Scene scene)
+        private static void modStrawberrySeed_Awake(On.Celeste.StrawberrySeed.orig_Awake orig, StrawberrySeed self, Monocle.Scene scene)
         {
             orig(self, scene);
 
@@ -37,7 +37,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             };
         }
 
-        private void modStrawberrySeed_Update(On.Celeste.StrawberrySeed.orig_Update orig, StrawberrySeed self)
+        private static void modStrawberrySeed_Update(On.Celeste.StrawberrySeed.orig_Update orig, StrawberrySeed self)
         {
             orig(self);
 
@@ -47,7 +47,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             }
         }
 
-        private void modStrawberrySeed_OnPlayer(On.Celeste.StrawberrySeed.orig_OnPlayer orig, StrawberrySeed self, Player player)
+        private static void modStrawberrySeed_OnPlayer(On.Celeste.StrawberrySeed.orig_OnPlayer orig, StrawberrySeed self, Player player)
         {
             if (HaveReceived())
             {
@@ -55,7 +55,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             }
         }
 
-        public override bool HaveReceived()
+        public static bool HaveReceived()
         {
             bool haveReceived = false;
             Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA121F, out haveReceived);

@@ -63,5 +63,26 @@ public class Celeste_MultiworldModule : EverestModule
     public override void Unload()
     {
         // TODO: unapply any hooks applied in Load()
+        foreach (modItemBase item in APItemData.modItems)
+        {
+            item.Unload();
+        }
+
+        foreach (modLocationBase location in APLocationData.modLocations)
+        {
+            location.Unload();
+        }
+
+        modMainMenu menu = new modMainMenu();
+        menu.Unload();
+
+        modChapterMenu chapterPanel = new modChapterMenu();
+        chapterPanel.Unload();
+
+        modAudio audio = new modAudio();
+        audio.Unload();
+
+        modPlayer player = new modPlayer();
+        player.Unload();
     }
 }

@@ -24,7 +24,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             On.Celeste.TotalStrawberriesDisplay.Update -= modTotalStrawberriesDisplay_Update;
         }
 
-        private void modStrawberry_ctor(On.Celeste.Strawberry.orig_ctor orig, Strawberry self, EntityData data, Microsoft.Xna.Framework.Vector2 offset, EntityID gid)
+        private static void modStrawberry_ctor(On.Celeste.Strawberry.orig_ctor orig, Strawberry self, EntityData data, Microsoft.Xna.Framework.Vector2 offset, EntityID gid)
         {
             orig(self, data, offset, gid);
 
@@ -36,7 +36,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             }
         }
 
-        private void modStrawberry_OnCollect(On.Celeste.Strawberry.orig_OnCollect orig, Strawberry self)
+        private static void modStrawberry_OnCollect(On.Celeste.Strawberry.orig_OnCollect orig, Strawberry self)
         {
             orig(self);
             string strawberryString = $"{SaveData.Instance.CurrentSession_Safe.Area.ID}_{(int)SaveData.Instance.CurrentSession_Safe.Area.Mode}_{self.ID}";
@@ -45,13 +45,13 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             Logger.Error("AP", strawberryString);
         }
 
-        private bool modSaveData_CheckStrawberry_EntityID(On.Celeste.SaveData.orig_CheckStrawberry_EntityID orig, SaveData self, EntityID strawberry)
+        private static bool modSaveData_CheckStrawberry_EntityID(On.Celeste.SaveData.orig_CheckStrawberry_EntityID orig, SaveData self, EntityID strawberry)
         {
             string AP_ID = $"{self.CurrentSession_Safe.Area.ID}_{(int)SaveData.Instance.CurrentSession_Safe.Area.Mode}_{strawberry}";
             return Celeste_MultiworldModule.SaveData.StrawberryLocations.Contains(AP_ID);
         }
 
-        private void modTotalStrawberriesDisplay_Update(On.Celeste.TotalStrawberriesDisplay.orig_Update orig, TotalStrawberriesDisplay self)
+        private static void modTotalStrawberriesDisplay_Update(On.Celeste.TotalStrawberriesDisplay.orig_Update orig, TotalStrawberriesDisplay self)
         {
             self.strawberries.showOutOf = true;
             self.strawberries.OutOf = ArchipelagoManager.Instance.StrawberriesRequired;

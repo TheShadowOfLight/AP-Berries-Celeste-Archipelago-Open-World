@@ -21,7 +21,12 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             On.Celeste.CassetteBlock.Update += modCassetteBlock_Update;
         }
 
-        private void modCassetteBlock_Update(On.Celeste.CassetteBlock.orig_Update orig, CassetteBlock self)
+        public override void Unload()
+        {
+            On.Celeste.CassetteBlock.Update -= modCassetteBlock_Update;
+        }
+
+        private static void modCassetteBlock_Update(On.Celeste.CassetteBlock.orig_Update orig, CassetteBlock self)
         {
             BlockColor bc = BlockColor.Pink;
             if (self.color.R == 240)
@@ -55,17 +60,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             }
         }
 
-        public override void Unload()
-        {
-            On.Celeste.CassetteBlock.Update -= modCassetteBlock_Update;
-        }
-        public override bool HaveReceived()
-        {
-            bool haveReceived = false;
-            return haveReceived;
-        }
-
-        internal bool HaveReceived(BlockColor color)
+        internal static bool HaveReceived(BlockColor color)
         {
             bool haveReceived = false;
             Celeste_MultiworldModule.SaveData.Interactables.TryGetValue((long)color, out haveReceived);

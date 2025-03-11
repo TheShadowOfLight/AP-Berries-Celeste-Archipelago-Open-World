@@ -8,8 +8,8 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
 {
     public class modCoin : modItemBase
     {
-        Microsoft.Xna.Framework.Color originalColor;
-        bool setColor = false;
+        static Microsoft.Xna.Framework.Color originalColor;
+        static bool setColor = false;
 
         public override void Load()
         {
@@ -24,11 +24,11 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             On.Celeste.TouchSwitch.OnPlayer -= modTouchSwitch_OnPlayer;
         }
 
-        private void modTouchSwitch_Render(On.Celeste.TouchSwitch.orig_Render orig, TouchSwitch self)
+        private static void modTouchSwitch_Render(On.Celeste.TouchSwitch.orig_Render orig, TouchSwitch self)
         {
             orig(self);
 
-            if (!setColor)
+            if (!modCoin.setColor)
             {
                 originalColor = self.inactiveColor;
                 setColor = true;
@@ -44,7 +44,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             }
         }
 
-        private void modTouchSwitch_OnPlayer(On.Celeste.TouchSwitch.orig_OnPlayer orig, TouchSwitch self, Player player)
+        private static void modTouchSwitch_OnPlayer(On.Celeste.TouchSwitch.orig_OnPlayer orig, TouchSwitch self, Player player)
         {
             if (HaveReceived())
             {
@@ -52,7 +52,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             }
         }
 
-        public override bool HaveReceived()
+        public static bool HaveReceived()
         {
             bool haveReceived = false;
             Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA1205, out haveReceived);

@@ -15,27 +15,29 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
             On.Celeste.MainMenuClimb.Confirm += modMainMenuClimb_Confirm;
         }
 
-        private System.Collections.IEnumerator modOuiMainMenu_Enter(On.Celeste.OuiMainMenu.orig_Enter orig, OuiMainMenu self, Oui from)
+        public void Unload()
+        {
+            On.Celeste.OuiMainMenu.Enter -= modOuiMainMenu_Enter;
+            On.Celeste.MainMenuClimb.Render -= modMainMenuClimb_Render;
+            On.Celeste.MainMenuClimb.Confirm -= modMainMenuClimb_Confirm;
+        }
+
+        private static System.Collections.IEnumerator modOuiMainMenu_Enter(On.Celeste.OuiMainMenu.orig_Enter orig, OuiMainMenu self, Oui from)
         {
             ArchipelagoManager.Instance.Disconnect();
 
             yield return orig(self, from);
         }
 
-        private void modMainMenuClimb_Render(On.Celeste.MainMenuClimb.orig_Render orig, MainMenuClimb self)
+        private static void modMainMenuClimb_Render(On.Celeste.MainMenuClimb.orig_Render orig, MainMenuClimb self)
         {
             orig(self);
             self.label = "Connect";
         }
 
-        private void modMainMenuClimb_Confirm(On.Celeste.MainMenuClimb.orig_Confirm orig, MainMenuClimb self)
+        private static void modMainMenuClimb_Confirm(On.Celeste.MainMenuClimb.orig_Confirm orig, MainMenuClimb self)
         {
             (self.Scene as Overworld).Goto<OuiConnection>();
-        }
-
-        public void Unload()
-        {
-
         }
     }
 }

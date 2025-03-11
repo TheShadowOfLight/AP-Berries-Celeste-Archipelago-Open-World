@@ -18,7 +18,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             On.Celeste.Torch.OnPlayer -= modTorch_OnPlayer;
         }
 
-        private void modTorch_OnPlayer(On.Celeste.Torch.orig_OnPlayer orig, Torch self, Player player)
+        private static void modTorch_OnPlayer(On.Celeste.Torch.orig_OnPlayer orig, Torch self, Player player)
         {
             if (HaveReceived())
             {
@@ -26,7 +26,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             }
         }
 
-        public override bool HaveReceived()
+        public static bool HaveReceived()
         {
             bool haveReceived = false;
             Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA1222, out haveReceived);

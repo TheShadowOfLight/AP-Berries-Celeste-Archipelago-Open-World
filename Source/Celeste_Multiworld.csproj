@@ -44,6 +44,14 @@
     <PropertyGroup>
         <PathMap>$(MSBuildProjectDirectory)=Celeste_Multiworld/</PathMap>
     </PropertyGroup>
+    
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+      <NoWarn>1701;1702;CL0003</NoWarn>
+    </PropertyGroup>
+    
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+      <NoWarn>1701;1702;CL0003</NoWarn>
+    </PropertyGroup>
 
     <!-- Inline task used to create a .zip for the mod -->
     <UsingTask TaskName="PackageMod" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">

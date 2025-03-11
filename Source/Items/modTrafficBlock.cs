@@ -8,8 +8,8 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
 {
     public class modTrafficBlock : modItemBase
     {
-        Microsoft.Xna.Framework.Color originalColor;
-        bool setColor = false;
+        static Microsoft.Xna.Framework.Color originalColor;
+        static bool setColor = false;
 
         public override void Load()
         {
@@ -24,14 +24,14 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             On.Celeste.ZipMover.Update -= modZipMover_Update;
         }
 
-        public override bool HaveReceived()
+        public static bool HaveReceived()
         {
             bool haveReceived = false;
             Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA1201, out haveReceived);
             return haveReceived;
         }
 
-        private void modZipMover_Render(On.Celeste.ZipMover.orig_Render orig, ZipMover self)
+        private static void modZipMover_Render(On.Celeste.ZipMover.orig_Render orig, ZipMover self)
         {
             orig(self);
 
@@ -51,7 +51,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             }
         }
 
-        private void modZipMover_Update(On.Celeste.ZipMover.orig_Update orig, ZipMover self)
+        private static void modZipMover_Update(On.Celeste.ZipMover.orig_Update orig, ZipMover self)
         {
             if (HaveReceived())
             {

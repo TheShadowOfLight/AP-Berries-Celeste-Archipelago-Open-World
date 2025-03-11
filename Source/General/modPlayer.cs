@@ -20,10 +20,12 @@ namespace Celeste.Mod.Celeste_Multiworld.General
 
         public void Unload()
         {
-
+            On.Celeste.Player.Die -= modPlayer_Die;
+            On.Celeste.Player.Update -= modPlayer_Update;
+            On.Celeste.Level.LoadLevel -= modLevel_LoadLevel;
         }
 
-        private PlayerDeadBody modPlayer_Die(On.Celeste.Player.orig_Die orig, Player self, Microsoft.Xna.Framework.Vector2 direction, bool evenIfInvincible, bool registerDeathInStats)
+        private static PlayerDeadBody modPlayer_Die(On.Celeste.Player.orig_Die orig, Player self, Microsoft.Xna.Framework.Vector2 direction, bool evenIfInvincible, bool registerDeathInStats)
         {
             PlayerDeadBody result = orig(self, direction, evenIfInvincible, registerDeathInStats);
 
@@ -35,7 +37,7 @@ namespace Celeste.Mod.Celeste_Multiworld.General
             return result;
         }
 
-        private void modPlayer_Update(On.Celeste.Player.orig_Update orig, Player self)
+        private static void modPlayer_Update(On.Celeste.Player.orig_Update orig, Player self)
         {
             orig(self);
 
@@ -60,7 +62,7 @@ namespace Celeste.Mod.Celeste_Multiworld.General
             }
         }
 
-        private void modLevel_LoadLevel(On.Celeste.Level.orig_LoadLevel orig, Level self, Player.IntroTypes playerIntro, bool isFromLoader)
+        private static void modLevel_LoadLevel(On.Celeste.Level.orig_LoadLevel orig, Level self, Player.IntroTypes playerIntro, bool isFromLoader)
         {
             orig(self, playerIntro, isFromLoader);
 

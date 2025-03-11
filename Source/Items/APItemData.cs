@@ -45,6 +45,10 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             { 0xCA1401, "Forsaken City A - Chasm" },
             { 0xCA1402, "Forsaken City B - Contraption" },
             { 0xCA1403, "Forsaken City B - Scrap Pit" },
+            { 0xCA1404, "Old Site A - Intervention" },
+            { 0xCA1405, "Old Site A - Awake" },
+            { 0xCA1406, "Old Site B - Combination Lock" },
+            { 0xCA1407, "Old Site B - Dream Altar" },
 
 
             { 0xCA1200, "Springs" },

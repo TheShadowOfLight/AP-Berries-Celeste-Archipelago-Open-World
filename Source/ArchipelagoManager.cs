@@ -41,13 +41,13 @@ namespace Celeste.Mod.Celeste_Multiworld
 
         private static readonly Version _supportedArchipelagoVersion = new(7, 7, 7);
 
-        private ArchipelagoSession? _session;
-        private DeathLinkService? _deathLinkService;
+        private ArchipelagoSession _session;
+        private DeathLinkService _deathLinkService;
         private DateTime _lastDeath;
 
         public bool GoalSent = false;
 
-        public DeathLink? DeathLinkData { get; private set; }
+        public DeathLink DeathLinkData { get; private set; }
         public int DeathsCounted = 0;
         public bool IsDeathLinkSafe { get; set; }
         public bool Ready { get; private set; }
@@ -118,7 +118,7 @@ namespace Celeste.Mod.Celeste_Multiworld
             catch (Exception ex)
             {
                 Disconnect();
-                return new($"Unable to establish an initial connection to the Archipelago server @ {Celeste_MultiworldModule.Settings.Address}");
+                return new($"Unable to establish an initial connection to the Archipelago server @ {Celeste_MultiworldModule.Settings.Address} : {ex.Message}");
             }
 
             var result = await _session.LoginAsync(
@@ -137,7 +137,7 @@ namespace Celeste.Mod.Celeste_Multiworld
             }
 
             // Load randomizer data.
-            object? value;
+            object value;
             int normalHairInt = Convert.ToInt32(((LoginSuccessful)result).SlotData.TryGetValue("madeline_one_dash_hair_color", out value) ? value : 0xdb2c00);
             int twoDashHairInt = Convert.ToInt32(((LoginSuccessful)result).SlotData.TryGetValue("madeline_two_dash_hair_color", out value) ? value : 0xfa91ff);
             int noDashHairInt = Convert.ToInt32(((LoginSuccessful)result).SlotData.TryGetValue("madeline_no_dash_hair_color", out value) ? value : 0x6ec0ff);
