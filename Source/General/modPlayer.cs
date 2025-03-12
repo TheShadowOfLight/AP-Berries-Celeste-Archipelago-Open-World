@@ -72,7 +72,33 @@ namespace Celeste.Mod.Celeste_Multiworld.General
 
         private static void modLevel_LoadLevel(On.Celeste.Level.orig_LoadLevel orig, Level self, Player.IntroTypes playerIntro, bool isFromLoader)
         {
+            // Fake the B Side Crystal Hearts so that the Golden Strawberries are spawned
+            Dictionary<int, bool> realBSideHearts = new Dictionary<int, bool>();
+            foreach (AreaStats area in SaveData.Instance.Areas_Safe)
+            {
+                AreaData areaData = AreaData.Areas[area.ID];
+
+                // TODO: This causes B Side Crystal Hearts to look as Ghosts in-level
+                if (areaData.HasMode(AreaMode.BSide) && areaData.Mode[(int)AreaMode.BSide].MapData.DetectedHeartGem)
+                {
+                    realBSideHearts.Add(area.ID, area.Modes[(int)AreaMode.BSide].HeartGem);
+                    area.Modes[(int)AreaMode.BSide].HeartGem = true;
+                }
+            }
+
             orig(self, playerIntro, isFromLoader);
+
+            // Undo faked B Side Crystal Hearts
+            foreach (AreaStats area in SaveData.Instance.Areas_Safe)
+            {
+                AreaData areaData = AreaData.Areas[area.ID];
+
+                if (areaData.HasMode(AreaMode.BSide) && areaData.Mode[(int)AreaMode.BSide].MapData.DetectedHeartGem)
+                {
+                    area.Modes[(int)AreaMode.BSide].HeartGem = realBSideHearts[area.ID];
+                }
+            }
+
 
             if (self.Session.Area.ID == 2 && self.Session.Area.Mode == 0)
             {

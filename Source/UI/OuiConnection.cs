@@ -187,12 +187,6 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
                     {
                         areaMode.Completed = true;
                     }
-
-                    // TODO: This enables Goldens. Try to find a cleaner way eventually
-                    if (areaData.HasMode(AreaMode.BSide) && areaData.Mode[(int)AreaMode.BSide].MapData.DetectedHeartGem)
-                    {
-                        area.Modes[(int)AreaMode.BSide].HeartGem = true;
-                    }
                 }
 
                 SaveData.Instance.UnlockedAreas = 10;
