@@ -198,7 +198,6 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
                 SaveData.Instance.UnlockedAreas = 10;
 
                 SaveData.Instance.AssistMode = true;
-                SaveData.Instance.DebugMode = true;
             }
 
             (Scene as Overworld).Goto<OuiChapterSelect>();

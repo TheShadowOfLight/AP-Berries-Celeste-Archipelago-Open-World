@@ -529,6 +529,28 @@ namespace Celeste.Mod.Celeste_Multiworld
                     }
                 }
             }
+            foreach (KeyValuePair<string, long> cassetteIDPair in Locations.APLocationData.CassetteIDToAP)
+            {
+                if (Celeste_MultiworldModule.SaveData.CassetteLocations.Contains(cassetteIDPair.Key))
+                {
+                    long locationID = cassetteIDPair.Value;
+                    if (!SentLocations.Contains(locationID))
+                    {
+                        locationsToCheck.Add(locationID);
+                    }
+                }
+            }
+            foreach (KeyValuePair<string, long> crystalHeartIDPair in Locations.APLocationData.CrystalHeartIDToAP)
+            {
+                if (Celeste_MultiworldModule.SaveData.CrystalHeartLocations.Contains(crystalHeartIDPair.Key))
+                {
+                    long locationID = crystalHeartIDPair.Value;
+                    if (!SentLocations.Contains(locationID))
+                    {
+                        locationsToCheck.Add(locationID);
+                    }
+                }
+            }
             foreach (KeyValuePair<string, long> strawberryIDPair in Locations.APLocationData.StrawberryIDToAP)
             {
                 if (Celeste_MultiworldModule.SaveData.StrawberryLocations.Contains(strawberryIDPair.Key))
@@ -582,6 +604,32 @@ namespace Celeste.Mod.Celeste_Multiworld
                     string levelClearLocString = Locations.APLocationData.LevelClearAPToID[newLoc];
 
                     Celeste_MultiworldModule.SaveData.LevelClearLocations.Add(levelClearLocString);
+                }
+
+                if (Locations.APLocationData.CassetteAPToID.ContainsKey(newLoc))
+                {
+                    string cassetteLocString = Locations.APLocationData.CassetteAPToID[newLoc];
+
+                    Celeste_MultiworldModule.SaveData.CassetteLocations.Add(cassetteLocString);
+
+                    string[] area_mode = cassetteLocString.Split(new char[] { '_' }, 3);
+                    int area = Int32.Parse(area_mode[0]);
+                    int mode = Int32.Parse(area_mode[1]);
+
+                    SaveData.Instance.RegisterCassette(new AreaKey(area, (AreaMode)mode));
+                }
+
+                if (Locations.APLocationData.CrystalHeartAPToID.ContainsKey(newLoc))
+                {
+                    string crystalHeartLocString = Locations.APLocationData.CrystalHeartAPToID[newLoc];
+
+                    Celeste_MultiworldModule.SaveData.CrystalHeartLocations.Add(crystalHeartLocString);
+
+                    string[] area_mode = crystalHeartLocString.Split(new char[] { '_' }, 3);
+                    int area = Int32.Parse(area_mode[0]);
+                    int mode = Int32.Parse(area_mode[1]);
+
+                    SaveData.Instance.RegisterHeartGem(new AreaKey(area, (AreaMode)mode));
                 }
 
                 if (Locations.APLocationData.StrawberryAPToID.ContainsKey(newLoc))

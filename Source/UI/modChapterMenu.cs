@@ -16,10 +16,12 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
             On.Celeste.OuiChapterPanel.Start += modOuiChapterPanel_Start;
             On.Celeste.OuiChapterPanel.Swap += modOuiChapterPanel_Swap;
             On.Celeste.OuiChapterPanel.UpdateStats += modOuiChapterPanel_UpdateStats;
+            On.Celeste.OuiChapterPanel.IncrementStats += modOuiChapterPanel_IncrementStats;
             On.Celeste.OuiChapterPanel.GetModeHeight += modOuiChapterPanel_GetModeHeight;
 
             On.Celeste.SaveData.SetCheckpoint += modSaveData_SetCheckpoint;
         }
+
         public void Unload()
         {
             On.Celeste.OuiChapterPanel.IsStart -= modOuiChapterPanel_IsStart;
@@ -113,6 +115,7 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
                     SaveData.Instance.LastArea_Safe.ID = areaData.ID;
                 }
             }
+
             bool flag = dynamicUI.Invoke<bool>("orig_IsStart", overworld, start);
             if (true && self.option >= self.options.Count && self.options.Count == 1)
             {
@@ -195,6 +198,15 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
             self.strawberries.ShowOutOf = self.Area.Mode == AreaMode.Normal;
             self.strawberries.Visible = !self.Data.Interlude_Safe;
             self.deaths.Visible = !self.Data.Interlude_Safe;
+        }
+
+        private static System.Collections.IEnumerator modOuiChapterPanel_IncrementStats(On.Celeste.OuiChapterPanel.orig_IncrementStats orig, OuiChapterPanel self, bool shouldAdvance)
+        {
+            if (SaveData.Instance.Areas_Safe[self.Data.ID].Cassette)
+            {
+                self.DisplayedStats.Cassette = true;
+            }
+            return orig(self, shouldAdvance);
         }
 
         private static int modOuiChapterPanel_GetModeHeight(On.Celeste.OuiChapterPanel.orig_GetModeHeight orig, OuiChapterPanel self)

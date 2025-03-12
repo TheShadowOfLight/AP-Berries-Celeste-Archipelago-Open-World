@@ -13,6 +13,8 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
         {
             new modStrawberry(),
             new modLookout(),
+            new modCassette(),
+            new modHeartGem(),
         };
 
         public static Dictionary<string, long> CheckpointStringToID { get; set; } = new Dictionary<string, long>
@@ -201,6 +203,32 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             { 0xCA1504, "2_0_Clear" },
             { 0xCA1505, "2_1_Clear" },
             { 0xCA1506, "2_2_Clear" },
+        };
+
+        public static Dictionary<string, long> CassetteIDToAP { get; set; } = new Dictionary<string, long>
+        {
+            { "1_0_Cassette", 0xCA1200 },
+
+            { "2_0_Cassette", 0xCA1201 },
+        };
+        public static Dictionary<long, string> CassetteAPToID { get; set; } = new Dictionary<long, string>
+        {
+            { 0xCA1200, "1_0_Cassette" },
+
+            { 0xCA1201, "2_0_Cassette" },
+        };
+
+        public static Dictionary<string, long> CrystalHeartIDToAP { get; set; } = new Dictionary<string, long>
+        {
+            { "1_0_CrystalHeart", 0xCA1300 },
+
+            { "2_0_CrystalHeart", 0xCA1301 },
+        };
+        public static Dictionary<long, string> CrystalHeartAPToID { get; set; } = new Dictionary<long, string>
+        {
+            { 0xCA1300, "1_0_CrystalHeart" },
+
+            { 0xCA1301, "2_0_CrystalHeart" },
         };
 
         public static Dictionary<string, long> StrawberryIDToAP { get; set; } = new Dictionary<string, long>

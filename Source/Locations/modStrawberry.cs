@@ -12,14 +12,16 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
         {
             On.Celeste.Strawberry.ctor += modStrawberry_ctor;
             On.Celeste.Strawberry.OnCollect += modStrawberry_OnCollect;
+            On.Celeste.SaveData.AddStrawberry_AreaKey_EntityID_bool += modSaveData_AddStrawberry_AreaKey_EntityID_bool;
             On.Celeste.SaveData.CheckStrawberry_EntityID += modSaveData_CheckStrawberry_EntityID;
             On.Celeste.TotalStrawberriesDisplay.Update += modTotalStrawberriesDisplay_Update;
         }
 
         public override void Unload()
         {
+            On.Celeste.Strawberry.ctor -= modStrawberry_ctor;
             On.Celeste.Strawberry.OnCollect -= modStrawberry_OnCollect;
-            On.Celeste.SaveData.CheckStrawberry_EntityID -= modSaveData_CheckStrawberry_EntityID;
+            On.Celeste.SaveData.AddStrawberry_AreaKey_EntityID_bool -= modSaveData_AddStrawberry_AreaKey_EntityID_bool;
             On.Celeste.SaveData.CheckStrawberry_EntityID -= modSaveData_CheckStrawberry_EntityID;
             On.Celeste.TotalStrawberriesDisplay.Update -= modTotalStrawberriesDisplay_Update;
         }
@@ -43,6 +45,16 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
 
             Celeste_MultiworldModule.SaveData.StrawberryLocations.Add(strawberryString);
             Logger.Error("AP", strawberryString);
+        }
+
+        private void modSaveData_AddStrawberry_AreaKey_EntityID_bool(On.Celeste.SaveData.orig_AddStrawberry_AreaKey_EntityID_bool orig, SaveData self, AreaKey area, EntityID strawberry, bool golden)
+        {
+            AreaModeStats areaModeStats = self.Areas_Safe[area.ID].Modes[(int)area.Mode];
+            if (!areaModeStats.Strawberries.Contains(strawberry))
+            {
+                areaModeStats.Strawberries.Add(strawberry);
+            }
+            Stats.Increment(golden ? Stat.GOLDBERRIES : Stat.BERRIES, 1);
         }
 
         private static bool modSaveData_CheckStrawberry_EntityID(On.Celeste.SaveData.orig_CheckStrawberry_EntityID orig, SaveData self, EntityID strawberry)
