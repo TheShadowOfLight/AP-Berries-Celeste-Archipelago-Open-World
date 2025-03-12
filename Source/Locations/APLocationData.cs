@@ -12,6 +12,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
         public static List<modLocationBase> modLocations { get; } = new List<modLocationBase>()
         {
             new modStrawberry(),
+            new modLookout(),
         };
 
         public static Dictionary<string, long> CheckpointStringToID { get; set; } = new Dictionary<string, long>
@@ -176,6 +177,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             { 0xCA143B,  "10_0_j-00" },
             { 0xCA143C,  "10_0_j-16" },
         };
+
         public static Dictionary<string, long> StrawberryIDToAP { get; set; } = new Dictionary<string, long>
         {
             // Level_Mode_Room:ID
@@ -285,6 +287,45 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             { 0xCA1104, "2_0_start:5" },
             { 0xCA1105, "2_1_start:5" },
             { 0xCA1106, "2_2_00:6" },
+        };
+
+        public static Dictionary<string, long> BinocularsIDToAP { get; set; } = new Dictionary<string, long>
+        {
+            // Level_Mode_Room:X_Y
+
+            // Forsaken City
+            { "1_1_03:1088_-616", 0xCA1700 },
+            { "1_1_09:3520_-2016", 0xCA1701 },
+
+            { "1_2_01:584_64", 0xCA1702 },
+            { "1_2_02:1496_-48", 0xCA1703 },
+
+            // Old Site
+            { "2_0_d3:1880_472", 0xCA1704 },
+
+            { "2_1_10:4592_-1912", 0xCA1705 },
+            { "2_1_11:4624_-2256", 0xCA1706 },
+
+            { "2_2_02:600_56", 0xCA1707 },
+        };
+        public static Dictionary<long, string> BinocularsAPToID { get; set; } = new Dictionary<long, string>
+        {
+            // Level_Mode_Room:X_Y
+
+            // Forsaken City
+            { 0xCA1700, "1_1_03:1088_-616" },
+            { 0xCA1701, "1_1_09:3520_-2016" },
+
+            { 0xCA1702, "1_2_01:584_64" },
+            { 0xCA1703, "1_2_02:1496_-48" },
+
+            // Old Site
+            { 0xCA1704, "2_0_d3:1880_472" },
+
+            { 0xCA1705, "2_1_10:4592_-1912" },
+            { 0xCA1706, "2_1_11:4624_-2256" },
+
+            { 0xCA1707, "2_2_02:600_56" },
         };
 
         public static Dictionary<string, long> RoomNameToAP { get; set; } = new Dictionary<string, long>

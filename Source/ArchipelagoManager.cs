@@ -69,6 +69,7 @@ namespace Celeste.Mod.Celeste_Multiworld
         public int StrawberriesRequired { get; set; }
         public bool DeathLinkActive { get; set; }
         public int DeathLinkAmnesty { get; set; }
+        public bool Binosanity = false;
         public bool Roomsanity = false;
         public bool IncludeGoldens = false;
         public bool IncludeCore = false;
@@ -163,6 +164,7 @@ namespace Celeste.Mod.Celeste_Multiworld
             StrawberriesRequired = Convert.ToInt32(((LoginSuccessful)result).SlotData.TryGetValue("strawberries_required", out value) ? value : 100);
             DeathLinkActive = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("death_link", out value) ? value : false);
             DeathLinkAmnesty = Convert.ToInt32(((LoginSuccessful)result).SlotData.TryGetValue("death_link_amnesty", out value) ? value : 10);
+            Binosanity = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("binosanity", out value) ? value : false);
             Roomsanity = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("roomsanity", out value) ? value : false);
             IncludeGoldens = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("include_goldens", out value) ? value : false);
             IncludeCore = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("include_core", out value) ? value : false);
@@ -527,6 +529,17 @@ namespace Celeste.Mod.Celeste_Multiworld
                     }
                 }
             }
+            foreach (KeyValuePair<string, long> binocularsIDPair in Locations.APLocationData.BinocularsIDToAP)
+            {
+                if (Celeste_MultiworldModule.SaveData.BinocularsLocations.Contains(binocularsIDPair.Key))
+                {
+                    long locationID = binocularsIDPair.Value;
+                    if (!SentLocations.Contains(locationID))
+                    {
+                        locationsToCheck.Add(locationID);
+                    }
+                }
+            }
             foreach (KeyValuePair<string, long> roomIDPair in Locations.APLocationData.RoomNameToAP)
             {
                 if (Celeste_MultiworldModule.SaveData.RoomLocations.Contains(roomIDPair.Key))
@@ -568,6 +581,13 @@ namespace Celeste.Mod.Celeste_Multiworld
                     // TODO: This count is getting doubled on a single-session (finish level, all berries counted twice)
                     SaveData.Instance.Areas_Safe[area].Modes[mode].TotalStrawberries += 1;
                     SaveData.Instance.Areas_Safe[area].Modes[mode].Strawberries.Add(new EntityID(level_EntityID[0], ID));
+                }
+
+                if (Locations.APLocationData.BinocularsAPToID.ContainsKey(newLoc))
+                {
+                    string binocularsLocString = Locations.APLocationData.BinocularsAPToID[newLoc];
+
+                    Celeste_MultiworldModule.SaveData.BinocularsLocations.Add(binocularsLocString);
                 }
 
                 if (Locations.APLocationData.APToRoomName.ContainsKey(newLoc))
