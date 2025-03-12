@@ -18,6 +18,7 @@ namespace Celeste.Mod.Celeste_Multiworld.General
             On.Celeste.Player.Die += modPlayer_Die;
             On.Celeste.Player.Update += modPlayer_Update;
             On.Celeste.Level.LoadLevel += modLevel_LoadLevel;
+            On.Celeste.Level.End += modLevel_End;
         }
 
         public void Unload()
@@ -25,6 +26,7 @@ namespace Celeste.Mod.Celeste_Multiworld.General
             On.Celeste.Player.Die -= modPlayer_Die;
             On.Celeste.Player.Update -= modPlayer_Update;
             On.Celeste.Level.LoadLevel -= modLevel_LoadLevel;
+            On.Celeste.Level.End -= modLevel_End;
         }
 
         private static PlayerDeadBody modPlayer_Die(On.Celeste.Player.orig_Die orig, Player self, Microsoft.Xna.Framework.Vector2 direction, bool evenIfInvincible, bool registerDeathInStats)
@@ -83,6 +85,14 @@ namespace Celeste.Mod.Celeste_Multiworld.General
             {
                 self.Entities.Add(new DeathDisplay());
             }
+        }
+
+        private static void modLevel_End(On.Celeste.Level.orig_End orig, Level self)
+        {
+            orig(self);
+
+            string AP_ID = $"{SaveData.Instance.CurrentSession_Safe.Area.ID}_{(int)SaveData.Instance.CurrentSession_Safe.Area.Mode}_Clear";
+            Celeste_MultiworldModule.SaveData.LevelClearLocations.Add(AP_ID);
         }
     }
 }

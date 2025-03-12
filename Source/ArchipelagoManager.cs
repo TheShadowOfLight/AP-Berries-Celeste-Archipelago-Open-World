@@ -518,6 +518,17 @@ namespace Celeste.Mod.Celeste_Multiworld
                     }
                 }
             }
+            foreach (KeyValuePair<string, long> levelClearIDPair in Locations.APLocationData.LevelClearIDToAP)
+            {
+                if (Celeste_MultiworldModule.SaveData.LevelClearLocations.Contains(levelClearIDPair.Key))
+                {
+                    long locationID = levelClearIDPair.Value;
+                    if (!SentLocations.Contains(locationID))
+                    {
+                        locationsToCheck.Add(locationID);
+                    }
+                }
+            }
             foreach (KeyValuePair<string, long> strawberryIDPair in Locations.APLocationData.StrawberryIDToAP)
             {
                 if (Celeste_MultiworldModule.SaveData.StrawberryLocations.Contains(strawberryIDPair.Key))
@@ -564,6 +575,13 @@ namespace Celeste.Mod.Celeste_Multiworld
                     string checkpointLocString = Locations.APLocationData.CheckpointIDToString[newLoc];
 
                     Celeste_MultiworldModule.SaveData.CheckpointLocations.Add(checkpointLocString);
+                }
+
+                if (Locations.APLocationData.LevelClearAPToID.ContainsKey(newLoc))
+                {
+                    string levelClearLocString = Locations.APLocationData.LevelClearAPToID[newLoc];
+
+                    Celeste_MultiworldModule.SaveData.LevelClearLocations.Add(levelClearLocString);
                 }
 
                 if (Locations.APLocationData.StrawberryAPToID.ContainsKey(newLoc))

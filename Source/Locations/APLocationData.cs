@@ -178,6 +178,31 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             { 0xCA143C,  "10_0_j-16" },
         };
 
+        public static Dictionary<string, long> LevelClearIDToAP { get; set; } = new Dictionary<string, long>
+        {
+            { "0_0_Clear", 0xCA1500 },
+
+            { "1_0_Clear", 0xCA1501 },
+            { "1_1_Clear", 0xCA1502 },
+            { "1_2_Clear", 0xCA1503 },
+
+            { "2_0_Clear", 0xCA1504 },
+            { "2_1_Clear", 0xCA1505 },
+            { "2_2_Clear", 0xCA1506 },
+        };
+        public static Dictionary<long, string> LevelClearAPToID { get; set; } = new Dictionary<long, string>
+        {
+            { 0xCA1500, "0_0_Clear" },
+
+            { 0xCA1501, "1_0_Clear" },
+            { 0xCA1502, "1_1_Clear" },
+            { 0xCA1503, "1_2_Clear" },
+
+            { 0xCA1504, "2_0_Clear" },
+            { 0xCA1505, "2_1_Clear" },
+            { 0xCA1506, "2_2_Clear" },
+        };
+
         public static Dictionary<string, long> StrawberryIDToAP { get; set; } = new Dictionary<string, long>
         {
             // Level_Mode_Room:ID
