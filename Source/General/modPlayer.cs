@@ -11,6 +11,8 @@ namespace Celeste.Mod.Celeste_Multiworld.General
 {
     internal class modPlayer
     {
+        public static int HairLength = 4;
+
         public void Load()
         {
             On.Celeste.Player.Die += modPlayer_Die;
@@ -41,9 +43,13 @@ namespace Celeste.Mod.Celeste_Multiworld.General
         {
             orig(self);
 
+            if (modPlayer.HairLength != 4 && self.Sprite != null)
+            {
+                self.Sprite.HairCount = modPlayer.HairLength;
+            }
+
             if (ArchipelagoManager.Instance.DeathLinkData != null)
             {
-                // TODO: Check for valid status to die
                 if (self.InControl && !self.Dead)
                 {
                     self.Die(Vector2.Zero, true, false);

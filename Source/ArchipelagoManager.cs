@@ -149,6 +149,8 @@ namespace Celeste.Mod.Celeste_Multiworld
 
             // Load randomizer data.
             object value;
+            int hairLengthInt = Convert.ToInt32(((LoginSuccessful)result).SlotData.TryGetValue("madeline_hair_length", out value) ? value : 4);
+            General.modPlayer.HairLength = hairLengthInt;
             int normalHairInt = Convert.ToInt32(((LoginSuccessful)result).SlotData.TryGetValue("madeline_one_dash_hair_color", out value) ? value : 0xdb2c00);
             int twoDashHairInt = Convert.ToInt32(((LoginSuccessful)result).SlotData.TryGetValue("madeline_two_dash_hair_color", out value) ? value : 0xfa91ff);
             int noDashHairInt = Convert.ToInt32(((LoginSuccessful)result).SlotData.TryGetValue("madeline_no_dash_hair_color", out value) ? value : 0x6ec0ff);

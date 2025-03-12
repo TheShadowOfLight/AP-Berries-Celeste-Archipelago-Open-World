@@ -20,15 +20,22 @@ public class Celeste_MultiworldModule : EverestModule
     public override Type SaveDataType => typeof(Celeste_MultiworldModuleSaveData);
     public static Celeste_MultiworldModuleSaveData SaveData => (Celeste_MultiworldModuleSaveData) Instance._SaveData;
 
+    #region Hooks
+    modMainMenu menu = new modMainMenu();
+    modChapterMenu chapterPanel = new modChapterMenu();
+    modAudio audio = new modAudio();
+    modPlayer player = new modPlayer();
+    #endregion
+
     public Celeste_MultiworldModule()
     {
         Instance = this;
 #if DEBUG
         // debug builds use verbose logging
-        Logger.SetLogLevel(nameof(Celeste_MultiworldModule), LogLevel.Verbose);
+        Logger.SetLogLevel("AP", LogLevel.Verbose);
 #else
         // release builds use info logging to reduce spam in log files
-        Logger.SetLogLevel(nameof(Celeste_MultiworldModule), LogLevel.Info);
+        Logger.SetLogLevel("AP", LogLevel.Info);
 #endif
     }
 
@@ -47,16 +54,9 @@ public class Celeste_MultiworldModule : EverestModule
             location.Load();
         }
 
-        modMainMenu menu = new modMainMenu();
         menu.Load();
-
-        modChapterMenu chapterPanel = new modChapterMenu();
         chapterPanel.Load();
-
-        modAudio audio = new modAudio();
         audio.Load();
-
-        modPlayer player = new modPlayer();
         player.Load();
     }
 
@@ -73,16 +73,9 @@ public class Celeste_MultiworldModule : EverestModule
             location.Unload();
         }
 
-        modMainMenu menu = new modMainMenu();
         menu.Unload();
-
-        modChapterMenu chapterPanel = new modChapterMenu();
         chapterPanel.Unload();
-
-        modAudio audio = new modAudio();
         audio.Unload();
-
-        modPlayer player = new modPlayer();
         player.Unload();
     }
 }
