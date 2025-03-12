@@ -18,7 +18,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             On.Celeste.Cassette.OnPlayer -= modCassette_OnPlayer;
         }
 
-        private void modCassette_OnPlayer(On.Celeste.Cassette.orig_OnPlayer orig, Cassette self, Player player)
+        private static void modCassette_OnPlayer(On.Celeste.Cassette.orig_OnPlayer orig, Cassette self, Player player)
         {
             orig(self, player);
 

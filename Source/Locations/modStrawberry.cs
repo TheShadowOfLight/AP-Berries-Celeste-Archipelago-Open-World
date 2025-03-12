@@ -47,7 +47,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             Logger.Error("AP", strawberryString);
         }
 
-        private void modSaveData_AddStrawberry_AreaKey_EntityID_bool(On.Celeste.SaveData.orig_AddStrawberry_AreaKey_EntityID_bool orig, SaveData self, AreaKey area, EntityID strawberry, bool golden)
+        private static void modSaveData_AddStrawberry_AreaKey_EntityID_bool(On.Celeste.SaveData.orig_AddStrawberry_AreaKey_EntityID_bool orig, SaveData self, AreaKey area, EntityID strawberry, bool golden)
         {
             AreaModeStats areaModeStats = self.Areas_Safe[area.ID].Modes[(int)area.Mode];
             if (!areaModeStats.Strawberries.Contains(strawberry))

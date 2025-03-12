@@ -18,7 +18,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             On.Celeste.HeartGem.Collect -= modHeartGem_Collect;
         }
 
-        private void modHeartGem_Collect(On.Celeste.HeartGem.orig_Collect orig, HeartGem self, Player player)
+        private static void modHeartGem_Collect(On.Celeste.HeartGem.orig_Collect orig, HeartGem self, Player player)
         {
             orig(self, player);
 
