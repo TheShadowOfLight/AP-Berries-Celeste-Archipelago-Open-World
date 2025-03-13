@@ -15,6 +15,8 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             new modLookout(),
             new modCassette(),
             new modHeartGem(),
+            new modKey(),
+            new modLockBlock(),
         };
 
         public static Dictionary<string, long> CheckpointStringToID { get; set; } = new Dictionary<string, long>
@@ -229,6 +231,15 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             { 0xCA1300, "1_0_CrystalHeart" },
 
             { 0xCA1301, "2_0_CrystalHeart" },
+        };
+
+        public static Dictionary<string, long> KeyIDToAP { get; set; } = new Dictionary<string, long>
+        {
+            { "3_0_s3:15", 0xCA1600 },
+        };
+        public static Dictionary<long, string> KeyAPToID { get; set; } = new Dictionary<long, string>
+        {
+            { 0xCA1600, "3_0_s3:15" },
         };
 
         public static Dictionary<string, long> StrawberryIDToAP { get; set; } = new Dictionary<string, long>
@@ -519,7 +530,6 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             { "2_2_01", 0xCA187E },
             { "2_2_02", 0xCA187F },
         };
-
         public static Dictionary<long, string> APToRoomName { get; set; } = new Dictionary<long, string>
         {
             { 0xCA1800, "0_0_-1" },

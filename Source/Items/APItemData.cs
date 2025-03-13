@@ -87,6 +87,8 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             { 0xCA1221, "White Block" },
             { 0xCA1222, "Torches" },
             { 0xCA1223, "Bird" },
+
+            { 0xCA1600, "Celestial Resort A - Front Door Key" },
         };
 
         public static Dictionary<long, CheckpointItemData> CheckpointData { get; set; } = new Dictionary<long, CheckpointItemData>

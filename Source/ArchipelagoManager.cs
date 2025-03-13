@@ -487,6 +487,17 @@ namespace Celeste.Mod.Celeste_Multiworld
                         }
                         break;
                     }
+                    case long id when id >= 0xCA1600 && id <= 0xCA1700:
+                    {
+                        Celeste_MultiworldModule.SaveData.KeyItems[id] = true;
+
+                        if (audioGuard < 3)
+                        {
+                            audioGuard++;
+                            Audio.Play(SFX.game_gen_key_get);
+                        }
+                        break;
+                    }
                     case long id when id >= 0xCA1200 && id <= 0xCA1230:
                     {
                         Celeste_MultiworldModule.SaveData.Interactables[id] = true;
@@ -545,6 +556,17 @@ namespace Celeste.Mod.Celeste_Multiworld
                 if (Celeste_MultiworldModule.SaveData.CrystalHeartLocations.Contains(crystalHeartIDPair.Key))
                 {
                     long locationID = crystalHeartIDPair.Value;
+                    if (!SentLocations.Contains(locationID))
+                    {
+                        locationsToCheck.Add(locationID);
+                    }
+                }
+            }
+            foreach (KeyValuePair<string, long> keyIDPair in Locations.APLocationData.KeyIDToAP)
+            {
+                if (Celeste_MultiworldModule.SaveData.KeyLocations.Contains(keyIDPair.Key))
+                {
+                    long locationID = keyIDPair.Value;
                     if (!SentLocations.Contains(locationID))
                     {
                         locationsToCheck.Add(locationID);
@@ -630,6 +652,13 @@ namespace Celeste.Mod.Celeste_Multiworld
                     int mode = Int32.Parse(area_mode[1]);
 
                     SaveData.Instance.RegisterHeartGem(new AreaKey(area, (AreaMode)mode));
+                }
+
+                if (Locations.APLocationData.KeyAPToID.ContainsKey(newLoc))
+                {
+                    string keyLocString = Locations.APLocationData.KeyAPToID[newLoc];
+
+                    Celeste_MultiworldModule.SaveData.KeyLocations.Add(keyLocString);
                 }
 
                 if (Locations.APLocationData.StrawberryAPToID.ContainsKey(newLoc))
