@@ -33,6 +33,8 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             new modCoin(),
             new modStrawberrySeeds(),
 
+            new modSinkingPlatform(),
+
             new modTorch(),
         };
 
@@ -50,6 +52,12 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             { 0xCA1405, "Old Site A - Awake" },
             { 0xCA1406, "Old Site B - Combination Lock" },
             { 0xCA1407, "Old Site B - Dream Altar" },
+            { 0xCA1408, "Celestial Resort A - Huge Mess" },
+            { 0xCA1409, "Celestial Resort A - Elevator Shaft" },
+            { 0xCA140A, "Celestial Resort A - Presidential Suite" },
+            { 0xCA140B, "Celestial Resort B - Staff Quarters" },
+            { 0xCA140C, "Celestial Resort B - Library" },
+            { 0xCA140D, "Celestial Resort B - Rooftop" },
 
 
             { 0xCA1200, "Springs" },
@@ -90,6 +98,10 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             { 0xCA1223, "Bird" },
 
             { 0xCA1600, "Celestial Resort A - Front Door Key" },
+            { 0xCA1601, "Celestial Resort A - Hallway Key 1" },
+            { 0xCA1602, "Celestial Resort A - Hallway Key 2" },
+            { 0xCA1603, "Celestial Resort A - Huge Mess Key" },
+            { 0xCA1604, "Celestial Resort A - Presidential Suite Key" },
         };
 
         public static Dictionary<long, CheckpointItemData> CheckpointData { get; set; } = new Dictionary<long, CheckpointItemData>

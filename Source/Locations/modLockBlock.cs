@@ -8,9 +8,15 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
 {
     internal class modLockBlock : modLocationBase
     {
+        static Key animKey = null;
+
         static Dictionary<string, string> lockToKey = new Dictionary<string, string>()
         {
             { "3_0_s3:16", "3_0_s3:15" },
+            { "3_0_02-a:9", "3_0_02-b:32" },
+            { "3_0_07-a:11", "3_0_07-b:2" },
+            { "3_0_09-b:2", "3_0_09-b:13" },
+            { "3_0_04-c:17", "3_0_02-c:1" },
         };
 
         public override void Load()
@@ -30,9 +36,12 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
                 string Lock_ID = $"{SaveData.Instance.CurrentSession_Safe.Area.ID}_{(int)SaveData.Instance.CurrentSession_Safe.Area.Mode}_{self.ID}";
                 Logger.Error("AP", Lock_ID);
 
-                if (Celeste_MultiworldModule.SaveData.KeyLocations.Contains(lockToKey[Lock_ID]))
+                if (lockToKey.ContainsKey(Lock_ID) && Celeste_MultiworldModule.SaveData.KeyLocations.Contains(lockToKey[Lock_ID]))
                 {
-                    Key animKey = new Key(player, new EntityID("0", 0));
+                    if (modLockBlock.animKey == null || modLockBlock.animKey.IsUsed)
+                    {
+                        modLockBlock.animKey = new Key(player, new EntityID("0", 0));
+                    }
                     self.SceneAs<Level>().Add(animKey);
                     self.SceneAs<Level>().Session.Keys.Add(animKey.ID);
 
