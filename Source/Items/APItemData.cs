@@ -36,6 +36,9 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             new modSinkingPlatform(),
             new modMovingPlatform(),
 
+            new modCloud(),
+            new modBooster(),
+
             new modTorch(),
         };
 

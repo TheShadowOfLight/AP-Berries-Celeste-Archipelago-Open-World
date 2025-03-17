@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Microsoft.Xna.Framework;
-using Monocle;
 
 namespace Celeste.Mod.Celeste_Multiworld.Items
 {
