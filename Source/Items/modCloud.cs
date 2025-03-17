@@ -32,7 +32,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             On.Celeste.Cloud.Update -= modCloud_Update;
         }
 
-        private void modCloud_Render(On.Celeste.Cloud.orig_Render orig, Cloud self)
+        private static void modCloud_Render(On.Celeste.Cloud.orig_Render orig, Cloud self)
         {
             if (!setColor)
             {
@@ -52,7 +52,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             orig(self);
         }
 
-        private void modCloud_Update(On.Celeste.Cloud.orig_Update orig, Cloud self)
+        private static void modCloud_Update(On.Celeste.Cloud.orig_Update orig, Cloud self)
         {
             orig(self);
 

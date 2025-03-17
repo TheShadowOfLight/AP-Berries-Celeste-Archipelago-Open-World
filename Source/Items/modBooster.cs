@@ -26,7 +26,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             On.Celeste.Booster.Update -= modBooster_Update;
         }
 
-        private void modBooster_Render(On.Celeste.Booster.orig_Render orig, Booster self)
+        private static void modBooster_Render(On.Celeste.Booster.orig_Render orig, Booster self)
         {
             if (!HaveReceived(self.red ? BoosterColor.Red : BoosterColor.Blue))
             {
@@ -38,7 +38,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             orig(self);
         }
 
-        private void modBooster_Update(On.Celeste.Booster.orig_Update orig, Booster self)
+        private static void modBooster_Update(On.Celeste.Booster.orig_Update orig, Booster self)
         {
             orig(self);
 

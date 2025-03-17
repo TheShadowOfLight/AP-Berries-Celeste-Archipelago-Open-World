@@ -38,6 +38,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
 
             new modCloud(),
             new modBooster(),
+            new modWhiteBlock(),
 
             new modTorch(),
         };
