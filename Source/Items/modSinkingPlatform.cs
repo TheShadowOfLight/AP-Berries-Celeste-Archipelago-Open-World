@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Microsoft.Xna.Framework;
+using Monocle;
+
 namespace Celeste.Mod.Celeste_Multiworld.Items
 {
     internal class modSinkingPlatform : modItemBase
@@ -22,7 +25,16 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
         {
             if (HaveReceived())
             {
+                self.Collidable = true;
                 orig(self);
+            }
+            else
+            {
+                Vector2 shakeAmount = new Vector2(Monocle.Calc.Random.NextFloat(), Monocle.Calc.Random.NextFloat());
+                self.shaker.On = true;
+                self.shaker.Value = shakeAmount;
+                self.shaker.ShakeFor(0.1f, false);
+                self.Collidable = false;
             }
         }
 

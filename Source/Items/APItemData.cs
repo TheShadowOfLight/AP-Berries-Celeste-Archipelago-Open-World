@@ -34,6 +34,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             new modStrawberrySeeds(),
 
             new modSinkingPlatform(),
+            new modMovingPlatform(),
 
             new modTorch(),
         };
