@@ -197,6 +197,30 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             { "3_0_Clear", 0xCA1507 },
             { "3_1_Clear", 0xCA1508 },
             { "3_2_Clear", 0xCA1509 },
+
+            { "4_0_Clear", 0xCA150A },
+            { "4_1_Clear", 0xCA150B },
+            { "4_2_Clear", 0xCA150C },
+
+            { "5_0_Clear", 0xCA150D },
+            { "5_1_Clear", 0xCA150E },
+            { "5_2_Clear", 0xCA150F },
+
+            { "6_0_Clear", 0xCA1510 },
+            { "6_1_Clear", 0xCA1511 },
+            { "6_2_Clear", 0xCA1512 },
+
+            { "7_0_Clear", 0xCA1513 },
+            { "7_1_Clear", 0xCA1514 },
+            { "7_2_Clear", 0xCA1515 },
+
+            { "8_0_Clear", 0xCA1516 },
+
+            { "9_0_Clear", 0xCA1517 },
+            { "9_1_Clear", 0xCA1518 },
+            { "9_2_Clear", 0xCA1519 },
+
+            { "10_0_Clear", 0xCA151A },
         };
         public static Dictionary<long, string> LevelClearAPToID { get; set; } = new Dictionary<long, string>
         {
@@ -213,6 +237,30 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             { 0xCA1507, "3_0_Clear" },
             { 0xCA1508, "3_1_Clear" },
             { 0xCA1509, "3_2_Clear" },
+
+            { 0xCA150A, "4_0_Clear" },
+            { 0xCA150B, "4_1_Clear" },
+            { 0xCA150C, "4_2_Clear" },
+
+            { 0xCA150D, "5_0_Clear" },
+            { 0xCA150E, "5_1_Clear" },
+            { 0xCA150F, "5_2_Clear" },
+
+            { 0xCA1510, "6_0_Clear" },
+            { 0xCA1511, "6_1_Clear" },
+            { 0xCA1512, "6_2_Clear" },
+
+            { 0xCA1513, "7_0_Clear" },
+            { 0xCA1514, "7_1_Clear" },
+            { 0xCA1515, "7_2_Clear" },
+
+            { 0xCA1516, "8_0_Clear" },
+
+            { 0xCA1517, "9_0_Clear" },
+            { 0xCA1518, "9_1_Clear" },
+            { 0xCA1519, "9_2_Clear" },
+
+            { 0xCA151A, "10_0_Clear" },
         };
 
         public static Dictionary<string, long> CassetteIDToAP { get; set; } = new Dictionary<string, long>
@@ -222,6 +270,16 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             { "2_0_Cassette", 0xCA1201 },
 
             { "3_0_Cassette", 0xCA1202 },
+
+            { "4_0_Cassette", 0xCA1203 },
+
+            { "5_0_Cassette", 0xCA1204 },
+
+            { "6_0_Cassette", 0xCA1205 },
+
+            { "7_0_Cassette", 0xCA1206 },
+
+            { "8_0_Cassette", 0xCA1207 },
         };
         public static Dictionary<long, string> CassetteAPToID { get; set; } = new Dictionary<long, string>
         {
@@ -230,6 +288,16 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             { 0xCA1201, "2_0_Cassette" },
 
             { 0xCA1202, "3_0_Cassette" },
+
+            { 0xCA1203, "4_0_Cassette" },
+
+            { 0xCA1204, "5_0_Cassette" },
+
+            { 0xCA1205, "6_0_Cassette" },
+
+            { 0xCA1206, "7_0_Cassette" },
+
+            { 0xCA1207, "8_0_Cassette" },
         };
 
         public static Dictionary<string, long> CrystalHeartIDToAP { get; set; } = new Dictionary<string, long>
@@ -239,6 +307,16 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             { "2_0_CrystalHeart", 0xCA1301 },
 
             { "3_0_CrystalHeart", 0xCA1302 },
+
+            { "4_0_CrystalHeart", 0xCA1303 },
+
+            { "5_0_CrystalHeart", 0xCA1304 },
+
+            { "6_0_CrystalHeart", 0xCA1305 },
+
+            { "7_0_CrystalHeart", 0xCA1306 },
+
+            { "8_0_CrystalHeart", 0xCA1307 },
         };
         public static Dictionary<long, string> CrystalHeartAPToID { get; set; } = new Dictionary<long, string>
         {
@@ -247,6 +325,16 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             { 0xCA1301, "2_0_CrystalHeart" },
 
             { 0xCA1302, "3_0_CrystalHeart" },
+
+            { 0xCA1303, "4_0_CrystalHeart" },
+
+            { 0xCA1304, "5_0_CrystalHeart" },
+
+            { 0xCA1305, "6_0_CrystalHeart" },
+
+            { 0xCA1306, "7_0_CrystalHeart" },
+
+            { 0xCA1307, "8_0_CrystalHeart" },
         };
 
         public static Dictionary<string, long> KeyIDToAP { get; set; } = new Dictionary<string, long>
@@ -351,6 +439,41 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             { "3_0_s0:7", 0xCA1107 },
             { "3_1_00:2", 0xCA1108 },
             { "3_2_00:86", 0xCA1109 },
+
+            // Golden Ridge
+            { "4_0_a-01x:11", 0xCA103F },
+            { "4_0_a-02:8", 0xCA1040 },
+            { "4_0_a-03:33", 0xCA1041 },
+            { "4_0_a-04:11", 0xCA1042 },
+            { "4_0_a-06:6", 0xCA1043 },
+            { "4_0_a-07:16", 0xCA1044 },
+            { "4_0_a-10:13", 0xCA1045 },
+            { "4_0_a-09:12", 0xCA1046 },
+            { "4_0_b-01:6", 0xCA1047 },
+            { "4_0_b-01:13", 0xCA1048 },
+            { "4_0_b-04:1", 0xCA1049 },
+            { "4_0_b-07:15", 0xCA104A },
+            { "4_0_b-03:5", 0xCA104B },
+            { "4_0_b-02:20", 0xCA104C },
+            { "4_0_b-02:58", 0xCA104D },
+            { "4_0_b-secb:9", 0xCA104E },
+            { "4_0_b-08:11", 0xCA104F },
+            { "4_0_c-00:17", 0xCA1050 },
+            { "4_0_c-01:26", 0xCA1051 },
+            { "4_0_c-05:21", 0xCA1052 },
+            { "4_0_c-06:35", 0xCA1053 },
+            { "4_0_c-06b:43", 0xCA1054 },
+            { "4_0_c-08:28", 0xCA1055 },
+            { "4_0_c-10:55", 0xCA1056 },
+            { "4_0_d-00b:11", 0xCA1057 },
+            { "4_0_d-01:7", 0xCA1058 },
+            { "4_0_d-04:88", 0xCA1059 },
+            { "4_0_d-07:70", 0xCA105A },
+            { "4_0_d-09:18", 0xCA105B },
+
+            { "4_0_a-00:13", 0xCA110A },
+            { "4_1_a-00:41", 0xCA110B },
+            { "4_2_00:1", 0xCA110C },
         };
         public static Dictionary<long, string> StrawberryAPToID { get; set; } = new Dictionary<long, string>
         {
@@ -437,6 +560,41 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             { 0xCA1107, "3_0_s0:7" },
             { 0xCA1108, "3_1_00:2" },
             { 0xCA1109, "3_2_00:86" },
+
+            // Golden Ridge
+            { 0xCA103F, "4_0_a-01x:11" },
+            { 0xCA1040, "4_0_a-02:8" },
+            { 0xCA1041, "4_0_a-03:33" },
+            { 0xCA1042, "4_0_a-04:11" },
+            { 0xCA1043, "4_0_a-06:6" },
+            { 0xCA1044, "4_0_a-07:16" },
+            { 0xCA1045, "4_0_a-10:13" },
+            { 0xCA1046, "4_0_a-09:12" },
+            { 0xCA1047, "4_0_b-01:6" },
+            { 0xCA1048, "4_0_b-01:13" },
+            { 0xCA1049, "4_0_b-04:1" },
+            { 0xCA104A, "4_0_b-07:15" },
+            { 0xCA104B, "4_0_b-03:5" },
+            { 0xCA104C, "4_0_b-02:20" },
+            { 0xCA104D, "4_0_b-02:58" },
+            { 0xCA104E, "4_0_b-secb:9" },
+            { 0xCA104F, "4_0_b-08:11" },
+            { 0xCA1050, "4_0_c-00:17" },
+            { 0xCA1051, "4_0_c-01:26" },
+            { 0xCA1052, "4_0_c-05:21" },
+            { 0xCA1053, "4_0_c-06:35" },
+            { 0xCA1054, "4_0_c-06b:43" },
+            { 0xCA1055, "4_0_c-08:28" },
+            { 0xCA1056, "4_0_c-10:55" },
+            { 0xCA1057, "4_0_d-00b:11" },
+            { 0xCA1058, "4_0_d-01:7" },
+            { 0xCA1059, "4_0_d-04:88" },
+            { 0xCA105A, "4_0_d-07:70" },
+            { 0xCA105B, "4_0_d-09:18" },
+
+            { 0xCA110A, "4_0_a-00:13" },
+            { 0xCA110B, "4_1_a-00:41" },
+            { 0xCA110C, "4_2_00:1" },
         };
 
         public static Dictionary<string, long> BinocularsIDToAP { get; set; } = new Dictionary<string, long>
@@ -463,6 +621,19 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             { "3_1_12:6224_-432", 0xCA1709 },
 
             { "3_2_02:560_-312", 0xCA170A },
+
+            // Golden Ridge
+            { "4_0_a-11:3704_-760", 0xCA170B },
+            { "4_0_b-02:4600_-1264", 0xCA170C },
+            { "4_0_d-00b:9232_-4368", 0xCA170D },
+
+            { "4_1_b-02:4360_-512", 0xCA170E },
+            { "4_1_c-03:8160_-1744", 0xCA170F },
+            { "4_1_d-01:9600_-2736", 0xCA1710 },
+            { "4_1_end:13208_-2784", 0xCA1711 },
+
+            { "4_2_01:352_-56", 0xCA1712 },
+            { "4_2_02:624_-496", 0xCA1713 },
         };
         public static Dictionary<long, string> BinocularsAPToID { get; set; } = new Dictionary<long, string>
         {
@@ -488,10 +659,24 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             { 0xCA1709, "3_1_12:6224_-432" },
 
             { 0xCA170A, "3_2_02:560_-312" },
+
+            // Golden Ridge
+            { 0xCA170B, "4_0_a-11:3704_-760" },
+            { 0xCA170C, "4_0_b-02:4600_-1264" },
+            { 0xCA170D, "4_0_d-00b:9232_-4368" },
+
+            { 0xCA170E, "4_1_b-02:4360_-512" },
+            { 0xCA170F, "4_1_c-03:8160_-1744" },
+            { 0xCA1710, "4_1_d-01:9600_-2736" },
+            { 0xCA1711, "4_1_end:13208_-2784" },
+
+            { 0xCA1712, "4_2_01:352_-56" },
+            { 0xCA1713, "4_2_02:624_-496" },
         };
 
         public static Dictionary<string, long> RoomNameToAP { get; set; } = new Dictionary<string, long>
         {
+            // Prologue
             { "0_0_-1", 0xCA1800 },
             { "0_0_0", 0xCA1801 },
             { "0_0_0b", 0xCA1802 },
@@ -499,6 +684,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             { "0_0_2", 0xCA1804 },
             { "0_0_3", 0xCA1805 },
 
+            // Forsaken City
             { "1_0_1", 0xCA1806 },
             { "1_0_2", 0xCA1807 },
             { "1_0_3", 0xCA1808 },
@@ -723,9 +909,85 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             { "3_2_00", 0xCA18D9 },
             { "3_2_01", 0xCA18DA },
             { "3_2_02", 0xCA18DB },
+
+            // Golden Ridge
+            { "4_0_a-00", 0xCA18DC },
+            { "4_0_a-01", 0xCA18DD },
+            { "4_0_a-01x", 0xCA18DE },
+            { "4_0_a-02", 0xCA18DF },
+            { "4_0_a-03", 0xCA18E0 },
+            { "4_0_a-04", 0xCA18E1 },
+            { "4_0_a-05", 0xCA18E2 },
+            { "4_0_a-06", 0xCA18E3 },
+            { "4_0_a-07", 0xCA18E4 },
+            { "4_0_a-08", 0xCA18E5 },
+            { "4_0_a-10", 0xCA18E6 },
+            { "4_0_a-11", 0xCA18E7 },
+            { "4_0_a-09", 0xCA18E8 },
+            { "4_0_b-00", 0xCA18E9 },
+            { "4_0_b-01", 0xCA18EA },
+            { "4_0_b-04", 0xCA18EB },
+            { "4_0_b-06", 0xCA18EC },
+            { "4_0_b-07", 0xCA18ED },
+            { "4_0_b-03", 0xCA18EE },
+            { "4_0_b-02", 0xCA18EF },
+            { "4_0_b-sec", 0xCA18F0 },
+            { "4_0_b-secb", 0xCA18F1 },
+            { "4_0_b-05", 0xCA18F2 },
+            { "4_0_b-08b", 0xCA18F3 },
+            { "4_0_b-08", 0xCA18F4 },
+            { "4_0_c-00", 0xCA18F5 },
+            { "4_0_c-01", 0xCA18F6 },
+            { "4_0_c-02", 0xCA18F7 },
+            { "4_0_c-04", 0xCA18F8 },
+            { "4_0_c-05", 0xCA18F9 },
+            { "4_0_c-06", 0xCA18FA },
+            { "4_0_c-06b", 0xCA18FB },
+            { "4_0_c-09", 0xCA18FC },
+            { "4_0_c-07", 0xCA18FD },
+            { "4_0_c-08", 0xCA18FE },
+            { "4_0_c-10", 0xCA18FF },
+            { "4_0_d-00", 0xCA1900 },
+            { "4_0_d-00b", 0xCA1901 },
+            { "4_0_d-01", 0xCA1902 },
+            { "4_0_d-02", 0xCA1903 },
+            { "4_0_d-03", 0xCA1904 },
+            { "4_0_d-04", 0xCA1905 },
+            { "4_0_d-05", 0xCA1906 },
+            { "4_0_d-06", 0xCA1907 },
+            { "4_0_d-07", 0xCA1908 },
+            { "4_0_d-08", 0xCA1909 },
+            { "4_0_d-09", 0xCA190A },
+            { "4_0_d-10", 0xCA190B },
+
+            { "4_1_a-00", 0xCA190C },
+            { "4_1_a-01", 0xCA190D },
+            { "4_1_a-02", 0xCA190E },
+            { "4_1_a-03", 0xCA190F },
+            { "4_1_a-04", 0xCA1910 },
+            { "4_1_b-00", 0xCA1911 },
+            { "4_1_b-01", 0xCA1912 },
+            { "4_1_b-02", 0xCA1913 },
+            { "4_1_b-03", 0xCA1914 },
+            { "4_1_b-04", 0xCA1915 },
+            { "4_1_c-00", 0xCA1916 },
+            { "4_1_c-01", 0xCA1917 },
+            { "4_1_c-02", 0xCA1918 },
+            { "4_1_c-03", 0xCA1919 },
+            { "4_1_c-04", 0xCA191A },
+            { "4_1_d-00", 0xCA191B },
+            { "4_1_d-01", 0xCA191C },
+            { "4_1_d-02", 0xCA191D },
+            { "4_1_d-03", 0xCA191E },
+            { "4_1_end", 0xCA191F },
+
+            { "4_2_00", 0xCA1920 },
+            { "4_2_01", 0xCA1921 },
+            { "4_2_02", 0xCA1922 },
         };
         public static Dictionary<long, string> APToRoomName { get; set; } = new Dictionary<long, string>
         {
+            // Prologue
             { 0xCA1800, "0_0_-1" },
             { 0xCA1801, "0_0_0" },
             { 0xCA1802, "0_0_0b" },
@@ -733,6 +995,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             { 0xCA1804, "0_0_2" },
             { 0xCA1805, "0_0_3" },
 
+            // Forsaken City
             { 0xCA1806, "1_0_1" },
             { 0xCA1807, "1_0_2" },
             { 0xCA1808, "1_0_3" },
@@ -957,6 +1220,81 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             { 0xCA18D9, "3_2_00" },
             { 0xCA18DA, "3_2_01" },
             { 0xCA18DB, "3_2_02" },
+
+            // Golden Ridge
+            { 0xCA18DC, "4_0_a-00" },
+            { 0xCA18DD, "4_0_a-01" },
+            { 0xCA18DE, "4_0_a-01x" },
+            { 0xCA18DF, "4_0_a-02" },
+            { 0xCA18E0, "4_0_a-03" },
+            { 0xCA18E1, "4_0_a-04" },
+            { 0xCA18E2, "4_0_a-05" },
+            { 0xCA18E3, "4_0_a-06" },
+            { 0xCA18E4, "4_0_a-07" },
+            { 0xCA18E5, "4_0_a-08" },
+            { 0xCA18E6, "4_0_a-10" },
+            { 0xCA18E7, "4_0_a-11" },
+            { 0xCA18E8, "4_0_a-09" },
+            { 0xCA18E9, "4_0_b-00" },
+            { 0xCA18EA, "4_0_b-01" },
+            { 0xCA18EB, "4_0_b-04" },
+            { 0xCA18EC, "4_0_b-06" },
+            { 0xCA18ED, "4_0_b-07" },
+            { 0xCA18EE, "4_0_b-03" },
+            { 0xCA18EF, "4_0_b-02" },
+            { 0xCA18F0, "4_0_b-sec" },
+            { 0xCA18F1, "4_0_b-secb" },
+            { 0xCA18F2, "4_0_b-05" },
+            { 0xCA18F3, "4_0_b-08b" },
+            { 0xCA18F4, "4_0_b-08" },
+            { 0xCA18F5, "4_0_c-00" },
+            { 0xCA18F6, "4_0_c-01" },
+            { 0xCA18F7, "4_0_c-02" },
+            { 0xCA18F8, "4_0_c-04" },
+            { 0xCA18F9, "4_0_c-05" },
+            { 0xCA18FA, "4_0_c-06" },
+            { 0xCA18FB, "4_0_c-06b" },
+            { 0xCA18FC, "4_0_c-09" },
+            { 0xCA18FD, "4_0_c-07" },
+            { 0xCA18FE, "4_0_c-08" },
+            { 0xCA18FF, "4_0_c-10" },
+            { 0xCA1900, "4_0_d-00" },
+            { 0xCA1901, "4_0_d-00b" },
+            { 0xCA1902, "4_0_d-01" },
+            { 0xCA1903, "4_0_d-02" },
+            { 0xCA1904, "4_0_d-03" },
+            { 0xCA1905, "4_0_d-04" },
+            { 0xCA1906, "4_0_d-05" },
+            { 0xCA1907, "4_0_d-06" },
+            { 0xCA1908, "4_0_d-07" },
+            { 0xCA1909, "4_0_d-08" },
+            { 0xCA190A, "4_0_d-09" },
+            { 0xCA190B, "4_0_d-10" },
+
+            { 0xCA190C, "4_1_a-00" },
+            { 0xCA190D, "4_1_a-01" },
+            { 0xCA190E, "4_1_a-02" },
+            { 0xCA190F, "4_1_a-03" },
+            { 0xCA1910, "4_1_a-04" },
+            { 0xCA1911, "4_1_b-00" },
+            { 0xCA1912, "4_1_b-01" },
+            { 0xCA1913, "4_1_b-02" },
+            { 0xCA1914, "4_1_b-03" },
+            { 0xCA1915, "4_1_b-04" },
+            { 0xCA1916, "4_1_c-00" },
+            { 0xCA1917, "4_1_c-01" },
+            { 0xCA1918, "4_1_c-02" },
+            { 0xCA1919, "4_1_c-03" },
+            { 0xCA191A, "4_1_c-04" },
+            { 0xCA191B, "4_1_d-00" },
+            { 0xCA191C, "4_1_d-01" },
+            { 0xCA191D, "4_1_d-02" },
+            { 0xCA191E, "4_1_d-03" },
+            { 0xCA191F, "4_1_end" },
+
+            { 0xCA1920, "4_2_00" },
+            { 0xCA1921, "4_2_01" },
+            { 0xCA1922, "4_2_02" },
         };
     }
 }

@@ -64,6 +64,12 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             { 0xCA140B, "Celestial Resort B - Staff Quarters" },
             { 0xCA140C, "Celestial Resort B - Library" },
             { 0xCA140D, "Celestial Resort B - Rooftop" },
+            { 0xCA140E, "Golden Ridge A - Shrine" },
+            { 0xCA140F, "Golden Ridge A - Old Trail" },
+            { 0xCA1410, "Golden Ridge A - Cliff Face" },
+            { 0xCA1411, "Golden Ridge B - Stepping Stones" },
+            { 0xCA1412, "Golden Ridge B - Gusty Canyon" },
+            { 0xCA1413, "Golden Ridge B - Eye of the Storm" },
 
 
             { 0xCA1200, "Springs" },
