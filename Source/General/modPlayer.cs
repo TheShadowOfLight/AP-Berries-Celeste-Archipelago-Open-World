@@ -45,6 +45,8 @@ namespace Celeste.Mod.Celeste_Multiworld.General
         {
             orig(self);
 
+            HandleMessageQueue(self);
+
             if (modPlayer.HairLength != 4 && self.Sprite != null)
             {
                 self.Sprite.HairCount = modPlayer.HairLength;
@@ -122,6 +124,22 @@ namespace Celeste.Mod.Celeste_Multiworld.General
             }
 
             return orig(self, spotlightWipe, skipScreenWipe, skipCompleteScreen);
+        }
+
+        private static void HandleMessageQueue(Player self)
+        {
+            if (ArchipelagoManager.Instance.MessageLog.Count > 0)
+            {
+                if (self.Scene.Tracker.GetEntity<modMiniTextbox>() == null)
+                {
+                    ArchipelagoMessage updatedMessage = ArchipelagoManager.Instance.MessageLog[0];
+                    ArchipelagoManager.Instance.MessageLog.RemoveAt(0);
+
+                    self.Scene.Add(new modMiniTextbox(updatedMessage.Text));
+                    Logger.Error("AP", "updatedMessage.Text");
+                    Logger.Error("AP", updatedMessage.Text);
+                }
+            }
         }
     }
 }

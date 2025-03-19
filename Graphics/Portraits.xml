@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Sprites>
+  <portrait_ap_icon path="ap_icon/" sfx="ex">
+    <Center />
+	 
+    <sfxs>
+      <normal index="1"/>
+    </sfxs>
+	 
+    <Anim id="idle_normal" path="normal" delay="0.1" frames="0*4" goto="idle_normal:5"/>
+    <Loop id="talk_normal" path="normal" delay="0.2" frames="0*4" />
+  </portrait_ap_icon>
+</Sprites>

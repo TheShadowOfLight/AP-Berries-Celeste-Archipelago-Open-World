@@ -696,27 +696,6 @@ namespace Celeste.Mod.Celeste_Multiworld
             CollectedLocations.Clear();
         }
 
-        //public void HandleMessageQueue(Batcher batch, SpriteFont font, Rect bounds)
-        //{
-        //    for (int i = Math.Min(Math.Max(4, MessageLog.Count - 1), 4); i >= 0; i--)
-        //    {
-        //        if (MessageLog.Count > i)
-        //        {
-        //            batch.Text(font, Game.Instance.ArchipelagoManager.MessageLog[i].Text, bounds.BottomLeft, new Vec2(0, 5 - i), new Foster.Framework.Color(0xF5, 0x42, 0xC8, 0xFF));
-        //            ArchipelagoMessage updatedMessage = Game.Instance.ArchipelagoManager.MessageLog[i];
-        //            updatedMessage.RemainingTime -= 1;
-        //            if (updatedMessage.RemainingTime <= 0)
-        //            {
-        //                Game.Instance.ArchipelagoManager.MessageLog.RemoveAt(i);
-        //            }
-        //            else
-        //            {
-        //                Game.Instance.ArchipelagoManager.MessageLog[i] = updatedMessage;
-        //            }
-        //        }
-        //    }
-        //}
-
         private void OnPacketReceived(ArchipelagoPacketBase packet)
         {
             if (packet.PacketType == ArchipelagoPacketType.Retrieved)
