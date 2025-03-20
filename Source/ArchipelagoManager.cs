@@ -27,12 +27,25 @@ namespace Celeste.Mod.Celeste_Multiworld
 {
     public struct ArchipelagoMessage
     {
-        public string Text { get; init; } = "";
-        public int RemainingTime { get; set; } = 300;
+        public enum MessageType
+        {
+            General,
+            ItemReceive,
+            ItemSend,
+            ItemHint
+        }
 
-        public ArchipelagoMessage(string text)
+        public string Text { get; init; } = "";
+        public MessageType Type { get; set; } = MessageType.General;
+        public ItemFlags Flags { get; set; } = ItemFlags.Advancement;
+        public bool Strawberry { get; set; } = false;
+
+        public ArchipelagoMessage(string text, MessageType type = MessageType.General, ItemFlags flags = ItemFlags.Advancement, bool strawberry = false)
         {
             Text = text;
+            Type = type;
+            Flags = flags;
+            Strawberry = strawberry;
         }
     }
 
@@ -403,6 +416,29 @@ namespace Celeste.Mod.Celeste_Multiworld
             }
         }
 
+        private static string GetColorString(ItemFlags flags)
+        {
+            string itemColor = "";
+            if ((flags & ItemFlags.Advancement) != 0)
+            {
+                itemColor = "#AF99EF";
+            }
+            else if ((flags & ItemFlags.NeverExclude) != 0)
+            {
+                itemColor = "#6D8BE8";
+            }
+            else if ((flags & ItemFlags.Trap) != 0)
+            {
+                itemColor = "#FA8072";
+            }
+            else
+            {
+                itemColor = "#00EEEE";
+            }
+
+            return itemColor;
+        }
+
         private void OnMessageReceived(LogMessage message)
         {
             switch (message)
@@ -412,7 +448,7 @@ namespace Celeste.Mod.Celeste_Multiworld
 
                     if (hintItemSendMessage.IsRelatedToActivePlayer)
                     {
-                        MessageLog.Add(new ArchipelagoMessage(message.ToString()));
+                        MessageLog.Add(new ArchipelagoMessage(message.ToString(), ArchipelagoMessage.MessageType.ItemHint));
                         Logger.Log("AP", message.ToString());
                         Monocle.Engine.Commands.Log(message.ToString(), M_Color.Orange);
                     }
@@ -422,7 +458,10 @@ namespace Celeste.Mod.Celeste_Multiworld
 
                     if (itemSendMessage.IsRelatedToActivePlayer && !itemSendMessage.IsReceiverTheActivePlayer)
                     {
-                        MessageLog.Add(new ArchipelagoMessage(message.ToString()));
+                        string itemColor = GetColorString(itemSendMessage.Item.Flags);
+                        string prettyMessage = $"Sent {{{itemColor}}}{Items.APItemData.ItemIDToString[itemSendMessage.Item.ItemId]}{{#}} to {{#FAFAD2}}{itemSendMessage.Receiver.Name}{{#}}.";
+
+                        MessageLog.Add(new ArchipelagoMessage(prettyMessage.ToString(), ArchipelagoMessage.MessageType.ItemSend, itemSendMessage.Item.Flags));
                         Logger.Log("AP", message.ToString());
                         Monocle.Engine.Commands.Log(message.ToString(), M_Color.Lime);
                     }
@@ -463,9 +502,20 @@ namespace Celeste.Mod.Celeste_Multiworld
                 var item = ItemQueue[index].Item2;
 
                 string receivedMessage = $"Received {Items.APItemData.ItemIDToString[item.ItemId]} from {GetPlayerName(item.Player)}.";
+                string itemColor = GetColorString(item.Flags);
+                string prettyMessage = "";
+
+                if (item.Player == this.Slot)
+                {
+                    prettyMessage = $"You found your {{{itemColor}}}{Items.APItemData.ItemIDToString[item.ItemId]}{{#}}.";
+                }
+                else
+                {
+                    prettyMessage = $"Received {{{itemColor}}}{Items.APItemData.ItemIDToString[item.ItemId]}{{#}} from {{#FAFAD2}}{GetPlayerName(item.Player)}{{#}}.";
+                }
 
                 Logger.Info("AP", receivedMessage);
-                MessageLog.Add(new ArchipelagoMessage($"Received {Items.APItemData.ItemIDToString[item.ItemId]} from {GetPlayerName(item.Player)}."));
+                MessageLog.Add(new ArchipelagoMessage(prettyMessage, ArchipelagoMessage.MessageType.ItemReceive, item.Flags));
                 Monocle.Engine.Commands.Log(receivedMessage, M_Color.DeepPink);
 
                 switch (item.ItemId)

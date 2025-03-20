@@ -126,18 +126,67 @@ namespace Celeste.Mod.Celeste_Multiworld.General
             return orig(self, spotlightWipe, skipScreenWipe, skipCompleteScreen);
         }
 
+        private static bool ShouldShowMessage(ArchipelagoMessage message)
+        {
+            if (message.Type == ArchipelagoMessage.MessageType.ItemReceive)
+            {
+                Celeste_MultiworldModuleSettings.ItemReceiveStyle style = Celeste_MultiworldModule.Settings.ItemReceiveMessages;
+
+                if (!message.Strawberry && (message.Flags & Archipelago.MultiClient.Net.Enums.ItemFlags.Advancement) != 0 && style > Celeste_MultiworldModuleSettings.ItemReceiveStyle.None)
+                {
+                    return true;
+                }
+                else if ((message.Flags & Archipelago.MultiClient.Net.Enums.ItemFlags.Advancement) != 0 && style > Celeste_MultiworldModuleSettings.ItemReceiveStyle.Non_Strawberry_Progression)
+                {
+                    return true;
+                }
+                else if (style > Celeste_MultiworldModuleSettings.ItemReceiveStyle.Progression)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else if (message.Type == ArchipelagoMessage.MessageType.ItemSend)
+            {
+                Celeste_MultiworldModuleSettings.ItemSendStyle style = Celeste_MultiworldModule.Settings.ItemSendMessages;
+
+                if ((message.Flags & Archipelago.MultiClient.Net.Enums.ItemFlags.Advancement) != 0 && style > Celeste_MultiworldModuleSettings.ItemSendStyle.None)
+                {
+                    return true;
+                }
+                else if (style > Celeste_MultiworldModuleSettings.ItemSendStyle.Progression)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return true;
+            }
+        }
+
         private static void HandleMessageQueue(Player self)
         {
             if (ArchipelagoManager.Instance.MessageLog.Count > 0)
             {
                 if (self.Scene.Tracker.GetEntity<modMiniTextbox>() == null)
                 {
-                    ArchipelagoMessage updatedMessage = ArchipelagoManager.Instance.MessageLog[0];
+                    ArchipelagoMessage message = ArchipelagoManager.Instance.MessageLog[0];
                     ArchipelagoManager.Instance.MessageLog.RemoveAt(0);
 
-                    self.Scene.Add(new modMiniTextbox(updatedMessage.Text));
-                    Logger.Error("AP", "updatedMessage.Text");
-                    Logger.Error("AP", updatedMessage.Text);
+                    if (ShouldShowMessage(message))
+                    {
+                        self.Scene.Add(new modMiniTextbox(message.Text));
+                        Logger.Error("AP", "updatedMessage.Text");
+                        Logger.Error("AP", message.Text);
+                    }
                 }
             }
         }
