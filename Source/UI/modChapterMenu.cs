@@ -40,6 +40,11 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
             {
                 Audio.Play("event:/ui/main/button_back");
             }
+            else if (self.Area.ID == 6 && self.Area.Mode == AreaMode.Normal && checkpoint == null)
+            {
+                // Special case to skip opening segment of 6A
+                orig(self, "00");
+            }
             else
             {
                 orig(self, checkpoint);
