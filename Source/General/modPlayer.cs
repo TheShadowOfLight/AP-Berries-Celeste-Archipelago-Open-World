@@ -184,7 +184,6 @@ namespace Celeste.Mod.Celeste_Multiworld.General
                     if (ShouldShowMessage(message))
                     {
                         self.Scene.Add(new modMiniTextbox(message.Text));
-                        Logger.Error("AP", "updatedMessage.Text");
                         Logger.Error("AP", message.Text);
                     }
                 }

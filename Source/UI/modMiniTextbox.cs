@@ -21,7 +21,7 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
             On.Celeste.MiniTextbox.ctor -= modMiniTextbox_ctor;
         }
 
-        private void modMiniTextbox_ctor(On.Celeste.MiniTextbox.orig_ctor orig, MiniTextbox self, string dialogId)
+        private static void modMiniTextbox_ctor(On.Celeste.MiniTextbox.orig_ctor orig, MiniTextbox self, string dialogId)
         {
             if (dialogId == "!AP")
             {

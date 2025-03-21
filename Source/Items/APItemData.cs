@@ -41,6 +41,8 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             new modMoveBlock(),
             new modWhiteBlock(),
 
+            new modSwapBlock(),
+            new modDashSwitch(),
             new modTorch(),
         };
 
