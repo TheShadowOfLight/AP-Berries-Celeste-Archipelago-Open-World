@@ -43,7 +43,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             else
             {
                 self.State.SetCallbacks(6, new Func<int>(self.RegenerateUpdate), new Func<IEnumerator>(self.RegenerateCoroutine), new Action(self.RegenerateBegin), new Action(self.RegenerateEnd));
-                if (self.State.currentCoroutine == null || self.State.currentCoroutine.Finished)
+                if (self.State.state == 6 && (self.State.currentCoroutine == null || self.State.currentCoroutine.Finished))
                 {
                     self.State.currentCoroutine.Replace(self.State.coroutines[6]());
                 }

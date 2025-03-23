@@ -106,7 +106,6 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             { 0xCA121B, "Green Cassette Blocks" },
             { 0xCA121C, "Dash Switches" },
             { 0xCA121D, "Seekers" },
-            { 0xCA121E, "Keys" },
             { 0xCA121F, "Strawberry Seeds" },
             { 0xCA1220, "Sinking Platforms" },
             { 0xCA1221, "White Block" },

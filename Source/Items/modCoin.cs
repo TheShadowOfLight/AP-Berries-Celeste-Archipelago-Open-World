@@ -14,14 +14,14 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
         public override void Load()
         {
             On.Celeste.TouchSwitch.Render += modTouchSwitch_Render;
-            On.Celeste.TouchSwitch.OnPlayer += modTouchSwitch_OnPlayer;
+            On.Celeste.TouchSwitch.TurnOn += modTouchSwitch_TurnOn;
             setColor = false;
         }
 
         public override void Unload()
         {
             On.Celeste.TouchSwitch.Render -= modTouchSwitch_Render;
-            On.Celeste.TouchSwitch.OnPlayer -= modTouchSwitch_OnPlayer;
+            On.Celeste.TouchSwitch.TurnOn -= modTouchSwitch_TurnOn;
         }
 
         private static void modTouchSwitch_Render(On.Celeste.TouchSwitch.orig_Render orig, TouchSwitch self)
@@ -43,12 +43,11 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
                 self.inactiveColor = originalColor;
             }
         }
-
-        private static void modTouchSwitch_OnPlayer(On.Celeste.TouchSwitch.orig_OnPlayer orig, TouchSwitch self, Player player)
+        private static void modTouchSwitch_TurnOn(On.Celeste.TouchSwitch.orig_TurnOn orig, TouchSwitch self)
         {
             if (HaveReceived())
             {
-                orig(self, player);
+                orig(self);
             }
         }
 
