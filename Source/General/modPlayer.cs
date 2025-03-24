@@ -17,6 +17,7 @@ namespace Celeste.Mod.Celeste_Multiworld.General
         {
             On.Celeste.Player.Die += modPlayer_Die;
             On.Celeste.Player.Update += modPlayer_Update;
+            On.Celeste.PlayerSeeker.Update += modPlayerSeeker_Update;
             On.Celeste.Level.LoadLevel += modLevel_LoadLevel;
             On.Celeste.Level.CompleteArea_bool_bool_bool += modLevel_CompleteArea_bool_bool_bool;
         }
@@ -25,6 +26,7 @@ namespace Celeste.Mod.Celeste_Multiworld.General
         {
             On.Celeste.Player.Die -= modPlayer_Die;
             On.Celeste.Player.Update -= modPlayer_Update;
+            On.Celeste.PlayerSeeker.Update -= modPlayerSeeker_Update;
             On.Celeste.Level.LoadLevel -= modLevel_LoadLevel;
             On.Celeste.Level.CompleteArea_bool_bool_bool -= modLevel_CompleteArea_bool_bool_bool;
         }
@@ -65,6 +67,20 @@ namespace Celeste.Mod.Celeste_Multiworld.General
             if (ArchipelagoManager.Instance.Roomsanity)
             {
                 if (self.InControl && !self.Dead)
+                {
+                    string AP_ID = $"{SaveData.Instance.CurrentSession_Safe.Area.ID}_{(int)SaveData.Instance.CurrentSession_Safe.Area.Mode}_{SaveData.Instance.CurrentSession_Safe.Level}";
+                    Celeste_MultiworldModule.SaveData.RoomLocations.Add(AP_ID);
+                }
+            }
+        }
+
+        private void modPlayerSeeker_Update(On.Celeste.PlayerSeeker.orig_Update orig, PlayerSeeker self)
+        {
+            orig(self);
+
+            if (ArchipelagoManager.Instance.Roomsanity)
+            {
+                if (self.enabled)
                 {
                     string AP_ID = $"{SaveData.Instance.CurrentSession_Safe.Area.ID}_{(int)SaveData.Instance.CurrentSession_Safe.Area.Mode}_{SaveData.Instance.CurrentSession_Safe.Level}";
                     Celeste_MultiworldModule.SaveData.RoomLocations.Add(AP_ID);

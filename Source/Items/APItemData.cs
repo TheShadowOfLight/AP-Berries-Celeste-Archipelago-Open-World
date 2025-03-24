@@ -74,6 +74,13 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             { 0xCA1411, "Golden Ridge B - Stepping Stones" },
             { 0xCA1412, "Golden Ridge B - Gusty Canyon" },
             { 0xCA1413, "Golden Ridge B - Eye of the Storm" },
+            { 0xCA1414, "Mirror Temple A - Depths" },
+            { 0xCA1415, "Mirror Temple A - Unravelling" },
+            { 0xCA1416, "Mirror Temple A - Search" },
+            { 0xCA1417, "Mirror Temple A - Rescue" },
+            { 0xCA1418, "Mirror Temple B - Central Chamber" },
+            { 0xCA1419, "Mirror Temple B - Through the Mirror" },
+            { 0xCA141A, "Mirror Temple B - Mix Master" },
 
 
             { 0xCA1200, "Springs" },
@@ -117,6 +124,13 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             { 0xCA1602, "Celestial Resort A - Hallway Key 2" },
             { 0xCA1603, "Celestial Resort A - Huge Mess Key" },
             { 0xCA1604, "Celestial Resort A - Presidential Suite Key" },
+            { 0xCA1605, "Mirror Temple A - Entrance Key" },
+            { 0xCA1606, "Mirror Temple A - Depths Key" },
+            { 0xCA1607, "Mirror Temple A - Search Key 1" },
+            { 0xCA1608, "Mirror Temple A - Search Key 2" },
+            { 0xCA1609, "Mirror Temple A - Search Key 3" },
+            { 0xCA160A, "Mirror Temple B - Central Chamber Key 1" },
+            { 0xCA160B, "Mirror Temple B - Central Chamber Key 2" },
         };
 
         public static Dictionary<long, CheckpointItemData> CheckpointData { get; set; } = new Dictionary<long, CheckpointItemData>
