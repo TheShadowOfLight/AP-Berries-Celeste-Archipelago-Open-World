@@ -60,7 +60,6 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             { 0xCA1024, "Fast Trap" },
             { 0xCA1025, "Slow Trap" },
             { 0xCA1026, "Ice Trap" },
-            { 0xCA1027, "Gravity Trap" },
             { 0xCA1028, "Reverse Trap" },
             { 0xCA1029, "Screen Flip Trap" },
             { 0xCA102A, "Laughter Trap" },
