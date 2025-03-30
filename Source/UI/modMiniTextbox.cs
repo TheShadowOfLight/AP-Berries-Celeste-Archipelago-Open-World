@@ -11,29 +11,19 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
     [Tracked]
     public class modMiniTextbox : MiniTextbox
     {
-        public void Load()
+        public static void Load()
         {
-            On.Celeste.MiniTextbox.ctor += modMiniTextbox_ctor;
+
         }
 
-        public void Unload()
+        public static void Unload()
         {
-            On.Celeste.MiniTextbox.ctor -= modMiniTextbox_ctor;
+
         }
 
-        private static void modMiniTextbox_ctor(On.Celeste.MiniTextbox.orig_ctor orig, MiniTextbox self, string dialogId)
+        public modMiniTextbox(string input, bool bLiterature = false) : base("!AP")
         {
-            if (dialogId == "!AP")
-            {
-                return;
-            }
-
-            orig(self, dialogId);
-        }
-
-        public modMiniTextbox(string input) : base("!AP")
-        {
-            base.Tag = Tags.HUD | Tags.TransitionUpdate;
+            base.Tag = Tags.HUD | Tags.TransitionUpdate | Tags.Persistent;
             this.portraitSize = 112f;
             this.box = GFX.Portraits["textbox/ap_mini"];
             this.text = FancyText.Parse(input, (int)(1688f - this.portraitSize - 32f), 2, 1f, null, null);
@@ -49,16 +39,29 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
 
             base.Add(this.routine = new Monocle.Coroutine(this.Routine(), true));
             this.routine.UseRawDeltaTime = true;
-            base.Add(new TransitionListener
+
+            if (!bLiterature)
             {
-                OnOutBegin = delegate
+                base.Add(new TransitionListener
                 {
-                    if (!this.closing)
+                    OnOutBegin = delegate
                     {
-                        this.routine.Replace(this.Close());
+                        if (!this.closing)
+                        {
+                            this.routine.Replace(this.Close());
+                        }
                     }
+                });
+            }
+            else
+            {
+                TransitionListener listener = base.Get<TransitionListener>();
+                if (listener != null)
+                {
+                    base.Remove(listener);
                 }
-            });
+            }
+
             if (Level.DialogSnapshot == null)
             {
                 Level.DialogSnapshot = Audio.CreateSnapshot("snapshot:/dialogue_in_progress", false);

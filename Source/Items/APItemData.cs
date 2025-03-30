@@ -53,6 +53,19 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             { 0xCA1000, "Strawberry" },
             { 0xCA1001, "Raspberry" },
 
+            { 0xCA1020, "Bald Trap" },
+            { 0xCA1021, "Literature Trap" },
+            { 0xCA1022, "Stun Trap" },
+            { 0xCA1023, "Invisible Trap" },
+            { 0xCA1024, "Fast Trap" },
+            { 0xCA1025, "Slow Trap" },
+            { 0xCA1026, "Ice Trap" },
+            { 0xCA1027, "Gravity Trap" },
+            { 0xCA1028, "Reverse Trap" },
+            { 0xCA1029, "Screen Flip Trap" },
+            { 0xCA102A, "Laughter Trap" },
+            { 0xCA102B, "Hiccup Trap" },
+            { 0xCA102C, "Zoom Trap" },
 
             { 0xCA1400, "Forsaken City A - Crossing" },
             { 0xCA1401, "Forsaken City A - Chasm" },
@@ -81,7 +94,6 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             { 0xCA1418, "Mirror Temple B - Central Chamber" },
             { 0xCA1419, "Mirror Temple B - Through the Mirror" },
             { 0xCA141A, "Mirror Temple B - Mix Master" },
-
 
             { 0xCA1200, "Springs" },
             { 0xCA1201, "Traffic Blocks" },

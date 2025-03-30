@@ -40,16 +40,30 @@ namespace Celeste.Mod.Celeste_Multiworld.General
                 ArchipelagoManager.Instance.SendDeathLinkIfEnabled("couldn't climb the mountain");
             }
 
+            Items.Traps.TrapManager.Instance.AddDeathToActiveTraps();
+
             return result;
         }
 
         private static void modPlayer_Update(On.Celeste.Player.orig_Update orig, Player self)
         {
-            orig(self);
+            if (Items.Traps.TrapManager.Instance.IsTrapActive(Items.Traps.TrapType.Stun))
+            {
+                self.Speed = Vector2.Zero;
+                self.StateMachine.state = 0;
+            }
+            else
+            {
+                orig(self);
+            }
 
             HandleMessageQueue(self);
 
-            if (modPlayer.HairLength != 4 && self.Sprite != null)
+            if (Items.Traps.TrapManager.Instance.IsTrapActive(Items.Traps.TrapType.Bald) && self.Sprite != null)
+            {
+                self.Sprite.HairCount = 0;
+            }
+            else if ((modPlayer.HairLength != 4 || self.Sprite.HairCount != modPlayer.HairLength) && self.Sprite != null)
             {
                 self.Sprite.HairCount = modPlayer.HairLength;
             }
@@ -64,17 +78,19 @@ namespace Celeste.Mod.Celeste_Multiworld.General
                 }
             }
 
-            if (ArchipelagoManager.Instance.Roomsanity)
+            if (self.InControl && !self.Dead)
             {
-                if (self.InControl && !self.Dead)
+                string AP_ID = $"{SaveData.Instance.CurrentSession_Safe.Area.ID}_{(int)SaveData.Instance.CurrentSession_Safe.Area.Mode}_{SaveData.Instance.CurrentSession_Safe.Level}";
+                Items.Traps.TrapManager.Instance.AddScreenToActiveTraps(AP_ID);
+
+                if (ArchipelagoManager.Instance.Roomsanity)
                 {
-                    string AP_ID = $"{SaveData.Instance.CurrentSession_Safe.Area.ID}_{(int)SaveData.Instance.CurrentSession_Safe.Area.Mode}_{SaveData.Instance.CurrentSession_Safe.Level}";
                     Celeste_MultiworldModule.SaveData.RoomLocations.Add(AP_ID);
                 }
             }
         }
 
-        private void modPlayerSeeker_Update(On.Celeste.PlayerSeeker.orig_Update orig, PlayerSeeker self)
+        private static void modPlayerSeeker_Update(On.Celeste.PlayerSeeker.orig_Update orig, PlayerSeeker self)
         {
             orig(self);
 
@@ -144,7 +160,11 @@ namespace Celeste.Mod.Celeste_Multiworld.General
 
         private static bool ShouldShowMessage(ArchipelagoMessage message)
         {
-            if (message.Type == ArchipelagoMessage.MessageType.ItemReceive)
+            if (message.Type == ArchipelagoMessage.MessageType.Literature)
+            {
+                return true;
+            }
+            else if (message.Type == ArchipelagoMessage.MessageType.ItemReceive)
             {
                 Celeste_MultiworldModuleSettings.ItemReceiveStyle style = Celeste_MultiworldModule.Settings.ItemReceiveMessages;
 
@@ -199,7 +219,7 @@ namespace Celeste.Mod.Celeste_Multiworld.General
 
                     if (ShouldShowMessage(message))
                     {
-                        self.Scene.Add(new modMiniTextbox(message.Text));
+                        self.Scene.Add(new modMiniTextbox(message.Text, (message.Type == ArchipelagoMessage.MessageType.Literature)));
                         Logger.Error("AP", message.Text);
                     }
                 }

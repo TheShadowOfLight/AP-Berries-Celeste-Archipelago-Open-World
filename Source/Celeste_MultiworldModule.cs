@@ -2,6 +2,7 @@
 using Celeste.Mod.Celeste_Multiworld.Aesthetics;
 using Celeste.Mod.Celeste_Multiworld.General;
 using Celeste.Mod.Celeste_Multiworld.Items;
+using Celeste.Mod.Celeste_Multiworld.Items.Traps;
 using Celeste.Mod.Celeste_Multiworld.Locations;
 using Celeste.Mod.Celeste_Multiworld.UI;
 
@@ -42,6 +43,7 @@ public class Celeste_MultiworldModule : EverestModule
     public override void Load()
     {
         new ArchipelagoManager(Celeste.Instance);
+        new TrapManager(Celeste.Instance);
 
         // TODO: apply any hooks that should always be active
         foreach (modItemBase item in APItemData.modItems)
@@ -58,6 +60,8 @@ public class Celeste_MultiworldModule : EverestModule
         chapterPanel.Load();
         audio.Load();
         player.Load();
+
+        modMiniTextbox.Load();
     }
 
     public override void Unload()
@@ -77,5 +81,7 @@ public class Celeste_MultiworldModule : EverestModule
         chapterPanel.Unload();
         audio.Unload();
         player.Unload();
+
+        modMiniTextbox.Unload();
     }
 }

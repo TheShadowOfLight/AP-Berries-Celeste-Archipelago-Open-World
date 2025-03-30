@@ -32,7 +32,8 @@ namespace Celeste.Mod.Celeste_Multiworld
             General,
             ItemReceive,
             ItemSend,
-            ItemHint
+            ItemHint,
+            Literature
         }
 
         public string Text { get; init; } = "";
@@ -209,6 +210,7 @@ namespace Celeste.Mod.Celeste_Multiworld
         {
             Ready = false;
             SentLocations.Clear();
+            Items.Traps.TrapManager.Instance.Reset();
 
             // Clear DeathLink events.
             if (_deathLinkService != null)
@@ -490,6 +492,7 @@ namespace Celeste.Mod.Celeste_Multiworld
 
         public void CheckReceivedItemQueue()
         {
+            // TODO: Crashed with NullRef here once on connection, somehow
             SaveData.Instance.TotalStrawberries_Safe = Celeste_MultiworldModule.SaveData.Strawberries;
             int audioGuard = 0;
             if (Celeste_MultiworldModule.SaveData == null)
@@ -514,15 +517,23 @@ namespace Celeste.Mod.Celeste_Multiworld
                     prettyMessage = $"Received {{{itemColor}}}{Items.APItemData.ItemIDToString[item.ItemId]}{{#}} from {{#FAFAD2}}{GetPlayerName(item.Player)}{{#}}.";
                 }
 
-                Logger.Info("AP", receivedMessage);
-                MessageLog.Add(new ArchipelagoMessage(prettyMessage, ArchipelagoMessage.MessageType.ItemReceive, item.Flags));
-                Monocle.Engine.Commands.Log(receivedMessage, M_Color.DeepPink);
+                if (item.ItemId < 0xCA1020 || item.ItemId >= 0xCA1050)
+                {
+                    Logger.Info("AP", receivedMessage);
+                    MessageLog.Add(new ArchipelagoMessage(prettyMessage, ArchipelagoMessage.MessageType.ItemReceive, item.Flags));
+                    Monocle.Engine.Commands.Log(receivedMessage, M_Color.DeepPink);
+                }
 
                 switch (item.ItemId)
                 {
                     case 0xCA1000:
                     {
                         Celeste_MultiworldModule.SaveData.Strawberries += 1;
+                        break;
+                    }
+                    case long id when id >= 0xCA1020 && id < 0xCA1050:
+                    {
+                        Items.Traps.TrapManager.Instance.AddTrapToQueue((Items.Traps.TrapType)(id - 0xCA1000), prettyMessage);
                         break;
                     }
                     case long id when id >= 0xCA1400 && id < 0xCA1500:
@@ -723,7 +734,6 @@ namespace Celeste.Mod.Celeste_Multiworld
                     string[] level_EntityID = area_mode_levelEntityID[2].Split(":");
                     int ID = Int32.Parse(level_EntityID[1]);
 
-                    // TODO: This count is getting doubled on a single-session (finish level, all berries counted twice)
                     SaveData.Instance.Areas_Safe[area].Modes[mode].TotalStrawberries += 1;
                     SaveData.Instance.Areas_Safe[area].Modes[mode].Strawberries.Add(new EntityID(level_EntityID[0], ID));
                 }
