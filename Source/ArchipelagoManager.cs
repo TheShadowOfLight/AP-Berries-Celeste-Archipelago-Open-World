@@ -19,6 +19,8 @@ using M_Color = Microsoft.Xna.Framework.Color;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json.Linq;
 using System.Reflection;
+using System.Net.Sockets;
+using Archipelago.MultiClient.Net.Converters;
 
 
 
@@ -83,6 +85,7 @@ namespace Celeste.Mod.Celeste_Multiworld
         public int StrawberriesRequired { get; set; }
         public bool DeathLinkActive { get; set; }
         public int DeathLinkAmnesty { get; set; }
+        public bool TrapLinkActive { get; set; }
         public bool Binosanity = false;
         public bool Roomsanity = false;
         public bool IncludeGoldens = false;
@@ -125,6 +128,7 @@ namespace Celeste.Mod.Celeste_Multiworld
             Ready = false;
             ItemQueue = new();
             LocationDictionary = new();
+            GoalSent = false;
 
             // Watch for the following events.
             _session.Socket.ErrorReceived += OnError;
@@ -175,9 +179,12 @@ namespace Celeste.Mod.Celeste_Multiworld
             Player.UsedHairColor = new M_Color((noDashHairInt >> 16) & 0xFF, (noDashHairInt >> 8) & 0xFF, (noDashHairInt) & 0xFF);
             Player.FlyPowerHairColor = new M_Color((featherHairInt >> 16) & 0xFF, (featherHairInt >> 8) & 0xFF, (featherHairInt) & 0xFF);
 
+            Items.Traps.TrapManager.EnabledTraps = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<int, int>>(((LoginSuccessful)result).SlotData["active_traps"].ToString());
+
             StrawberriesRequired = Convert.ToInt32(((LoginSuccessful)result).SlotData.TryGetValue("strawberries_required", out value) ? value : 100);
             DeathLinkActive = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("death_link", out value) ? value : false);
             DeathLinkAmnesty = Convert.ToInt32(((LoginSuccessful)result).SlotData.TryGetValue("death_link_amnesty", out value) ? value : 10);
+            TrapLinkActive = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("trap_link", out value) ? value : false);
             Binosanity = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("binosanity", out value) ? value : false);
             Roomsanity = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("roomsanity", out value) ? value : false);
             IncludeGoldens = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("include_goldens", out value) ? value : false);
@@ -185,14 +192,18 @@ namespace Celeste.Mod.Celeste_Multiworld
             IncludeFarewell = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("include_farewell", out value) ? value : false);
             IncludeBSides = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("include_b_sides", out value) ? value : false);
             IncludeCSides = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("include_c_sides", out value) ? value : false);
-            bool DeathLinkEnabled = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("death_link", out value) ? value : false);
 
             // Initialize DeathLink service.
             _deathLinkService = _session.CreateDeathLinkService();
             _deathLinkService.OnDeathLinkReceived += OnDeathLink;
-            if (DeathLinkEnabled)
+            if (DeathLinkActive)
             {
                 _deathLinkService.EnableDeathLink();
+            }
+
+            if (TrapLinkActive)
+            {
+                _session.ConnectionInfo.UpdateConnectionOptions(_session.ConnectionInfo.Tags.Concat(new string[1] { "TrapLink" }).ToArray());
             }
 
             // TODO: Wrap this and only do if active
@@ -211,6 +222,10 @@ namespace Celeste.Mod.Celeste_Multiworld
             Ready = false;
             SentLocations.Clear();
             Items.Traps.TrapManager.Instance.Reset();
+
+            GoalSent = false;
+            DeathsCounted = 0;
+            ItemQueue.Clear();
 
             // Clear DeathLink events.
             if (_deathLinkService != null)
@@ -492,7 +507,11 @@ namespace Celeste.Mod.Celeste_Multiworld
 
         public void CheckReceivedItemQueue()
         {
-            // TODO: Crashed with NullRef here once on connection, somehow
+            if (SaveData.Instance == null || Celeste_MultiworldModule.SaveData == null)
+            {
+                return;
+            }
+
             SaveData.Instance.TotalStrawberries_Safe = Celeste_MultiworldModule.SaveData.Strawberries;
             int audioGuard = 0;
             if (Celeste_MultiworldModule.SaveData == null)
@@ -756,9 +775,49 @@ namespace Celeste.Mod.Celeste_Multiworld
             CollectedLocations.Clear();
         }
 
+        public void SendTrapLink(Items.Traps.TrapType trapType)
+        {
+            if (!this.Ready || !this.TrapLinkActive)
+            {
+                return;
+            }
+
+            BouncePacket bouncePacket = new BouncePacket
+            {
+                Tags = new List<string> { "TrapLink" },
+                Data = new Dictionary<string, JToken>
+                {
+                    { "time", DateTime.UtcNow.ToUnixTimeStamp() },
+                    { "source", GetPlayerName(this.Slot) },
+                    { "trap_name", Items.APItemData.ItemIDToString[0xCA1000 + (int)trapType] }
+                }
+            };
+
+            _session.Socket.SendPacketAsync(bouncePacket);
+        }
+
         private void OnPacketReceived(ArchipelagoPacketBase packet)
         {
-            if (packet.PacketType == ArchipelagoPacketType.Retrieved)
+            if (packet.PacketType == ArchipelagoPacketType.Bounced)
+            {
+                BouncedPacket bouncedPacket = packet as BouncedPacket;
+
+                if (bouncedPacket.Tags.Contains("TrapLink") && this.TrapLinkActive && bouncedPacket.Data["source"].ToString() != GetPlayerName(this.Slot))
+                {
+                    string trap_name = bouncedPacket.Data["trap_name"].ToString();
+                    string message = $"Received Linked {{#FA8072}}{trap_name}{{#}} from {{#FAFAD2}}{bouncedPacket.Data["source"].ToString()}{{#}}.";
+
+                    Items.Traps.TrapType type = Items.Traps.TrapManager.TrapLinkNames[trap_name];
+
+                    if (Items.Traps.TrapManager.EnabledTraps[(int)(type)] == 0)
+                    {
+                        return;
+                    }
+
+                    Items.Traps.TrapManager.Instance.SetPriorityTrap(type, message);
+                }
+            }
+            else if (packet.PacketType == ArchipelagoPacketType.Retrieved)
             {
                 //if (_connectionInfo.SeeGhosts)
                 {

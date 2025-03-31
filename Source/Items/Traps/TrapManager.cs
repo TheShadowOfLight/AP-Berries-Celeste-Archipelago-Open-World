@@ -42,10 +42,12 @@ namespace Celeste.Mod.Celeste_Multiworld.Items.Traps
 
         public DateTime activationTime;
 
+        public bool bIsLinked = false;
+
         public int trackedDeaths = 0;
         public HashSet<string> trackedScreens = new HashSet<string>();
 
-        public BaseTrapInstance(TrapType type, string message, TrapExpirationAction expirationAction, int expirationAmount)
+        public BaseTrapInstance(TrapType type, string message, TrapExpirationAction expirationAction, int expirationAmount, bool bIsLinked = false)
         {
             this.type = type;
             this.message = message;
@@ -53,6 +55,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Items.Traps
             this.expirationAmount = expirationAmount;
 
             this.activationTime = DateTime.Now;
+            this.bIsLinked = bIsLinked;
         }
 
         public void Activate()
@@ -256,6 +259,44 @@ namespace Celeste.Mod.Celeste_Multiworld.Items.Traps
             "{>> 0.25}Tell me. For whom do you fight?{n}{n}Hmph! How very glib. And do you believe in Eorzea? Eorzea's unity is forged of falsehoods. Its city-states are built on deceit. And its faith is an instrument of deception.{n}{n}It is naught but a cobweb of lies. To believe in Eorzea is to believe in nothing.In Eorzea, the beast tribes often summon gods to fight in their stead--though your comrades only rarely respond in kind. Which is strange, is it not?{n}{n}Are the 'Twelve' otherwise engaged? I was given to understand they were your protectors. If you truly believe them your guardians, why do you not repeat the trick that served you so well at Carteneau, and call them down? They will answer--so long as you lavish them with crystals and gorge them on aether. Your gods are no different than those of the beasts--eikons every one. Accept but this, and you will see how Eorzea's faith is bleeding the land dry.",
         ];
 
+        public static Dictionary<string, TrapType> TrapLinkNames = new Dictionary<string, TrapType>()
+        {
+            { "Bald Trap",          TrapType.Bald },
+            { "Literature Trap",    TrapType.Literature },
+            { "Stun Trap",          TrapType.Stun },
+            { "Invisible Trap",     TrapType.Invisible },
+            { "Fast Trap",          TrapType.Fast },
+            { "Slow Trap",          TrapType.Slow },
+            { "Ice Trap",           TrapType.Ice },
+            { "Reverse Trap",       TrapType.Reverse },
+            { "Screen Flip Trap",   TrapType.Screen_Flip },
+            { "Laughter Trap",      TrapType.Laughter },
+            { "Hiccup Trap",        TrapType.Hiccup },
+            { "Zoom Trap",          TrapType.Zoom },
+
+            { "Chaos Control Trap", TrapType.Stun },
+            { "Confuse Trap",       TrapType.Reverse },
+            { "Exposition Trap",    TrapType.Literature },
+            { "Cutscene Trap",      TrapType.Literature },
+            { "Poison Trap",        TrapType.Hiccup },
+            { "Timer Trap",         TrapType.Fast },
+            { "Freeze Trap",        TrapType.Stun },
+            { "Frozen Trap",        TrapType.Stun },
+            { "Paralyze Trap",      TrapType.Stun },
+            { "Slowness Trap",      TrapType.Slow },
+            { "Reversal Trap",      TrapType.Reverse },
+            { "Fuzzy Trap",         TrapType.Laughter },
+            { "Spring Trap",        TrapType.Hiccup },
+            { "Eject Ability",      TrapType.Hiccup },
+            { "Deisometric Trap",   TrapType.Zoom },
+            { "Banana Trap",        TrapType.Ice },
+            { "Bonk Trap",          TrapType.Hiccup },
+            { "Possession Trap",    TrapType.Invisible },
+            { "Ghost Trap",         TrapType.Invisible },
+            { "Fire Trap",          TrapType.Fast },
+        };
+        public static Dictionary<int, int> EnabledTraps = new Dictionary<int, int>();
+
         public static TrapManager Instance { get; private set; }
 
         public TrapExpirationAction ExpirationAction { get; private set; } = TrapExpirationAction.Screens;
@@ -312,6 +353,8 @@ namespace Celeste.Mod.Celeste_Multiworld.Items.Traps
                 {
                     this.ActiveTraps.Add(newTrap);
                     newTrap.Activate();
+
+                    ArchipelagoManager.Instance.SendTrapLink(newTrap.type);
 
                     Logger.Info("AP", newTrap.message);
                     ArchipelagoMessage message = new ArchipelagoMessage(newTrap.message, ArchipelagoMessage.MessageType.ItemReceive, Archipelago.MultiClient.Net.Enums.ItemFlags.Trap);
@@ -477,7 +520,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Items.Traps
 
         public void SetPriorityTrap(TrapType type, string message)
         {
-            this.PriorityTrap = new BaseTrapInstance(type, message, this.ExpirationAction, this.ExpirationAmount);
+            this.PriorityTrap = new BaseTrapInstance(type, message, this.ExpirationAction, this.ExpirationAmount, true);
         }
 
         public bool IsTrapValid(TrapType type)
