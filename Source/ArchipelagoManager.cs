@@ -21,6 +21,7 @@ using Newtonsoft.Json.Linq;
 using System.Reflection;
 using System.Net.Sockets;
 using Archipelago.MultiClient.Net.Converters;
+using Newtonsoft.Json;
 
 
 
@@ -80,6 +81,9 @@ namespace Celeste.Mod.Celeste_Multiworld
         public int HintPoints => _session.RoomState.HintPoints;
         public int HintCost => _session.RoomState.HintCost;
         public Hint[] Hints => _session.DataStorage.GetHints();
+
+        public int ServerItemsRcv = -1;
+        private bool ItemRcvCallbackSet = false;
 
         #region Slot Data
         public int StrawberriesRequired { get; set; }
@@ -206,6 +210,9 @@ namespace Celeste.Mod.Celeste_Multiworld
                 _session.ConnectionInfo.UpdateConnectionOptions(_session.ConnectionInfo.Tags.Concat(new string[1] { "TrapLink" }).ToArray());
             }
 
+            this.AddItemsRcvCallback($"Celeste_Open_Rcv_{_session.Players.GetPlayerName(this.Slot)}", ItemsRcvUpdated);
+            this.ServerItemsRcv = -1;
+
             // TODO: Wrap this and only do if active
             //AddPlayerListCallback($"Celeste_OtherPlayers_List", PlayerListUpdated);
 
@@ -219,13 +226,14 @@ namespace Celeste.Mod.Celeste_Multiworld
 
         public void Disconnect()
         {
-            Ready = false;
-            SentLocations.Clear();
+            this.Ready = false;
+            this.SentLocations.Clear();
             Items.Traps.TrapManager.Instance.Reset();
 
-            GoalSent = false;
-            DeathsCounted = 0;
-            ItemQueue.Clear();
+            this.GoalSent = false;
+            this.ServerItemsRcv = -1;
+            this.DeathsCounted = 0;
+            this.ItemQueue.Clear();
 
             // Clear DeathLink events.
             if (_deathLinkService != null)
@@ -504,7 +512,6 @@ namespace Celeste.Mod.Celeste_Multiworld
         #endregion
 
 
-
         public void CheckReceivedItemQueue()
         {
             if (SaveData.Instance == null || Celeste_MultiworldModule.SaveData == null)
@@ -512,13 +519,15 @@ namespace Celeste.Mod.Celeste_Multiworld
                 return;
             }
 
-            SaveData.Instance.TotalStrawberries_Safe = Celeste_MultiworldModule.SaveData.Strawberries;
-            int audioGuard = 0;
-            if (Celeste_MultiworldModule.SaveData == null)
+            if (this.ServerItemsRcv < 0)
             {
+                this.ServerItemsRcv = this.GetInt($"Celeste_Open_Rcv_{_session.Players.GetPlayerName(this.Slot)}");
                 return;
             }
 
+            SaveData.Instance.TotalStrawberries_Safe = Celeste_MultiworldModule.SaveData.Strawberries;
+
+            int audioGuard = 0;
             for (int index = Celeste_MultiworldModule.SaveData.ItemRcv; index < ItemQueue.Count; index++)
             {
                 var item = ItemQueue[index].Item2;
@@ -536,8 +545,9 @@ namespace Celeste.Mod.Celeste_Multiworld
                     prettyMessage = $"Received {{{itemColor}}}{Items.APItemData.ItemIDToString[item.ItemId]}{{#}} from {{#FAFAD2}}{GetPlayerName(item.Player)}{{#}}.";
                 }
 
-                if (item.ItemId < 0xCA1020 || item.ItemId >= 0xCA1050)
+                if ((item.ItemId < 0xCA1020 || item.ItemId >= 0xCA1050) && index >= this.ServerItemsRcv)
                 {
+                    Logger.Info("AP", $"index ({index}) >= this.ServerItemsRcv ({this.ServerItemsRcv})");
                     Logger.Info("AP", receivedMessage);
                     MessageLog.Add(new ArchipelagoMessage(prettyMessage, ArchipelagoMessage.MessageType.ItemReceive, item.Flags));
                     Monocle.Engine.Commands.Log(receivedMessage, M_Color.DeepPink);
@@ -552,7 +562,10 @@ namespace Celeste.Mod.Celeste_Multiworld
                     }
                     case long id when id >= 0xCA1020 && id < 0xCA1050:
                     {
-                        Items.Traps.TrapManager.Instance.AddTrapToQueue((Items.Traps.TrapType)(id - 0xCA1000), prettyMessage);
+                        if (index >= this.ServerItemsRcv)
+                        {
+                            Items.Traps.TrapManager.Instance.AddTrapToQueue((Items.Traps.TrapType)(id - 0xCA1000), prettyMessage);
+                        }
                         break;
                     }
                     case long id when id >= 0xCA1400 && id < 0xCA1500:
@@ -591,7 +604,15 @@ namespace Celeste.Mod.Celeste_Multiworld
                     }
                 }
 
+                Logger.Info("AP", $"Set Celeste_MultiworldModule.SaveData.ItemRcv {Celeste_MultiworldModule.SaveData.ItemRcv}");
                 Celeste_MultiworldModule.SaveData.ItemRcv = index + 1;
+            }
+
+            if (Celeste_MultiworldModule.SaveData.ItemRcv > this.ServerItemsRcv)
+            {
+                this.ServerItemsRcv = Celeste_MultiworldModule.SaveData.ItemRcv;
+                this.Set($"Celeste_Open_Rcv_{_session.Players.GetPlayerName(this.Slot)}", Celeste_MultiworldModule.SaveData.ItemRcv);
+                Logger.Info("AP", $"Set Celeste_Open_Rcv_{_session.Players.GetPlayerName(this.Slot)} {Celeste_MultiworldModule.SaveData.ItemRcv}");
             }
         }
 
@@ -794,6 +815,40 @@ namespace Celeste.Mod.Celeste_Multiworld
             };
 
             _session.Socket.SendPacketAsync(bouncePacket);
+        }
+
+        public int GetInt(string key)
+        {
+            if (!_session.DataStorage[key])
+            {
+                return 0;
+            }
+
+            return _session.DataStorage[key];
+        }
+
+        public void Set(string key, int value)
+        {
+            var token = JToken.FromObject(value);
+            _session.DataStorage[key] = token;
+        }
+
+        public void AddItemsRcvCallback(string key, Action<int> callback)
+        {
+            if (!ItemRcvCallbackSet)
+            {
+                ItemRcvCallbackSet = true;
+                _session.DataStorage[key].OnValueChanged += (oldData, newData, _) => {
+                    int newItemsRcv = JsonConvert.DeserializeObject<int>(newData.ToString());
+                    callback(newItemsRcv);
+                };
+            }
+        }
+
+        public void ItemsRcvUpdated(int newItemsRcv)
+        {
+            this.ServerItemsRcv = newItemsRcv;
+            Logger.Info("AP", $"Updating ServerItemsRcv {newItemsRcv}");
         }
 
         private void OnPacketReceived(ArchipelagoPacketBase packet)
