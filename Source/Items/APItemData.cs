@@ -93,6 +93,13 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             { 0xCA1418, "Mirror Temple B - Central Chamber" },
             { 0xCA1419, "Mirror Temple B - Through the Mirror" },
             { 0xCA141A, "Mirror Temple B - Mix Master" },
+            { 0xCA141B, "Reflection A - Hollows" },
+            { 0xCA141C, "Reflection A - Reflection" },
+            { 0xCA141D, "Reflection A - Rock Bottom" },
+            { 0xCA141E, "Reflection A - Resolution" },
+            { 0xCA141F, "Reflection B - Reflection" },
+            { 0xCA1420, "Reflection B - Rock Bottom" },
+            { 0xCA1421, "Reflection B - Reprieve" },
 
             { 0xCA1200, "Springs" },
             { 0xCA1201, "Traffic Blocks" },

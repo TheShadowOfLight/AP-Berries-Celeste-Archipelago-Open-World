@@ -547,7 +547,6 @@ namespace Celeste.Mod.Celeste_Multiworld
 
                 if ((item.ItemId < 0xCA1020 || item.ItemId >= 0xCA1050) && index >= this.ServerItemsRcv)
                 {
-                    Logger.Info("AP", $"index ({index}) >= this.ServerItemsRcv ({this.ServerItemsRcv})");
                     Logger.Info("AP", receivedMessage);
                     MessageLog.Add(new ArchipelagoMessage(prettyMessage, ArchipelagoMessage.MessageType.ItemReceive, item.Flags));
                     Monocle.Engine.Commands.Log(receivedMessage, M_Color.DeepPink);
@@ -604,7 +603,6 @@ namespace Celeste.Mod.Celeste_Multiworld
                     }
                 }
 
-                Logger.Info("AP", $"Set Celeste_MultiworldModule.SaveData.ItemRcv {Celeste_MultiworldModule.SaveData.ItemRcv}");
                 Celeste_MultiworldModule.SaveData.ItemRcv = index + 1;
             }
 
@@ -612,7 +610,6 @@ namespace Celeste.Mod.Celeste_Multiworld
             {
                 this.ServerItemsRcv = Celeste_MultiworldModule.SaveData.ItemRcv;
                 this.Set($"Celeste_Open_Rcv_{_session.Players.GetPlayerName(this.Slot)}", Celeste_MultiworldModule.SaveData.ItemRcv);
-                Logger.Info("AP", $"Set Celeste_Open_Rcv_{_session.Players.GetPlayerName(this.Slot)} {Celeste_MultiworldModule.SaveData.ItemRcv}");
             }
         }
 
@@ -848,7 +845,6 @@ namespace Celeste.Mod.Celeste_Multiworld
         public void ItemsRcvUpdated(int newItemsRcv)
         {
             this.ServerItemsRcv = newItemsRcv;
-            Logger.Info("AP", $"Updating ServerItemsRcv {newItemsRcv}");
         }
 
         private void OnPacketReceived(ArchipelagoPacketBase packet)
