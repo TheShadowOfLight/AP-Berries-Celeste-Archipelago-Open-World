@@ -46,6 +46,11 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             new modTorch(),
             new modSeeker(),
             new modTheoCrystal(),
+
+            new modFeather(),
+            new modBumper(),
+            new modKevinBlock(),
+            new modBadelineBooster(),
         };
 
         public static Dictionary<long, string> ItemIDToString { get; set; } = new Dictionary<long, string>

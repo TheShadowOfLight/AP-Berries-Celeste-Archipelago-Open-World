@@ -26,6 +26,7 @@ public class Celeste_MultiworldModule : EverestModule
     modChapterMenu chapterPanel = new modChapterMenu();
     modAudio audio = new modAudio();
     modPlayer player = new modPlayer();
+    modHeartGate heartGate = new modHeartGate();
     #endregion
 
     public Celeste_MultiworldModule()
@@ -60,6 +61,7 @@ public class Celeste_MultiworldModule : EverestModule
         chapterPanel.Load();
         audio.Load();
         player.Load();
+        heartGate.Load();
 
         modMiniTextbox.Load();
     }
@@ -81,6 +83,7 @@ public class Celeste_MultiworldModule : EverestModule
         chapterPanel.Unload();
         audio.Unload();
         player.Unload();
+        heartGate.Unload();
 
         modMiniTextbox.Unload();
     }
