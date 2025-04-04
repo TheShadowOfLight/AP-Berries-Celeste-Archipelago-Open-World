@@ -7,6 +7,15 @@ using System.Threading.Tasks;
 
 namespace Celeste.Mod.Celeste_Multiworld.Locations
 {
+    public enum LocationType
+    {
+        Strawberry,
+        Checkpoint,
+        Key,
+        Binoculars,
+        Room
+    }
+
     internal class APLocationData
     {
         public static List<modLocationBase> modLocations { get; } = new List<modLocationBase>()
@@ -18,6 +27,116 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             new modKey(),
             new modLockBlock(),
         };
+
+        public static int GetLocationCount(LocationType type, int level, int mode)
+        {
+            int count = 0;
+            string level_mode = $"{level}_{mode}";
+            switch (type)
+            {
+                case LocationType.Checkpoint:
+                {
+                    foreach (string location in Celeste_MultiworldModule.SaveData.CheckpointLocations)
+                    {
+                        if (location.Substring(0, 3) == level_mode)
+                        {
+                            count++;
+                        }
+                    }
+                    break;
+                }
+                case LocationType.Key:
+                {
+                    foreach (string location in Celeste_MultiworldModule.SaveData.KeyLocations)
+                    {
+                        if (location.Substring(0, 3) == level_mode)
+                        {
+                            count++;
+                        }
+                    }
+                    break;
+                }
+                case LocationType.Binoculars:
+                {
+                    foreach (string location in Celeste_MultiworldModule.SaveData.BinocularsLocations)
+                    {
+                        if (location.Substring(0, 3) == level_mode)
+                        {
+                            count++;
+                        }
+                    }
+                    break;
+                }
+                case LocationType.Room:
+                {
+                    foreach (string location in Celeste_MultiworldModule.SaveData.RoomLocations)
+                    {
+                        if (location.Substring(0, 3) == level_mode)
+                        {
+                            count++;
+                        }
+                    }
+                    break;
+                }
+            }
+
+            return count;
+        }
+
+        public static int GetLocationTotal(LocationType type, int level, int mode)
+        {
+            int count = 0;
+            string level_mode = $"{level}_{mode}";
+            switch (type)
+            {
+                case LocationType.Checkpoint:
+                {
+                    foreach (string location in CheckpointStringToID.Keys)
+                    {
+                        if (location.Substring(0, 3).Contains(level_mode))
+                        {
+                            count++;
+                        }
+                    }
+                    break;
+                }
+                case LocationType.Key:
+                {
+                    foreach (string location in KeyIDToAP.Keys)
+                    {
+                        if (location.Substring(0, 3).Contains(level_mode))
+                        {
+                            count++;
+                        }
+                    }
+                    break;
+                }
+                case LocationType.Binoculars:
+                {
+                    foreach (string location in BinocularsIDToAP.Keys)
+                    {
+                        if (location.Substring(0, 3).Contains(level_mode))
+                        {
+                            count++;
+                        }
+                    }
+                    break;
+                }
+                case LocationType.Room:
+                {
+                    foreach (string location in RoomNameToAP.Keys)
+                    {
+                        if (location.Substring(0, 3).Contains(level_mode))
+                        {
+                            count++;
+                        }
+                    }
+                    break;
+                }
+            }
+
+            return count;
+        }
 
         public static Dictionary<string, long> CheckpointStringToID { get; set; } = new Dictionary<string, long>
         {

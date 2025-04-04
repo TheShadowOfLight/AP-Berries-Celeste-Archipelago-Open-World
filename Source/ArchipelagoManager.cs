@@ -97,6 +97,7 @@ namespace Celeste.Mod.Celeste_Multiworld
         public bool IncludeFarewell = false;
         public bool IncludeBSides = false;
         public bool IncludeCSides = false;
+        public List<string> ActiveLevels { get; set; } = new();
         #endregion
 
         private static string commandHolder = null;
@@ -196,6 +197,8 @@ namespace Celeste.Mod.Celeste_Multiworld
             IncludeFarewell = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("include_farewell", out value) ? value : false);
             IncludeBSides = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("include_b_sides", out value) ? value : false);
             IncludeCSides = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("include_c_sides", out value) ? value : false);
+
+            ActiveLevels = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(((LoginSuccessful)result).SlotData["active_levels"].ToString());
 
             // Initialize DeathLink service.
             _deathLinkService = _session.CreateDeathLinkService();
@@ -360,6 +363,11 @@ namespace Celeste.Mod.Celeste_Multiworld
         public int LocationsCheckedCount()
         {
             return _session.Locations.AllLocationsChecked.Count();
+        }
+
+        public int LocationsTotalCount()
+        {
+            return _session.Locations.AllLocations.Count();
         }
 
         private void SendPacket(ArchipelagoPacketBase packet)

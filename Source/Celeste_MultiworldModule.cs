@@ -24,6 +24,7 @@ public class Celeste_MultiworldModule : EverestModule
     #region Hooks
     modMainMenu menu = new modMainMenu();
     modChapterMenu chapterPanel = new modChapterMenu();
+    modJournal journal = new modJournal();
     modAudio audio = new modAudio();
     modPlayer player = new modPlayer();
     modHeartGate heartGate = new modHeartGate();
@@ -59,6 +60,7 @@ public class Celeste_MultiworldModule : EverestModule
 
         menu.Load();
         chapterPanel.Load();
+        journal.Load();
         audio.Load();
         player.Load();
         heartGate.Load();
@@ -81,6 +83,7 @@ public class Celeste_MultiworldModule : EverestModule
 
         menu.Unload();
         chapterPanel.Unload();
+        journal.Unload();
         audio.Unload();
         player.Unload();
         heartGate.Unload();
