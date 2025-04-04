@@ -28,7 +28,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             }
         }
 
-        private void modBadelineBoost_Update(On.Celeste.BadelineBoost.orig_Update orig, BadelineBoost self)
+        private static void modBadelineBoost_Update(On.Celeste.BadelineBoost.orig_Update orig, BadelineBoost self)
         {
             if (!HaveReceived())
             {

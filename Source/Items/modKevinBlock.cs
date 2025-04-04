@@ -39,7 +39,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             orig(self);
         }
 
-        private bool modCrushBlock_CanActivate(On.Celeste.CrushBlock.orig_CanActivate orig, CrushBlock self, Microsoft.Xna.Framework.Vector2 direction)
+        private static bool modCrushBlock_CanActivate(On.Celeste.CrushBlock.orig_CanActivate orig, CrushBlock self, Microsoft.Xna.Framework.Vector2 direction)
         {
             if (!HaveReceived())
             {

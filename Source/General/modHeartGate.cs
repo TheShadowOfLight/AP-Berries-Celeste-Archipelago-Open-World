@@ -18,7 +18,7 @@ namespace Celeste.Mod.Celeste_Multiworld.General
             On.Celeste.HeartGemDoor.Added -= modHeartGemDoor_Added;
         }
 
-        private void modHeartGemDoor_Added(On.Celeste.HeartGemDoor.orig_Added orig, HeartGemDoor self, Monocle.Scene scene)
+        private static void modHeartGemDoor_Added(On.Celeste.HeartGemDoor.orig_Added orig, HeartGemDoor self, Monocle.Scene scene)
         {
             (scene as Level).Session.SetFlag("opened_heartgem_door_" + self.Requires);
 
