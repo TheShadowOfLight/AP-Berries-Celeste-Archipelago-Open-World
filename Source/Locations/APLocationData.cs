@@ -56,6 +56,13 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
                             count++;
                         }
                     }
+                    foreach (string location in Celeste_MultiworldModule.SaveData.GemLocations)
+                    {
+                        if (location.StartsWith(level_mode))
+                        {
+                            count++;
+                        }
+                    }
                     break;
                 }
                 case LocationType.Binoculars:
@@ -110,6 +117,13 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
                 case LocationType.Key:
                 {
                     foreach (string location in KeyIDToAP.Keys)
+                    {
+                        if (location.StartsWith(level_mode))
+                        {
+                            count++;
+                        }
+                    }
+                    foreach (string location in GemIDToAP.Keys)
                     {
                         if (location.StartsWith(level_mode))
                         {
