@@ -409,6 +409,12 @@ namespace Celeste.Mod.Celeste_Multiworld.Items.Traps
                     }
                     case TrapType.Fast:
                     {
+                        if (SaveData.Instance.CurrentSession_Safe.Area.ID == 0)
+                        {
+                            // Prologue depends on Timescale
+                            break;
+                        }
+
                         bool bOtherActive = this.IsTrapActive(TrapType.Slow);
 
                         if (bActive)
@@ -424,6 +430,12 @@ namespace Celeste.Mod.Celeste_Multiworld.Items.Traps
                     }
                     case TrapType.Slow:
                     {
+                        if (SaveData.Instance.CurrentSession_Safe.Area.ID == 0)
+                        {
+                            // Prologue depends on Timescale
+                            break;
+                        }
+
                         bool bOtherActive = this.IsTrapActive(TrapType.Fast);
 
                         if (bActive)
@@ -572,6 +584,12 @@ namespace Celeste.Mod.Celeste_Multiworld.Items.Traps
                 }
                 case TrapType.Fast:
                 {
+                    if (SaveData.Instance.CurrentSession_Safe.Area.ID == 0)
+                    {
+                        // Prologue depends on Timescale
+                        return false;
+                    }
+
                     bool bOtherActive = this.IsTrapActive(TrapType.Slow);
 
                     if (bOtherActive)
