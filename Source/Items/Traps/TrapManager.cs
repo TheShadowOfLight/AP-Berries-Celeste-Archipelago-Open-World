@@ -327,9 +327,6 @@ namespace Celeste.Mod.Celeste_Multiworld.Items.Traps
                 return;
             }
 
-            // TODO: Trap Link
-            // TODO: Save Processed Trap/Item Count to DataStorage
-
             // Check Priority Trap for validity, discard if invalid
             if (this.PriorityTrap != null && this.IsTrapValid(this.PriorityTrap.type))
             {

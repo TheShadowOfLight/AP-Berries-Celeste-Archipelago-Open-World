@@ -13,6 +13,7 @@ public class Celeste_MultiworldModuleSaveData : EverestModuleSaveData
 
     public Dictionary<long, bool> Interactables { get; set; } = new Dictionary<long, bool>();
     public Dictionary<long, bool> KeyItems { get; set; } = new Dictionary<long, bool>();
+    public Dictionary<long, bool> GemItems { get; set; } = new Dictionary<long, bool>();
     #endregion
 
     #region AP Locations
@@ -23,6 +24,7 @@ public class Celeste_MultiworldModuleSaveData : EverestModuleSaveData
     public HashSet<string> CassetteLocations { get; set; } = new HashSet<string>();
     public HashSet<string> BinocularsLocations { get; set; } = new HashSet<string>();
     public HashSet<string> KeyLocations { get; set; } = new HashSet<string>();
+    public HashSet<string> GemLocations { get; set; } = new HashSet<string>();
     public HashSet<string> RoomLocations { get; set; } = new HashSet<string>();
     #endregion
 }

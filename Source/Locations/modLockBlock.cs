@@ -29,6 +29,9 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
 
             { "5_1_b-02:226", "5_1_b-02:221" }, // Key 1
             { "5_1_b-00:145", "5_1_b-02:219" }, // Key 2
+
+            // The Summit
+            { "7_0_f-05:700", "7_0_f-07:712" }, // 2500 M
         };
 
         public override void Load()

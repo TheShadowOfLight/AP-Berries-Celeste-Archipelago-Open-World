@@ -29,8 +29,6 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
 
         private static void modOuiJournalProgress_ctor(On.Celeste.OuiJournalProgress.orig_ctor orig, OuiJournalProgress self, OuiJournal journal)
         {
-            int MODES_REPLACE = 3;
-
             MonoMod.Utils.DynamicData dynamicUI = MonoMod.Utils.DynamicData.For(self);
             dynamicUI.Set("TextJustify", new Vector2(0.5f, 0.5f));
             dynamicUI.Set("TextColor", Color.Black * 0.6f);

@@ -587,7 +587,7 @@ namespace Celeste.Mod.Celeste_Multiworld
                         }
                         break;
                     }
-                    case long id when id >= 0xCA1600 && id <= 0xCA1700:
+                    case long id when id >= 0xCA1600 && id < 0xCA16A0:
                     {
                         Celeste_MultiworldModule.SaveData.KeyItems[id] = true;
 
@@ -598,7 +598,18 @@ namespace Celeste.Mod.Celeste_Multiworld
                         }
                         break;
                     }
-                    case long id when id >= 0xCA1200 && id <= 0xCA1230:
+                    case long id when id >= 0xCA16A0 && id < 0xCA1700:
+                    {
+                        Celeste_MultiworldModule.SaveData.GemItems[id] = true;
+
+                        if (audioGuard < 3)
+                        {
+                            audioGuard++;
+                            Audio.Play(SFX.game_07_gem_get);
+                        }
+                        break;
+                    }
+                    case long id when id >= 0xCA1200 && id < 0xCA1230:
                     {
                         Celeste_MultiworldModule.SaveData.Interactables[id] = true;
 
@@ -673,6 +684,17 @@ namespace Celeste.Mod.Celeste_Multiworld
                 if (Celeste_MultiworldModule.SaveData.KeyLocations.Contains(keyIDPair.Key))
                 {
                     long locationID = keyIDPair.Value;
+                    if (!SentLocations.Contains(locationID))
+                    {
+                        locationsToCheck.Add(locationID);
+                    }
+                }
+            }
+            foreach (KeyValuePair<string, long> gemIDPair in Locations.APLocationData.GemIDToAP)
+            {
+                if (Celeste_MultiworldModule.SaveData.GemLocations.Contains(gemIDPair.Key))
+                {
+                    long locationID = gemIDPair.Value;
                     if (!SentLocations.Contains(locationID))
                     {
                         locationsToCheck.Add(locationID);
@@ -765,6 +787,13 @@ namespace Celeste.Mod.Celeste_Multiworld
                     string keyLocString = Locations.APLocationData.KeyAPToID[newLoc];
 
                     Celeste_MultiworldModule.SaveData.KeyLocations.Add(keyLocString);
+                }
+
+                if (Locations.APLocationData.GemAPToID.ContainsKey(newLoc))
+                {
+                    string gemLocString = Locations.APLocationData.GemAPToID[newLoc];
+
+                    Celeste_MultiworldModule.SaveData.GemLocations.Add(gemLocString);
                 }
 
                 if (Locations.APLocationData.StrawberryAPToID.ContainsKey(newLoc))

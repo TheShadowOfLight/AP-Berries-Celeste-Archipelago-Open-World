@@ -12,6 +12,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
         Strawberry,
         Checkpoint,
         Key,
+        Gem,
         Binoculars,
         Room
     }
@@ -25,6 +26,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             new modCassette(),
             new modHeartGem(),
             new modKey(),
+            new modSummitGem(),
             new modLockBlock(),
         };
 
@@ -38,7 +40,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
                 {
                     foreach (string location in Celeste_MultiworldModule.SaveData.CheckpointLocations)
                     {
-                        if (location.Substring(0, 3) == level_mode)
+                        if (location.StartsWith(level_mode))
                         {
                             count++;
                         }
@@ -49,7 +51,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
                 {
                     foreach (string location in Celeste_MultiworldModule.SaveData.KeyLocations)
                     {
-                        if (location.Substring(0, 3) == level_mode)
+                        if (location.StartsWith(level_mode))
                         {
                             count++;
                         }
@@ -60,7 +62,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
                 {
                     foreach (string location in Celeste_MultiworldModule.SaveData.BinocularsLocations)
                     {
-                        if (location.Substring(0, 3) == level_mode)
+                        if (location.StartsWith(level_mode))
                         {
                             count++;
                         }
@@ -71,7 +73,12 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
                 {
                     foreach (string location in Celeste_MultiworldModule.SaveData.RoomLocations)
                     {
-                        if (location.Substring(0, 3) == level_mode)
+                        if (!RoomNameToAP.ContainsKey(location))
+                        {
+                            continue;
+                        }
+
+                        if (location.StartsWith(level_mode))
                         {
                             count++;
                         }
@@ -93,7 +100,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
                 {
                     foreach (string location in CheckpointStringToID.Keys)
                     {
-                        if (location.Substring(0, 3).Contains(level_mode))
+                        if (location.StartsWith(level_mode))
                         {
                             count++;
                         }
@@ -104,7 +111,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
                 {
                     foreach (string location in KeyIDToAP.Keys)
                     {
-                        if (location.Substring(0, 3).Contains(level_mode))
+                        if (location.StartsWith(level_mode))
                         {
                             count++;
                         }
@@ -115,7 +122,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
                 {
                     foreach (string location in BinocularsIDToAP.Keys)
                     {
-                        if (location.Substring(0, 3).Contains(level_mode))
+                        if (location.StartsWith(level_mode))
                         {
                             count++;
                         }
@@ -126,7 +133,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
                 {
                     foreach (string location in RoomNameToAP.Keys)
                     {
-                        if (location.Substring(0, 3).Contains(level_mode))
+                        if (location.StartsWith(level_mode))
                         {
                             count++;
                         }
@@ -472,6 +479,9 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
 
             { "5_1_b-02:221", 0xCA160A }, // Left
             { "5_1_b-02:219", 0xCA160B }, // Right
+
+            // The Summit
+            { "7_0_f-07:712", 0xCA160C },
         };
         public static Dictionary<long, string> KeyAPToID { get; set; } = new Dictionary<long, string>
         {
@@ -491,6 +501,30 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
 
             { 0xCA160A, "5_1_b-02:221" }, // Left
             { 0xCA160B, "5_1_b-02:219" }, // Right
+
+            // The Summit
+            { 0xCA160C, "7_0_f-07:712" },
+        };
+
+        public static Dictionary<string, long> GemIDToAP { get; set; } = new Dictionary<string, long>
+        {
+            // The Summit
+            { "7_0_a-06", 0xCA16A0 },
+            { "7_0_b-02d", 0xCA16A1 },
+            { "7_0_c-06c", 0xCA16A2 },
+            { "7_0_d-05b", 0xCA16A3 },
+            { "7_0_e-01c", 0xCA16A4 },
+            { "7_0_f-02b", 0xCA16A5 },
+        };
+        public static Dictionary<long, string> GemAPToID { get; set; } = new Dictionary<long, string>
+        {
+            // The Summit
+            { 0xCA16A0, "7_0_a-06" },
+            { 0xCA16A1, "7_0_b-02d" },
+            { 0xCA16A2, "7_0_c-06c" },
+            { 0xCA16A3, "7_0_d-05b" },
+            { 0xCA16A4, "7_0_e-01c" },
+            { 0xCA16A5, "7_0_f-02b" },
         };
 
         public static Dictionary<string, long> StrawberryIDToAP { get; set; } = new Dictionary<string, long>
@@ -655,6 +689,59 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             { "6_0_00:51", 0xCA1110 },
             { "6_1_a-00:137", 0xCA1111 },
             { "6_2_00:3", 0xCA1112 },
+
+            // The Summit
+            { "7_0_a-02b:61", 0xCA107B },
+            { "7_0_a-04b:136", 0xCA107C },
+            { "7_0_a-04b:85", 0xCA107D },
+            { "7_0_a-05:54", 0xCA107E },
+            { "7_0_b-02:101", 0xCA107F },
+            { "7_0_b-02b:102", 0xCA1080 },
+            { "7_0_b-02e:112", 0xCA1081 },
+            { "7_0_b-04:67", 0xCA1082 },
+            { "7_0_b-08:129", 0xCA1083 },
+            { "7_0_b-09:167", 0xCA1084 },
+            { "7_0_c-03b:228", 0xCA1085 },
+            { "7_0_c-05:248", 0xCA1086 },
+            { "7_0_c-06b:281", 0xCA1087 },
+            { "7_0_c-07b:291", 0xCA1088 },
+            { "7_0_c-08:331", 0xCA1089 },
+            { "7_0_c-09:354", 0xCA108A },
+            { "7_0_d-00:43", 0xCA108B },
+            { "7_0_d-01c:226", 0xCA108C },
+            { "7_0_d-01d:282", 0xCA108D },
+            { "7_0_d-03:383", 0xCA108E },
+            { "7_0_d-04:388", 0xCA108F },
+            { "7_0_d-07:484", 0xCA1090 },
+            { "7_0_d-08:527", 0xCA1091 },
+            { "7_0_d-10b:682", 0xCA1092 },
+            { "7_0_e-02:7", 0xCA1093 },
+            { "7_0_e-05:237", 0xCA1094 },
+            { "7_0_e-07:473", 0xCA1095 },
+            { "7_0_e-09:398", 0xCA1096 },
+            { "7_0_e-11:425", 0xCA1097 },
+            { "7_0_e-12:504", 0xCA1098 },
+            { "7_0_e-10:515", 0xCA1099 },
+            { "7_0_e-13:829", 0xCA109A },
+            { "7_0_f-00:590", 0xCA109B },
+            { "7_0_f-01:639", 0xCA109C },
+            { "7_0_f-07:711", 0xCA109D },
+            { "7_0_f-08b:856", 0xCA109E },
+            { "7_0_f-08c:759", 0xCA109F },
+            { "7_0_f-11:1068", 0xCA10A0 },
+            { "7_0_f-11:1238", 0xCA10A1 },
+            { "7_0_f-11:1229", 0xCA10A2 },
+            { "7_0_g-00b:37", 0xCA10A3 },
+            { "7_0_g-00b:127", 0xCA10A4 },
+            { "7_0_g-00b:114", 0xCA10A5 },
+            { "7_0_g-01:66", 0xCA10A6 },
+            { "7_0_g-01:279", 0xCA10A7 },
+            { "7_0_g-01:342", 0xCA10A8 },
+            { "7_0_g-03:1504", 0xCA10A9 },
+
+            { "7_0_a-00:57", 0xCA1113 },
+            { "7_1_a-00:102", 0xCA1114 },
+            { "7_2_01:334", 0xCA1115 },
         };
         public static Dictionary<long, string> StrawberryAPToID { get; set; } = new Dictionary<long, string>
         {
@@ -818,6 +905,59 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             { 0xCA1110, "6_0_00:51" },
             { 0xCA1111, "6_1_a-00:137" },
             { 0xCA1112, "6_2_00:3" },
+
+            // The Summit
+            { 0xCA107B, "7_0_a-02b:61" },
+            { 0xCA107C, "7_0_a-04b:136" },
+            { 0xCA107D, "7_0_a-04b:85" },
+            { 0xCA107E, "7_0_a-05:54" },
+            { 0xCA107F, "7_0_b-02:101" },
+            { 0xCA1080, "7_0_b-02b:102" },
+            { 0xCA1081, "7_0_b-02e:112" },
+            { 0xCA1082, "7_0_b-04:67" },
+            { 0xCA1083, "7_0_b-08:129" },
+            { 0xCA1084, "7_0_b-09:167" },
+            { 0xCA1085, "7_0_c-03b:228" },
+            { 0xCA1086, "7_0_c-05:248" },
+            { 0xCA1087, "7_0_c-06b:281" },
+            { 0xCA1088, "7_0_c-07b:291" },
+            { 0xCA1089, "7_0_c-08:331" },
+            { 0xCA108A, "7_0_c-09:354" },
+            { 0xCA108B, "7_0_d-00:43" },
+            { 0xCA108C, "7_0_d-01c:226" },
+            { 0xCA108D, "7_0_d-01d:282" },
+            { 0xCA108E, "7_0_d-03:383" },
+            { 0xCA108F, "7_0_d-04:388" },
+            { 0xCA1090, "7_0_d-07:484" },
+            { 0xCA1091, "7_0_d-08:527" },
+            { 0xCA1092, "7_0_d-10b:682" },
+            { 0xCA1093, "7_0_e-02:7" },
+            { 0xCA1094, "7_0_e-05:237" },
+            { 0xCA1095, "7_0_e-07:473" },
+            { 0xCA1096, "7_0_e-09:398" },
+            { 0xCA1097, "7_0_e-11:425" },
+            { 0xCA1098, "7_0_e-12:504" },
+            { 0xCA1099, "7_0_e-10:515" },
+            { 0xCA109A, "7_0_e-13:829" },
+            { 0xCA109B, "7_0_f-00:590" },
+            { 0xCA109C, "7_0_f-01:639" },
+            { 0xCA109D, "7_0_f-07:711" },
+            { 0xCA109E, "7_0_f-08b:856" },
+            { 0xCA109F, "7_0_f-08c:759" },
+            { 0xCA10A0, "7_0_f-11:1068" },
+            { 0xCA10A1, "7_0_f-11:1238" },
+            { 0xCA10A2, "7_0_f-11:1229" },
+            { 0xCA10A3, "7_0_g-00b:37" },
+            { 0xCA10A4, "7_0_g-00b:127" },
+            { 0xCA10A5, "7_0_g-00b:114" },
+            { 0xCA10A6, "7_0_g-01:66" },
+            { 0xCA10A7, "7_0_g-01:279" },
+            { 0xCA10A8, "7_0_g-01:342" },
+            { 0xCA10A9, "7_0_g-03:1504" },
+
+            { 0xCA1113, "7_0_a-00:57" },
+            { 0xCA1114, "7_1_a-00:102" },
+            { 0xCA1115, "7_2_01:334" },
         };
 
         public static Dictionary<string, long> BinocularsIDToAP { get; set; } = new Dictionary<string, long>
@@ -873,6 +1013,22 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
 
             { "6_2_02:1024_720", 0xCA171A },
             { "6_2_02:1368_1200", 0xCA171B },
+
+            // The Summit
+            { "7_0_b-01:2976_-2008", 0xCA171C },
+            { "7_0_b-02:3592_-2080", 0xCA171D },
+            { "7_0_b-02b:3536_-2456", 0xCA171E },
+            { "7_0_c-03b:6696_-5160", 0xCA171F },
+            { "7_0_c-05:8408_-5304", 0xCA1720 },
+            { "7_0_c-06c:8440_-5832", 0xCA1721 },
+            { "7_0_c-07b:7744_-6104", 0xCA1722 },
+            { "7_0_g-03:26424_-22944", 0xCA1723 },
+
+            { "7_1_b-01:2160_-2096", 0xCA1724 },
+            { "7_1_b-02:2800_-2880", 0xCA1725 },
+
+            { "7_2_01:32_144", 0xCA1726 },
+            { "7_2_03:1200_-944", 0xCA1727 },
         };
         public static Dictionary<long, string> BinocularsAPToID { get; set; } = new Dictionary<long, string>
         {
@@ -927,6 +1083,22 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
 
             { 0xCA171A, "6_1_02:1024_720" },
             { 0xCA171B, "6_2_02:1368_1200" },
+
+            // The Summit
+            { 0xCA171C, "7_0_b-01:2976_-2008" },
+            { 0xCA171D, "7_0_b-02:3592_-2080" },
+            { 0xCA171E, "7_0_b-02b:3536_-2456" },
+            { 0xCA171F, "7_0_c-03b:6696_-5160" },
+            { 0xCA1720, "7_0_c-05:8408_-5304" },
+            { 0xCA1721, "7_0_c-06c:8440_-5832" },
+            { 0xCA1722, "7_0_c-07b:7744_-6104" },
+            { 0xCA1723, "7_0_g-03:26424_-22944" },
+
+            { 0xCA1724, "7_1_b-01:2160_-2096" },
+            { 0xCA1725, "7_1_b-02:2800_-2880" },
+
+            { 0xCA1726, "7_2_01:32_144" },
+            { 0xCA1727, "7_2_03:1200_-944" },
         };
 
         public static Dictionary<string, long> RoomNameToAP { get; set; } = new Dictionary<string, long>
@@ -1453,6 +1625,141 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             { "6_2_00", 0xCA19EE },
             { "6_2_01", 0xCA19EF },
             { "6_2_02", 0xCA19F0 },
+
+            // The Summit
+            { "7_0_a-00", 0xCA19F1 },
+            { "7_0_a-01", 0xCA19F2 },
+            { "7_0_a-02", 0xCA19F3 },
+            { "7_0_a-02b", 0xCA19F4 },
+            { "7_0_a-03", 0xCA19F5 },
+            { "7_0_a-04", 0xCA19F6 },
+            { "7_0_a-04b", 0xCA19F7 },
+            { "7_0_a-05", 0xCA19F8 },
+            { "7_0_a-06", 0xCA19F9 },
+            { "7_0_b-00", 0xCA19FA },
+            { "7_0_b-01", 0xCA19FB },
+            { "7_0_b-02", 0xCA19FC },
+            { "7_0_b-02b", 0xCA19FD },
+            { "7_0_b-02e", 0xCA19FE },
+            { "7_0_b-02c", 0xCA19FF },
+            { "7_0_b-02d", 0xCA1A00 },
+            { "7_0_b-03", 0xCA1A01 },
+            { "7_0_b-04", 0xCA1A02 },
+            { "7_0_b-05", 0xCA1A03 },
+            { "7_0_b-06", 0xCA1A04 },
+            { "7_0_b-07", 0xCA1A05 },
+            { "7_0_b-08", 0xCA1A06 },
+            { "7_0_b-09", 0xCA1A07 },
+            { "7_0_c-00", 0xCA1A08 },
+            { "7_0_c-01", 0xCA1A09 },
+            { "7_0_c-02", 0xCA1A0A },
+            { "7_0_c-03", 0xCA1A0B },
+            { "7_0_c-03b", 0xCA1A0C },
+            { "7_0_c-04", 0xCA1A0D },
+            { "7_0_c-05", 0xCA1A0E },
+            { "7_0_c-06", 0xCA1A0F },
+            { "7_0_c-06b", 0xCA1A10 },
+            { "7_0_c-06c", 0xCA1A11 },
+            { "7_0_c-07", 0xCA1A12 },
+            { "7_0_c-07b", 0xCA1A13 },
+            { "7_0_c-08", 0xCA1A14 },
+            { "7_0_c-09", 0xCA1A15 },
+            { "7_0_d-00", 0xCA1A16 },
+            { "7_0_d-01", 0xCA1A17 },
+            { "7_0_d-01b", 0xCA1A18 },
+            { "7_0_d-01c", 0xCA1A19 },
+            { "7_0_d-01d", 0xCA1A1A },
+            { "7_0_d-02", 0xCA1A1B },
+            { "7_0_d-03", 0xCA1A1C },
+            { "7_0_d-03b", 0xCA1A1D },
+            { "7_0_d-04", 0xCA1A1E },
+            { "7_0_d-05", 0xCA1A1F },
+            { "7_0_d-05b", 0xCA1A20 },
+            { "7_0_d-06", 0xCA1A21 },
+            { "7_0_d-07", 0xCA1A22 },
+            { "7_0_d-08", 0xCA1A23 },
+            { "7_0_d-09", 0xCA1A24 },
+            { "7_0_d-10", 0xCA1A25 },
+            { "7_0_d-10b", 0xCA1A26 },
+            { "7_0_d-11", 0xCA1A27 },
+            { "7_0_e-00b", 0xCA1A28 },
+            { "7_0_e-00", 0xCA1A29 },
+            { "7_0_e-01", 0xCA1A2A },
+            { "7_0_e-01b", 0xCA1A2B },
+            { "7_0_e-01c", 0xCA1A2C },
+            { "7_0_e-02", 0xCA1A2D },
+            { "7_0_e-03", 0xCA1A2E },
+            { "7_0_e-04", 0xCA1A2F },
+            { "7_0_e-05", 0xCA1A30 },
+            { "7_0_e-06", 0xCA1A31 },
+            { "7_0_e-07", 0xCA1A32 },
+            { "7_0_e-08", 0xCA1A33 },
+            { "7_0_e-09", 0xCA1A34 },
+            { "7_0_e-11", 0xCA1A35 },
+            { "7_0_e-12", 0xCA1A36 },
+            { "7_0_e-10", 0xCA1A37 },
+            { "7_0_e-10b", 0xCA1A38 },
+            { "7_0_e-13", 0xCA1A39 },
+            { "7_0_f-00", 0xCA1A3A },
+            { "7_0_f-01", 0xCA1A3B },
+            { "7_0_f-02", 0xCA1A3C },
+            { "7_0_f-02b", 0xCA1A3D },
+            { "7_0_f-04", 0xCA1A3E },
+            { "7_0_f-03", 0xCA1A3F },
+            { "7_0_f-05", 0xCA1A40 },
+            { "7_0_f-06", 0xCA1A41 },
+            { "7_0_f-07", 0xCA1A42 },
+            { "7_0_f-08", 0xCA1A43 },
+            { "7_0_f-08b", 0xCA1A44 },
+            { "7_0_f-08d", 0xCA1A45 },
+            { "7_0_f-08c", 0xCA1A46 },
+            { "7_0_f-09", 0xCA1A47 },
+            { "7_0_f-10", 0xCA1A48 },
+            { "7_0_f-10b", 0xCA1A49 },
+            { "7_0_f-11", 0xCA1A4A },
+            { "7_0_g-00", 0xCA1A4B },
+            { "7_0_g-00b", 0xCA1A4C },
+            { "7_0_g-01", 0xCA1A4D },
+            { "7_0_g-02", 0xCA1A4E },
+            { "7_0_g-03", 0xCA1A4F },
+
+            { "7_1_a-00", 0xCA1A50 },
+            { "7_1_a-01", 0xCA1A51 },
+            { "7_1_a-02", 0xCA1A52 },
+            { "7_1_a-03", 0xCA1A53 },
+            { "7_1_b-00", 0xCA1A54 },
+            { "7_1_b-01", 0xCA1A55 },
+            { "7_1_b-02", 0xCA1A56 },
+            { "7_1_b-03", 0xCA1A57 },
+            { "7_1_c-01", 0xCA1A58 },
+            { "7_1_c-00", 0xCA1A59 },
+            { "7_1_c-02", 0xCA1A5A },
+            { "7_1_c-03", 0xCA1A5B },
+            { "7_1_d-00", 0xCA1A5C },
+            { "7_1_d-01", 0xCA1A5D },
+            { "7_1_d-02", 0xCA1A5E },
+            { "7_1_d-03", 0xCA1A5F },
+            { "7_1_e-00", 0xCA1A60 },
+            { "7_1_e-01", 0xCA1A61 },
+            { "7_1_e-02", 0xCA1A62 },
+            { "7_1_e-03", 0xCA1A63 },
+            { "7_1_f-00", 0xCA1A64 },
+            { "7_1_f-01", 0xCA1A65 },
+            { "7_1_f-02", 0xCA1A66 },
+            { "7_1_f-03", 0xCA1A67 },
+            { "7_1_g-00", 0xCA1A68 },
+            { "7_1_g-01", 0xCA1A69 },
+            { "7_1_g-02", 0xCA1A6A },
+            { "7_1_g-03", 0xCA1A6B },
+
+            { "7_2_01", 0xCA1A6C },
+            { "7_2_02", 0xCA1A6D },
+            { "7_2_03", 0xCA1A6E },
+
+            // Epilogue
+            { "8_0_outside", 0xCA1A6F },
+            { "8_0_bridge", 0xCA1A70 },
+            { "8_0_secret", 0xCA1A71 },
         };
         public static Dictionary<long, string> APToRoomName { get; set; } = new Dictionary<long, string>
         {
@@ -1978,6 +2285,141 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             { 0xCA19EE, "6_2_00" },
             { 0xCA19EF, "6_2_01" },
             { 0xCA19F0, "6_2_02" },
+
+            // The Summit
+            { 0xCA19F1, "7_0_a-00" },
+            { 0xCA19F2, "7_0_a-01" },
+            { 0xCA19F3, "7_0_a-02" },
+            { 0xCA19F4, "7_0_a-02b" },
+            { 0xCA19F5, "7_0_a-03" },
+            { 0xCA19F6, "7_0_a-04" },
+            { 0xCA19F7, "7_0_a-04b" },
+            { 0xCA19F8, "7_0_a-05" },
+            { 0xCA19F9, "7_0_a-06" },
+            { 0xCA19FA, "7_0_b-00" },
+            { 0xCA19FB, "7_0_b-01" },
+            { 0xCA19FC, "7_0_b-02" },
+            { 0xCA19FD, "7_0_b-02b" },
+            { 0xCA19FE, "7_0_b-02e" },
+            { 0xCA19FF, "7_0_b-02c" },
+            { 0xCA1A00, "7_0_b-02d" },
+            { 0xCA1A01, "7_0_b-03" },
+            { 0xCA1A02, "7_0_b-04" },
+            { 0xCA1A03, "7_0_b-05" },
+            { 0xCA1A04, "7_0_b-06" },
+            { 0xCA1A05, "7_0_b-07" },
+            { 0xCA1A06, "7_0_b-08" },
+            { 0xCA1A07, "7_0_b-09" },
+            { 0xCA1A08, "7_0_c-00" },
+            { 0xCA1A09, "7_0_c-01" },
+            { 0xCA1A0A, "7_0_c-02" },
+            { 0xCA1A0B, "7_0_c-03" },
+            { 0xCA1A0C, "7_0_c-03b" },
+            { 0xCA1A0D, "7_0_c-04" },
+            { 0xCA1A0E, "7_0_c-05" },
+            { 0xCA1A0F, "7_0_c-06" },
+            { 0xCA1A10, "7_0_c-06b" },
+            { 0xCA1A11, "7_0_c-06c" },
+            { 0xCA1A12, "7_0_c-07" },
+            { 0xCA1A13, "7_0_c-07b" },
+            { 0xCA1A14, "7_0_c-08" },
+            { 0xCA1A15, "7_0_c-09" },
+            { 0xCA1A16, "7_0_d-00" },
+            { 0xCA1A17, "7_0_d-01" },
+            { 0xCA1A18, "7_0_d-01b" },
+            { 0xCA1A19, "7_0_d-01c" },
+            { 0xCA1A1A, "7_0_d-01d" },
+            { 0xCA1A1B, "7_0_d-02" },
+            { 0xCA1A1C, "7_0_d-03" },
+            { 0xCA1A1D, "7_0_d-03b" },
+            { 0xCA1A1E, "7_0_d-04" },
+            { 0xCA1A1F, "7_0_d-05" },
+            { 0xCA1A20, "7_0_d-05b" },
+            { 0xCA1A21, "7_0_d-06" },
+            { 0xCA1A22, "7_0_d-07" },
+            { 0xCA1A23, "7_0_d-08" },
+            { 0xCA1A24, "7_0_d-09" },
+            { 0xCA1A25, "7_0_d-10" },
+            { 0xCA1A26, "7_0_d-10b" },
+            { 0xCA1A27, "7_0_d-11" },
+            { 0xCA1A28, "7_0_e-00b" },
+            { 0xCA1A29, "7_0_e-00" },
+            { 0xCA1A2A, "7_0_e-01" },
+            { 0xCA1A2B, "7_0_e-01b" },
+            { 0xCA1A2C, "7_0_e-01c" },
+            { 0xCA1A2D, "7_0_e-02" },
+            { 0xCA1A2E, "7_0_e-03" },
+            { 0xCA1A2F, "7_0_e-04" },
+            { 0xCA1A30, "7_0_e-05" },
+            { 0xCA1A31, "7_0_e-06" },
+            { 0xCA1A32, "7_0_e-07" },
+            { 0xCA1A33, "7_0_e-08" },
+            { 0xCA1A34, "7_0_e-09" },
+            { 0xCA1A35, "7_0_e-11" },
+            { 0xCA1A36, "7_0_e-12" },
+            { 0xCA1A37, "7_0_e-10" },
+            { 0xCA1A38, "7_0_e-10b" },
+            { 0xCA1A39, "7_0_e-13" },
+            { 0xCA1A3A, "7_0_f-00" },
+            { 0xCA1A3B, "7_0_f-01" },
+            { 0xCA1A3C, "7_0_f-02" },
+            { 0xCA1A3D, "7_0_f-02b" },
+            { 0xCA1A3E, "7_0_f-04" },
+            { 0xCA1A3F, "7_0_f-03" },
+            { 0xCA1A40, "7_0_f-05" },
+            { 0xCA1A41, "7_0_f-06" },
+            { 0xCA1A42, "7_0_f-07" },
+            { 0xCA1A43, "7_0_f-08" },
+            { 0xCA1A44, "7_0_f-08b" },
+            { 0xCA1A45, "7_0_f-08d" },
+            { 0xCA1A46, "7_0_f-08c" },
+            { 0xCA1A47, "7_0_f-09" },
+            { 0xCA1A48, "7_0_f-10" },
+            { 0xCA1A49, "7_0_f-10b" },
+            { 0xCA1A4A, "7_0_f-11" },
+            { 0xCA1A4B, "7_0_g-00" },
+            { 0xCA1A4C, "7_0_g-00b" },
+            { 0xCA1A4D, "7_0_g-01" },
+            { 0xCA1A4E, "7_0_g-02" },
+            { 0xCA1A4F, "7_0_g-03" },
+
+            { 0xCA1A50, "7_1_a-00" },
+            { 0xCA1A51, "7_1_a-01" },
+            { 0xCA1A52, "7_1_a-02" },
+            { 0xCA1A53, "7_1_a-03" },
+            { 0xCA1A54, "7_1_b-00" },
+            { 0xCA1A55, "7_1_b-01" },
+            { 0xCA1A56, "7_1_b-02" },
+            { 0xCA1A57, "7_1_b-03" },
+            { 0xCA1A58, "7_1_c-01" },
+            { 0xCA1A59, "7_1_c-00" },
+            { 0xCA1A5A, "7_1_c-02" },
+            { 0xCA1A5B, "7_1_c-03" },
+            { 0xCA1A5C, "7_1_d-00" },
+            { 0xCA1A5D, "7_1_d-01" },
+            { 0xCA1A5E, "7_1_d-02" },
+            { 0xCA1A5F, "7_1_d-03" },
+            { 0xCA1A60, "7_1_e-00" },
+            { 0xCA1A61, "7_1_e-01" },
+            { 0xCA1A62, "7_1_e-02" },
+            { 0xCA1A63, "7_1_e-03" },
+            { 0xCA1A64, "7_1_f-00" },
+            { 0xCA1A65, "7_1_f-01" },
+            { 0xCA1A66, "7_1_f-02" },
+            { 0xCA1A67, "7_1_f-03" },
+            { 0xCA1A68, "7_1_g-00" },
+            { 0xCA1A69, "7_1_g-01" },
+            { 0xCA1A6A, "7_1_g-02" },
+            { 0xCA1A6B, "7_1_g-03" },
+
+            { 0xCA1A6C, "7_2_01" },
+            { 0xCA1A6D, "7_2_02" },
+            { 0xCA1A6E, "7_2_03" },
+
+            // Epilogue
+            { 0xCA1A6F, "8_0_outside" },
+            { 0xCA1A70, "8_0_bridge" },
+            { 0xCA1A71, "8_0_secret" },
         };
     }
 }

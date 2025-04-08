@@ -105,6 +105,18 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             { 0xCA141F, "Reflection B - Reflection" },
             { 0xCA1420, "Reflection B - Rock Bottom" },
             { 0xCA1421, "Reflection B - Reprieve" },
+            { 0xCA1422, "The Summit A - 500 M" },
+            { 0xCA1423, "The Summit A - 1000 M" },
+            { 0xCA1424, "The Summit A - 1500 M" },
+            { 0xCA1425, "The Summit A - 2000 M" },
+            { 0xCA1426, "The Summit A - 2500 M" },
+            { 0xCA1427, "The Summit A - 3000 M" },
+            { 0xCA1428, "The Summit B - 500 M" },
+            { 0xCA1429, "The Summit B - 1000 M" },
+            { 0xCA142A, "The Summit B - 1500 M" },
+            { 0xCA142B, "The Summit B - 2000 M" },
+            { 0xCA142C, "The Summit B - 2500 M" },
+            { 0xCA142D, "The Summit B - 3000 M" },
 
             { 0xCA1200, "Springs" },
             { 0xCA1201, "Traffic Blocks" },
@@ -154,6 +166,14 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             { 0xCA1609, "Mirror Temple A - Search Key 3" },
             { 0xCA160A, "Mirror Temple B - Central Chamber Key 1" },
             { 0xCA160B, "Mirror Temple B - Central Chamber Key 2" },
+            { 0xCA160C, "The Summit A - 2500 M Key" },
+
+            { 0xCA16A0, "The Summit A - Gem 1" },
+            { 0xCA16A1, "The Summit A - Gem 2" },
+            { 0xCA16A2, "The Summit A - Gem 3" },
+            { 0xCA16A3, "The Summit A - Gem 4" },
+            { 0xCA16A4, "The Summit A - Gem 5" },
+            { 0xCA16A5, "The Summit A - Gem 6" },
         };
 
         public static Dictionary<long, CheckpointItemData> CheckpointData { get; set; } = new Dictionary<long, CheckpointItemData>
