@@ -10,6 +10,7 @@ public class Celeste_MultiworldModuleSaveData : EverestModuleSaveData
 
     #region AP Items
     public int Strawberries { get; set; } = 0;
+    public bool GoalItem { get; set; } = false;
 
     public Dictionary<long, bool> Interactables { get; set; } = new Dictionary<long, bool>();
     public Dictionary<long, bool> KeyItems { get; set; } = new Dictionary<long, bool>();

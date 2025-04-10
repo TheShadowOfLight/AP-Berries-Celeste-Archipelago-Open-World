@@ -98,6 +98,8 @@ namespace Celeste.Mod.Celeste_Multiworld
         public bool IncludeBSides = false;
         public bool IncludeCSides = false;
         public List<string> ActiveLevels { get; set; } = new();
+        public string GoalLevel = "";
+        public bool LockGoalLevel = true;
         #endregion
 
         private static string commandHolder = null;
@@ -199,6 +201,8 @@ namespace Celeste.Mod.Celeste_Multiworld
             IncludeCSides = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("include_c_sides", out value) ? value : false);
 
             ActiveLevels = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(((LoginSuccessful)result).SlotData["active_levels"].ToString());
+            GoalLevel = Convert.ToString(((LoginSuccessful)result).SlotData.TryGetValue("goal_area", out value) ? value : false);
+            LockGoalLevel = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("lock_goal_area", out value) ? value : false);
 
             // Initialize DeathLink service.
             _deathLinkService = _session.CreateDeathLinkService();
@@ -565,6 +569,11 @@ namespace Celeste.Mod.Celeste_Multiworld
                     case 0xCA1000:
                     {
                         Celeste_MultiworldModule.SaveData.Strawberries += 1;
+                        break;
+                    }
+                    case 0xCA1010:
+                    {
+                        Celeste_MultiworldModule.SaveData.GoalItem = true;
                         break;
                     }
                     case long id when id >= 0xCA1020 && id < 0xCA1050:

@@ -9,6 +9,19 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
 {
     public class modChapterMenu
     {
+        public static Dictionary<string, string> LevelNameToDisplayName = new Dictionary<string, string>()
+        {
+            { "7a", "The Summit A" },
+            { "7b", "The Summit B" },
+            { "7c", "The Summit C" },
+            { "9a", "Core A" },
+            { "9b", "Core B" },
+            { "9c", "Core C" },
+            { "10a", "Empty Space" },
+            { "10b", "Farewell" },
+            { "10c", "Farewell Golden" },
+        };
+
         public void Load()
         {
             On.Celeste.OuiChapterPanel.IsStart += modOuiChapterPanel_IsStart;
@@ -20,6 +33,8 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
             On.Celeste.OuiChapterPanel.GetModeHeight += modOuiChapterPanel_GetModeHeight;
 
             On.Celeste.SaveData.SetCheckpoint += modSaveData_SetCheckpoint;
+
+            On.Celeste.Checkpoint.TurnOn += modCheckpoint_TurnOn;
         }
 
         public void Unload()
@@ -32,13 +47,50 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
             On.Celeste.OuiChapterPanel.GetModeHeight -= modOuiChapterPanel_GetModeHeight;
 
             On.Celeste.SaveData.SetCheckpoint -= modSaveData_SetCheckpoint;
+
+            On.Celeste.Checkpoint.TurnOn -= modCheckpoint_TurnOn;
         }
 
         private static void modOuiChapterPanel_Start(On.Celeste.OuiChapterPanel.orig_Start orig, OuiChapterPanel self, string checkpoint)
         {
-            if (self.Area.Mode == AreaMode.BSide && !ArchipelagoManager.Instance.IncludeBSides)
+            string AreaName = $"{self.Area.ID}";
+
+            switch (self.Area.Mode)
+            {
+                case AreaMode.Normal:
+                {
+                    AreaName += "a";
+                    break;
+                }
+                case AreaMode.BSide:
+                {
+                    AreaName += "b";
+                    break;
+                }
+                case AreaMode.CSide:
+                {
+                    AreaName += "c";
+                    break;
+                }
+            }
+
+            if (!ArchipelagoManager.Instance.ActiveLevels.Contains(AreaName))
             {
                 Audio.Play("event:/ui/main/button_back");
+            }
+            else if (AreaName == ArchipelagoManager.Instance.GoalLevel)
+            {
+                if (Celeste_MultiworldModule.SaveData.Strawberries >= ArchipelagoManager.Instance.StrawberriesRequired)
+                {
+                    orig(self, checkpoint);
+                }
+            }
+            else if (AreaName == "8a")
+            {
+                if (Celeste_MultiworldModule.SaveData.Strawberries >= ArchipelagoManager.Instance.StrawberriesRequired && Celeste_MultiworldModule.SaveData.GoalItem)
+                {
+                    orig(self, checkpoint);
+                }
             }
             else if (self.Area.ID == 6 && self.Area.Mode == AreaMode.Normal && checkpoint == null)
             {
@@ -53,7 +105,28 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
 
         private static void modOuiChapterPanel_Swap(On.Celeste.OuiChapterPanel.orig_Swap orig, OuiChapterPanel self)
         {
-            if (self.Area.Mode == AreaMode.BSide && !ArchipelagoManager.Instance.IncludeBSides)
+            string AreaName = $"{self.Area.ID}";
+
+            switch (self.Area.Mode)
+            {
+                case AreaMode.Normal:
+                    {
+                        AreaName += "a";
+                        break;
+                    }
+                case AreaMode.BSide:
+                    {
+                        AreaName += "b";
+                        break;
+                    }
+                case AreaMode.CSide:
+                    {
+                        AreaName += "c";
+                        break;
+                    }
+            }
+
+            if (!ArchipelagoManager.Instance.ActiveLevels.Contains(AreaName))
             {
                 Audio.Play("event:/ui/main/button_back");
             }
@@ -74,6 +147,16 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
 
             Celeste_MultiworldModule.SaveData.CheckpointLocations.Add(checkpointString);
             return true;
+        }
+
+        private static void modCheckpoint_TurnOn(On.Celeste.Checkpoint.orig_TurnOn orig, Checkpoint self, bool animate)
+        {
+            if (!animate)
+            {
+                return;
+            }
+
+            orig(self, animate);
         }
 
         private static HashSet<string> modSaveData_GetCheckpoints(On.Celeste.SaveData.orig_GetCheckpoints orig, SaveData self, AreaKey area)
@@ -158,32 +241,82 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
             self.height = (float)self.GetModeHeight();
             self.modes.Clear();
             bool flag = false;
+
             if (!self.Data.Interlude_Safe && self.Area.ID < 10)
             {
-                flag = ArchipelagoManager.Instance.IncludeBSides || ArchipelagoManager.Instance.IncludeCSides;
+                flag = true;
             }
-            bool flag2 = !self.Data.Interlude_Safe && Celeste.PlayMode != Celeste.PlayModes.Event && self.Area.ID < 10 && ArchipelagoManager.Instance.IncludeCSides;
+
+            // TODO: "Farewell Golden" might be too long for the UI widget
+            // A Side Option
+            string LevelNameA = $"{self.Area.ID}a";
+            string DisplayStringA = Dialog.Clean(self.Data.Interlude_Safe ? "FILE_BEGIN" : "overworld_normal", null).ToUpper();
+            if (!ArchipelagoManager.Instance.ActiveLevels.Contains(LevelNameA))
+            {
+                DisplayStringA = "NOT ACTIVE";
+            }
+            else if (LevelNameA == ArchipelagoManager.Instance.GoalLevel && ArchipelagoManager.Instance.LockGoalLevel)
+            {
+                DisplayStringA = $"Strawberries: {Celeste_MultiworldModule.SaveData.Strawberries}/{ArchipelagoManager.Instance.StrawberriesRequired}";
+            }
+            else if (LevelNameA == "8a")
+            {
+                DisplayStringA = $"{modChapterMenu.LevelNameToDisplayName[ArchipelagoManager.Instance.GoalLevel]} | Strawberries: {Celeste_MultiworldModule.SaveData.Strawberries}/{ArchipelagoManager.Instance.StrawberriesRequired}";
+            }
             self.modes.Add(new OuiChapterPanel.Option
             {
                 Bg = GFX.Gui[dynamicUI.Invoke<string>("_ModAreaselectTexture", "areaselect/tab")],
-                Label = Dialog.Clean(self.Data.Interlude_Safe ? "FILE_BEGIN" : "overworld_normal", null).ToUpper(),
+                Label = DisplayStringA,
                 Icon = GFX.Gui[dynamicUI.Invoke<string>("_ModMenuTexture", "menu/play")],
                 ID = "A"
             });
+
+            // B Side Option
+            string LevelNameB = $"{self.Area.ID}b";
+            string DisplayStringB = Dialog.Clean("overworld_remix", null);
+            if (!ArchipelagoManager.Instance.ActiveLevels.Contains(LevelNameB))
+            {
+                DisplayStringB = "NOT ACTIVE";
+            }
+            else if (LevelNameB == ArchipelagoManager.Instance.GoalLevel && ArchipelagoManager.Instance.LockGoalLevel)
+            {
+                DisplayStringB = $"Strawberries: {Celeste_MultiworldModule.SaveData.Strawberries}/{ArchipelagoManager.Instance.StrawberriesRequired}";
+            }
             if (flag)
             {
-                self.AddRemixButton();
+                OuiChapterPanel.Option option = new OuiChapterPanel.Option
+                {
+                    Bg = GFX.Gui[dynamicUI.Invoke<string>("_ModAreaselectTexture", "areaselect/tab")],
+                    Label = DisplayStringB,
+                    Icon = GFX.Gui[dynamicUI.Invoke<string>("_ModMenuTexture", "menu/remix")],
+                    ID = "B",
+                };
+                self.modes.Insert(1, option);
             }
+
+            // C Side Option
+            string LevelNameC = $"{self.Area.ID}c";
+            string DisplayStringC = Dialog.Clean("overworld_remix2", null);
+            if (!ArchipelagoManager.Instance.ActiveLevels.Contains(LevelNameC))
+            {
+                DisplayStringC = "NOT ACTIVE";
+            }
+            else if (LevelNameC == ArchipelagoManager.Instance.GoalLevel && ArchipelagoManager.Instance.LockGoalLevel)
+            {
+                DisplayStringC = $"Strawberries: {Celeste_MultiworldModule.SaveData.Strawberries}/{ArchipelagoManager.Instance.StrawberriesRequired}";
+            }
+            bool flag2 = !self.Data.Interlude_Safe && Celeste.PlayMode != Celeste.PlayModes.Event && self.Area.ID < 10;
             if (flag2)
             {
                 self.modes.Add(new OuiChapterPanel.Option
                 {
                     Bg = GFX.Gui[dynamicUI.Invoke<string>("_ModAreaselectTexture", "areaselect/tab")],
-                    Label = Dialog.Clean("overworld_remix2", null),
+                    Label = DisplayStringC,
                     Icon = GFX.Gui[dynamicUI.Invoke<string>("_ModMenuTexture", "menu/rmx2")],
                     ID = "C"
                 });
             }
+
             self.selectingMode = true;
             self.UpdateStats(false, null, null, null);
             self.SetStatsPosition(false);

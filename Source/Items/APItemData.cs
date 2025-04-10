@@ -58,6 +58,8 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             { 0xCA1000, "Strawberry" },
             { 0xCA1001, "Raspberry" },
 
+            { 0xCA1010, "Granny's House Keys" },
+
             { 0xCA1020, "Bald Trap" },
             { 0xCA1021, "Literature Trap" },
             { 0xCA1022, "Stun Trap" },
