@@ -88,6 +88,15 @@ namespace Celeste.Mod.Celeste_Multiworld.General
                     Celeste_MultiworldModule.SaveData.RoomLocations.Add(AP_ID);
                 }
             }
+            else if (!self.InControl)
+            {
+                string AP_ID = $"{SaveData.Instance.CurrentSession_Safe.Area.ID}_{(int)SaveData.Instance.CurrentSession_Safe.Area.Mode}_{SaveData.Instance.CurrentSession_Safe.Level}";
+
+                if (AP_ID == "7_0_credits-summit")
+                {
+                    ArchipelagoManager.Instance.UpdateGameStatus(Archipelago.MultiClient.Net.Enums.ArchipelagoClientState.ClientGoal);
+                }
+            }
         }
 
         private static void modPlayerSeeker_Update(On.Celeste.PlayerSeeker.orig_Update orig, PlayerSeeker self)

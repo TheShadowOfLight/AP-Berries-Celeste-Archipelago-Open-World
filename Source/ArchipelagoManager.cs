@@ -328,6 +328,14 @@ namespace Celeste.Mod.Celeste_Multiworld
         }
         public void UpdateGameStatus(ArchipelagoClientState state)
         {
+            if (state == ArchipelagoClientState.ClientGoal)
+            {
+                if (GoalSent)
+                {
+                    return;
+                }
+                GoalSent = true;
+            }
             SendPacket(new StatusUpdatePacket { Status = state });
         }
 
