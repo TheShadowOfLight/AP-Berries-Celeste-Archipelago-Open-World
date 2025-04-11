@@ -1,9 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Monocle;
+using System.IO;
 
 namespace Celeste.Mod.Celeste_Multiworld.UI
 {
@@ -35,6 +38,10 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
             On.Celeste.SaveData.SetCheckpoint += modSaveData_SetCheckpoint;
 
             On.Celeste.Checkpoint.TurnOn += modCheckpoint_TurnOn;
+
+            On.Celeste.AreaComplete.Update += modAreaComplete_Update;
+            On.Celeste.Level.CompleteArea_bool_bool_bool += modLevel_CompleteArea_bool_bool_bool;
+            On.Celeste.Credits.CreateCredits += modCredits_CreateCredits;
         }
 
         public void Unload()
@@ -49,6 +56,10 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
             On.Celeste.SaveData.SetCheckpoint -= modSaveData_SetCheckpoint;
 
             On.Celeste.Checkpoint.TurnOn -= modCheckpoint_TurnOn;
+
+            On.Celeste.AreaComplete.Update -= modAreaComplete_Update;
+            On.Celeste.Level.CompleteArea_bool_bool_bool -= modLevel_CompleteArea_bool_bool_bool; ;
+            On.Celeste.Credits.CreateCredits -= modCredits_CreateCredits;
         }
 
         private static void modOuiChapterPanel_Start(On.Celeste.OuiChapterPanel.orig_Start orig, OuiChapterPanel self, string checkpoint)
@@ -360,6 +371,145 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
                 return 540;
             }
             return 300;
+        }
+
+        private static void modAreaComplete_Update(On.Celeste.AreaComplete.orig_Update orig, AreaComplete self)
+        {
+            if (!self.Paused)
+            {
+                self.Entities.Update();
+                self.RendererList.Update();
+            }
+
+            if (Input.MenuConfirm.Pressed && self.finishedSlide && self.canConfirm)
+            {
+                self.canConfirm = false;
+                if (self.Session.Area.ID == 8 && self.Session.Area.Mode == AreaMode.Normal)
+                {
+                    new FadeWipe(self, false, delegate
+                    {
+                        self.Session.Area.ID = 7;
+                        self.Session.Level = "credits-summit";
+                        self.Session.RespawnPoint = null;
+                        self.Session.FirstLevel = false;
+                        self.Session.Audio.Music.Event = "event:/music/lvl8/main";
+                        self.Session.Audio.Apply(false);
+                        Engine.Scene = new LevelLoader(self.Session, null)
+                        {
+                            PlayerIntroTypeOverride = new Player.IntroTypes?(Player.IntroTypes.None),
+                            Level =
+                            {
+                                new CS07_Credits()
+                            }
+                        };
+                    });
+                }
+                else
+                {
+                    HiresSnow outSnow = new HiresSnow(0.45f);
+                    outSnow.Alpha = 0f;
+                    outSnow.AttachAlphaTo = new FadeWipe(self, false, delegate
+                    {
+                        Engine.Scene = new OverworldLoader(Overworld.StartMode.AreaComplete, outSnow);
+                    });
+                    self.RendererList.Add(outSnow);
+                }
+            }
+            self.snow.Alpha = Calc.Approach(self.snow.Alpha, 0f, Engine.DeltaTime * 0.5f);
+            self.snow.Direction.Y = Calc.Approach(self.snow.Direction.Y, 1f, Engine.DeltaTime * 24f);
+            self.speedrunTimerDelay -= Engine.DeltaTime;
+            if (self.speedrunTimerDelay <= 0f)
+            {
+                self.speedrunTimerEase = Calc.Approach(self.speedrunTimerEase, 1f, Engine.DeltaTime * 2f);
+            }
+            if (self.title != null)
+            {
+                self.title.Update();
+            }
+            if (Celeste.PlayMode == Celeste.PlayModes.Debug)
+            {
+                if (MInput.Keyboard.Pressed(Keys.F2))
+                {
+                    Celeste.ReloadAssets(false, true, false, null);
+                    Engine.Scene = new LevelExit(LevelExit.Mode.Completed, self.Session, null);
+                    return;
+                }
+                if (MInput.Keyboard.Pressed(Keys.F3))
+                {
+                    Celeste.ReloadAssets(false, true, true, null);
+                    Engine.Scene = new LevelExit(LevelExit.Mode.Completed, self.Session, null);
+                }
+            }
+
+            MonoMod.Utils.DynamicData dynamicAC = MonoMod.Utils.DynamicData.For(self);
+            float buttonTimerDelay = (float)dynamicAC.Get("buttonTimerDelay");
+            buttonTimerDelay -= Engine.DeltaTime;
+            dynamicAC.Set("buttonTimerDelay", buttonTimerDelay);
+            if (buttonTimerDelay <= 0f)
+            {
+                float buttonTimerEase = (float)dynamicAC.Get("buttonTimerEase");
+                buttonTimerEase = Calc.Approach(buttonTimerEase, 1f, Engine.DeltaTime * 4f);
+                dynamicAC.Set("buttonTimerEase", buttonTimerEase);
+            }
+        }
+
+        private static ScreenWipe modLevel_CompleteArea_bool_bool_bool(On.Celeste.Level.orig_CompleteArea_bool_bool_bool orig, Level self, bool spotlightWipe, bool skipScreenWipe, bool skipCompleteScreen)
+        {
+            self.RegisterAreaComplete();
+            self.PauseLock = true;
+            Action action;
+            if (AreaData.Get(self.Session).ID == 8)
+            {
+                action = delegate
+                {
+                    Engine.Scene = new LevelExit(LevelExit.Mode.Completed, self.Session, null);
+                };
+            }
+            else if (AreaData.Get(self.Session).Interlude_Safe || skipCompleteScreen)
+            {
+                action = delegate
+                {
+                    Engine.Scene = new LevelExit(LevelExit.Mode.CompletedInterlude, self.Session, self.HiresSnow);
+                };
+            }
+            else
+            {
+                action = delegate
+                {
+                    Engine.Scene = new LevelExit(LevelExit.Mode.Completed, self.Session, null);
+                };
+            }
+            if (self.SkippingCutscene || skipScreenWipe)
+            {
+                Audio.BusStopAll("bus:/gameplay_sfx", true);
+                action();
+                return null;
+            }
+            if (spotlightWipe)
+            {
+                Player entity = self.Tracker.GetEntity<Player>();
+                if (entity != null)
+                {
+                    SpotlightWipe.FocusPoint = entity.Position - self.Camera.Position - new Vector2(0f, 8f);
+                }
+                return new SpotlightWipe(self, false, action);
+            }
+            return new FadeWipe(self, false, action);
+        }
+
+        private static object modCredits_CreateCredits(On.Celeste.Credits.orig_CreateCredits orig, bool title, bool polaroids)
+        {
+            List<Credits.CreditNode> credits = (List<Credits.CreditNode>)orig(title, polaroids);
+
+            int insertPoint = polaroids ? credits.Count() - 3 : credits.Count() - 2;
+
+            Credits.Image apImage = new Credits.Image(GFX.Gui, "menu/start");
+            Credits.Role apPory = new Credits.Role("PoryGone", new string[] { "Archipelago Implementation" });
+
+            credits.Insert(insertPoint, apImage);
+            credits.Insert(insertPoint + 1, apPory);
+
+            return credits;
         }
     }
 }
