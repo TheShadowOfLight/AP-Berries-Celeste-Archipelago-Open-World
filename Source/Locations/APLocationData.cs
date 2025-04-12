@@ -25,6 +25,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             new modLookout(),
             new modCassette(),
             new modHeartGem(),
+            new modIntroCar(),
             new modKey(),
             new modSummitGem(),
             new modLockBlock(),
@@ -535,6 +536,23 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             { 0xCA16A3, "7_0_d-05b" },
             { 0xCA16A4, "7_0_e-01c" },
             { 0xCA16A5, "7_0_f-02b" },
+        };
+
+        public static Dictionary<string, long> CarIDToAP { get; set; } = new Dictionary<string, long>
+        {
+            // Prologue
+            { "0_0_-1", 0xCA12A0 },
+
+            // Core
+            { "9_0_0x", 0xCA12A1 },
+        };
+        public static Dictionary<long, string> CarAPToID { get; set; } = new Dictionary<long, string>
+        {
+            // Prologue
+            { 0xCA12A0, "0_0_-1" },
+
+            // Core
+            { 0xCA12A1, "9_0_0x" },
         };
 
         public static Dictionary<string, long> StrawberryIDToAP { get; set; } = new Dictionary<string, long>

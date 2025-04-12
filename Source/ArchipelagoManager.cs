@@ -92,6 +92,7 @@ namespace Celeste.Mod.Celeste_Multiworld
         public bool TrapLinkActive { get; set; }
         public bool Binosanity = false;
         public bool Roomsanity = false;
+        public bool Carsanity = false;
         public bool IncludeGoldens = false;
         public bool IncludeCore = false;
         public bool IncludeFarewell = false;
@@ -194,6 +195,7 @@ namespace Celeste.Mod.Celeste_Multiworld
             TrapLinkActive = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("trap_link", out value) ? value : false);
             Binosanity = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("binosanity", out value) ? value : false);
             Roomsanity = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("roomsanity", out value) ? value : false);
+            Carsanity = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("carsanity", out value) ? value : false);
             IncludeGoldens = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("include_goldens", out value) ? value : false);
             IncludeCore = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("include_core", out value) ? value : false);
             IncludeFarewell = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("include_farewell", out value) ? value : false);
@@ -696,6 +698,17 @@ namespace Celeste.Mod.Celeste_Multiworld
                     }
                 }
             }
+            foreach (KeyValuePair<string, long> carIDPair in Locations.APLocationData.CarIDToAP)
+            {
+                if (Celeste_MultiworldModule.SaveData.CarLocations.Contains(carIDPair.Key))
+                {
+                    long locationID = carIDPair.Value;
+                    if (!SentLocations.Contains(locationID))
+                    {
+                        locationsToCheck.Add(locationID);
+                    }
+                }
+            }
             foreach (KeyValuePair<string, long> keyIDPair in Locations.APLocationData.KeyIDToAP)
             {
                 if (Celeste_MultiworldModule.SaveData.KeyLocations.Contains(keyIDPair.Key))
@@ -797,6 +810,13 @@ namespace Celeste.Mod.Celeste_Multiworld
                     int mode = Int32.Parse(area_mode[1]);
 
                     SaveData.Instance.RegisterHeartGem(new AreaKey(area, (AreaMode)mode));
+                }
+
+                if (Locations.APLocationData.CarAPToID.ContainsKey(newLoc))
+                {
+                    string keyLocString = Locations.APLocationData.CarAPToID[newLoc];
+
+                    Celeste_MultiworldModule.SaveData.CarLocations.Add(keyLocString);
                 }
 
                 if (Locations.APLocationData.KeyAPToID.ContainsKey(newLoc))

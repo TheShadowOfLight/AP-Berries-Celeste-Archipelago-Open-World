@@ -30,6 +30,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
         public override void Unload()
         {
             On.Celeste.SummitGem.OnPlayer -= modSummitGem_OnPlayer;
+            On.Celeste.SummitGemManager.Routine -= modSummitGemManager_Routine;
         }
 
         private static void modSummitGem_OnPlayer(On.Celeste.SummitGem.orig_OnPlayer orig, SummitGem self, Player player)
@@ -128,7 +129,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
                 index = num + 1;
                 //gem = null;
             }
-            List<SummitGemManager.Gem>.Enumerator enumerator2 = default(List<SummitGemManager.Gem>.Enumerator);
+
             if (broken >= 6)
             {
                 HeartGem heart = self.Scene.Entities.FindFirst<HeartGem>();
@@ -148,7 +149,6 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
                 }
                 heart = null;
             }
-            yield break;
             yield break;
         }
     }

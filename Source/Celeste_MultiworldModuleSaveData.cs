@@ -23,6 +23,7 @@ public class Celeste_MultiworldModuleSaveData : EverestModuleSaveData
     public HashSet<string> StrawberryLocations { get; set; } = new HashSet<string>();
     public HashSet<string> CrystalHeartLocations { get; set; } = new HashSet<string>();
     public HashSet<string> CassetteLocations { get; set; } = new HashSet<string>();
+    public HashSet<string> CarLocations { get; set; } = new HashSet<string>();
     public HashSet<string> BinocularsLocations { get; set; } = new HashSet<string>();
     public HashSet<string> KeyLocations { get; set; } = new HashSet<string>();
     public HashSet<string> GemLocations { get; set; } = new HashSet<string>();
