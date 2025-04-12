@@ -119,6 +119,12 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             { 0xCA142B, "The Summit B - 2000 M" },
             { 0xCA142C, "The Summit B - 2500 M" },
             { 0xCA142D, "The Summit B - 3000 M" },
+            { 0xCA142E, "Core A - Into the Core" },
+            { 0xCA142F, "Core A - Hot and Cold" },
+            { 0xCA1430, "Core A - Heart of the Mountain" },
+            { 0xCA1431, "Core B - Into the Core" },
+            { 0xCA1432, "Core B - Burning or Freezing" },
+            { 0xCA1433, "Core B - Heartbeat" },
 
             { 0xCA1200, "Springs" },
             { 0xCA1201, "Traffic Blocks" },
