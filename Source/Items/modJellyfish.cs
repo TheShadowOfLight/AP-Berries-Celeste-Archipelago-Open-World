@@ -6,29 +6,29 @@ using System.Threading.Tasks;
 
 namespace Celeste.Mod.Celeste_Multiworld.Items
 {
-    internal class modTheoCrystal : modItemBase
+    internal class modJellyfish : modItemBase
     {
         public override void Load()
         {
-            On.Celeste.TheoCrystal.Update += modTheoCrystal_Update;
+            On.Celeste.Glider.Update += modGlider_Update;
         }
 
         public override void Unload()
         {
-            On.Celeste.TheoCrystal.Update += modTheoCrystal_Update;
+            On.Celeste.Glider.Update -= modGlider_Update;
         }
 
-        private static void modTheoCrystal_Update(On.Celeste.TheoCrystal.orig_Update orig, TheoCrystal self)
+        private static void modGlider_Update(On.Celeste.Glider.orig_Update orig, Glider self)
         {
             orig(self);
 
             if (!HaveReceived())
             {
                 self.Collidable = false;
-                self.sprite.Color.R = (byte)(0.5f * 255);
-                self.sprite.Color.G = (byte)(0.5f * 255);
-                self.sprite.Color.B = (byte)(0.5f * 255);
-                self.sprite.Color.A = (byte)(0.1f * 255);
+                self.sprite.Color.R = (byte)(0.3f * 255.0f);
+                self.sprite.Color.G = (byte)(0.3f * 255.0f);
+                self.sprite.Color.B = (byte)(0.3f * 255.0f);
+                self.sprite.Color.A = (byte)(0.3f * 255.0f);
                 self.Hold.cannotHoldTimer = 1.0f;
             }
             else
@@ -44,7 +44,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
         public static bool HaveReceived()
         {
             bool haveReceived = false;
-            Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA120C, out haveReceived);
+            Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA1216, out haveReceived);
             return haveReceived;
         }
     }

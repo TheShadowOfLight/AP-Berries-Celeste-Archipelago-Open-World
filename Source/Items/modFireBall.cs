@@ -18,7 +18,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             On.Celeste.FireBall.Update -= modFireBall_Update;
         }
 
-        private void modFireBall_Update(On.Celeste.FireBall.orig_Update orig, FireBall self)
+        private static void modFireBall_Update(On.Celeste.FireBall.orig_Update orig, FireBall self)
         {
             orig(self);
 

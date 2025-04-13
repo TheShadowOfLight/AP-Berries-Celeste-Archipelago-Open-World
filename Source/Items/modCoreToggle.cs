@@ -18,7 +18,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             On.Celeste.CoreModeToggle.Update -= modCoreModeToggle_Update;
         }
 
-        private void modCoreModeToggle_Update(On.Celeste.CoreModeToggle.orig_Update orig, CoreModeToggle self)
+        private static void modCoreModeToggle_Update(On.Celeste.CoreModeToggle.orig_Update orig, CoreModeToggle self)
         {
             if (!HaveReceived())
             {
