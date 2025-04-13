@@ -814,9 +814,9 @@ namespace Celeste.Mod.Celeste_Multiworld
 
                 if (Locations.APLocationData.CarAPToID.ContainsKey(newLoc))
                 {
-                    string keyLocString = Locations.APLocationData.CarAPToID[newLoc];
+                    string carLocString = Locations.APLocationData.CarAPToID[newLoc];
 
-                    Celeste_MultiworldModule.SaveData.CarLocations.Add(keyLocString);
+                    Celeste_MultiworldModule.SaveData.CarLocations.Add(carLocString);
                 }
 
                 if (Locations.APLocationData.KeyAPToID.ContainsKey(newLoc))
