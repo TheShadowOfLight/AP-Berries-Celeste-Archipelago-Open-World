@@ -16,8 +16,8 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
 
         internal enum CloudColor
         {
-            Blue = 0xCA1208,
-            Pink = 0xCA1210,
+            Blue = 0xCA12008,
+            Pink = 0xCA12010,
         }
 
         public override void Load()

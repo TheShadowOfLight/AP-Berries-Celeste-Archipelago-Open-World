@@ -13,12 +13,12 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
         static Dictionary<int, int> indexToGemItem = new Dictionary<int, int>()
         {
             // The Summit
-            { 0, 0xCA16A0 },
-            { 1, 0xCA16A1 },
-            { 2, 0xCA16A2 },
-            { 3, 0xCA16A3 },
-            { 4, 0xCA16A4 },
-            { 5, 0xCA16A5 },
+            { 0, 0xCA160A0 },
+            { 1, 0xCA160A1 },
+            { 2, 0xCA160A2 },
+            { 3, 0xCA160A3 },
+            { 4, 0xCA160A4 },
+            { 5, 0xCA160A5 },
         };
 
         public override void Load()

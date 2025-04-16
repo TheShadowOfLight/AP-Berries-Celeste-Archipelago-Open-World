@@ -10,10 +10,10 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
     {
         internal enum BlockColor
         {
-            Pink = 0xCA1202,
-            Blue = 0xCA1203,
-            Yellow = 0xCA121A,
-            Green = 0xCA121B
+            Pink = 0xCA12002,
+            Blue = 0xCA12003,
+            Yellow = 0xCA1201A,
+            Green = 0xCA1201B
         }
 
         public override void Load()

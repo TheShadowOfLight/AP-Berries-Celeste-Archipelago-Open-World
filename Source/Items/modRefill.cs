@@ -11,8 +11,8 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
     {
         internal enum DashCount
         {
-            One = 0xCA1218,
-            Two = 0xCA1219,
+            One = 0xCA12018,
+            Two = 0xCA12019,
         }
 
         public override void Load()

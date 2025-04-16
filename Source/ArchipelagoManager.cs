@@ -567,7 +567,7 @@ namespace Celeste.Mod.Celeste_Multiworld
                     prettyMessage = $"Received {{{itemColor}}}{Items.APItemData.ItemIDToString[item.ItemId]}{{#}} from {{#FAFAD2}}{GetPlayerName(item.Player)}{{#}}.";
                 }
 
-                if ((item.ItemId < 0xCA1020 || item.ItemId >= 0xCA1050) && index >= this.ServerItemsRcv)
+                if ((item.ItemId < 0xCA10020 || item.ItemId >= 0xCA10050) && index >= this.ServerItemsRcv)
                 {
                     Logger.Info("AP", receivedMessage);
                     MessageLog.Add(new ArchipelagoMessage(prettyMessage, ArchipelagoMessage.MessageType.ItemReceive, item.Flags));
@@ -576,25 +576,25 @@ namespace Celeste.Mod.Celeste_Multiworld
 
                 switch (item.ItemId)
                 {
-                    case 0xCA1000:
+                    case 0xCA10000:
                     {
                         Celeste_MultiworldModule.SaveData.Strawberries += 1;
                         break;
                     }
-                    case 0xCA1010:
+                    case 0xCA10010:
                     {
                         Celeste_MultiworldModule.SaveData.GoalItem = true;
                         break;
                     }
-                    case long id when id >= 0xCA1020 && id < 0xCA1050:
+                    case long id when id >= 0xCA10020 && id < 0xCA10050:
                     {
                         if (index >= this.ServerItemsRcv)
                         {
-                            Items.Traps.TrapManager.Instance.AddTrapToQueue((Items.Traps.TrapType)(id - 0xCA1000), prettyMessage);
+                            Items.Traps.TrapManager.Instance.AddTrapToQueue((Items.Traps.TrapType)(id - 0xCA10000), prettyMessage);
                         }
                         break;
                     }
-                    case long id when id >= 0xCA1400 && id < 0xCA1500:
+                    case long id when id >= 0xCA14000 && id < 0xCA15000:
                     {
                         Items.CheckpointItemData cp_data = Items.APItemData.CheckpointData[id];
                         SaveData.Instance.Areas_Safe[cp_data.Area].Modes[cp_data.Mode].Checkpoints.Add(cp_data.Room);
@@ -606,7 +606,7 @@ namespace Celeste.Mod.Celeste_Multiworld
                         }
                         break;
                     }
-                    case long id when id >= 0xCA1600 && id < 0xCA16A0:
+                    case long id when id >= 0xCA16000 && id < 0xCA160A0:
                     {
                         Celeste_MultiworldModule.SaveData.KeyItems[id] = true;
 
@@ -617,7 +617,7 @@ namespace Celeste.Mod.Celeste_Multiworld
                         }
                         break;
                     }
-                    case long id when id >= 0xCA16A0 && id < 0xCA1700:
+                    case long id when id >= 0xCA160A0 && id < 0xCA17000:
                     {
                         Celeste_MultiworldModule.SaveData.GemItems[id] = true;
 
@@ -628,7 +628,7 @@ namespace Celeste.Mod.Celeste_Multiworld
                         }
                         break;
                     }
-                    case long id when id >= 0xCA1200 && id < 0xCA1230:
+                    case long id when id >= 0xCA12000 && id < 0xCA12030:
                     {
                         Celeste_MultiworldModule.SaveData.Interactables[id] = true;
 
@@ -881,7 +881,7 @@ namespace Celeste.Mod.Celeste_Multiworld
                 {
                     { "time", DateTime.UtcNow.ToUnixTimeStamp() },
                     { "source", GetPlayerName(this.Slot) },
-                    { "trap_name", Items.APItemData.ItemIDToString[0xCA1000 + (int)trapType] }
+                    { "trap_name", Items.APItemData.ItemIDToString[0xCA10000 + (int)trapType] }
                 }
             };
 

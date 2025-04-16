@@ -55,7 +55,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
         public static bool HaveReceived()
         {
             bool haveReceived = false;
-            Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA121D, out haveReceived);
+            Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA1201D, out haveReceived);
             return haveReceived;
         }
     }

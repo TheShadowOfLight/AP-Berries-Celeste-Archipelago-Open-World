@@ -10,8 +10,8 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
     {
         internal enum BoosterColor
         {
-            Blue = 0xCA1207,
-            Red = 0xCA120B,
+            Blue = 0xCA12007,
+            Red = 0xCA1200B,
         }
 
         public override void Load()
