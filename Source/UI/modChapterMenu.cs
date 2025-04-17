@@ -95,12 +95,20 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
                 {
                     orig(self, checkpoint);
                 }
+                else
+                {
+                    Audio.Play("event:/ui/main/button_back");
+                }
             }
             else if (AreaName == "8a")
             {
                 if (Celeste_MultiworldModule.SaveData.Strawberries >= ArchipelagoManager.Instance.StrawberriesRequired && Celeste_MultiworldModule.SaveData.GoalItem)
                 {
                     orig(self, checkpoint);
+                }
+                else
+                {
+                    Audio.Play("event:/ui/main/button_back");
                 }
             }
             else if (self.Area.ID == 6 && self.Area.Mode == AreaMode.Normal && checkpoint == null)

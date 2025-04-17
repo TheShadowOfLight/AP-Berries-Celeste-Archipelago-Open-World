@@ -108,6 +108,20 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
                 {
                     foreach (string location in CheckpointStringToID.Keys)
                     {
+                        if (level == 10)
+                        {
+                            string room = location.Replace(level_mode, "");
+                            if (!ArchipelagoManager.Instance.ActiveLevels.Contains("10c") && room.Contains("end-golden"))
+                            {
+                                continue;
+                            }
+
+                            if (!ArchipelagoManager.Instance.ActiveLevels.Contains("10b") && (room.Substring(1, 1).CompareTo("f") >= 0))
+                            {
+                                continue;
+                            }
+                        }
+
                         if (location.StartsWith(level_mode))
                         {
                             count++;
@@ -137,6 +151,20 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
                 {
                     foreach (string location in BinocularsIDToAP.Keys)
                     {
+                        if (level == 10)
+                        {
+                            string room = location.Replace(level_mode, "");
+                            if (!ArchipelagoManager.Instance.ActiveLevels.Contains("10c") && room.Contains("end-golden"))
+                            {
+                                continue;
+                            }
+
+                            if (!ArchipelagoManager.Instance.ActiveLevels.Contains("10b") && (room.Substring(1, 1).CompareTo("f") >= 0))
+                            {
+                                continue;
+                            }
+                        }
+
                         if (location.StartsWith(level_mode))
                         {
                             count++;
@@ -148,6 +176,20 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
                 {
                     foreach (string location in RoomNameToAP.Keys)
                     {
+                        if (level == 10)
+                        {
+                            string room = location.Replace(level_mode, "");
+                            if (!ArchipelagoManager.Instance.ActiveLevels.Contains("10c") && room.Contains("end-golden"))
+                            {
+                                continue;
+                            }
+
+                            if (!ArchipelagoManager.Instance.ActiveLevels.Contains("10b") && !room.Contains("intro") && (room.Substring(1, 1).CompareTo("f") >= 0))
+                            {
+                                continue;
+                            }
+                        }
+
                         if (location.StartsWith(level_mode))
                         {
                             count++;

@@ -653,6 +653,11 @@ namespace Celeste.Mod.Celeste_Multiworld
 
         public void CheckLocationsToSend()
         {
+            if (SaveData.Instance == null || Celeste_MultiworldModule.SaveData == null)
+            {
+                return;
+            }
+
             List<long> locationsToCheck = new List<long>();
             foreach (KeyValuePair<string, long> checkpointIDPair in Locations.APLocationData.CheckpointStringToID)
             {
@@ -770,6 +775,11 @@ namespace Celeste.Mod.Celeste_Multiworld
 
         public void HandleCollectedLocations()
         {
+            if (SaveData.Instance == null || Celeste_MultiworldModule.SaveData == null)
+            {
+                return;
+            }
+
             foreach (long newLoc in CollectedLocations)
             {
                 if (Locations.APLocationData.CheckpointIDToString.ContainsKey(newLoc))
