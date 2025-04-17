@@ -91,7 +91,7 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
             }
             else if (AreaName == ArchipelagoManager.Instance.GoalLevel)
             {
-                if (Celeste_MultiworldModule.SaveData.Strawberries >= ArchipelagoManager.Instance.StrawberriesRequired)
+                if (!ArchipelagoManager.Instance.LockGoalLevel || (Celeste_MultiworldModule.SaveData.Strawberries >= ArchipelagoManager.Instance.StrawberriesRequired))
                 {
                     orig(self, checkpoint);
                 }

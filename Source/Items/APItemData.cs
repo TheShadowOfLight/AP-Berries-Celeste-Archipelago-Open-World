@@ -185,6 +185,12 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             { 0xCA1600B, "Mirror Temple B - Central Chamber Key 2" },
             { 0xCA1600C, "The Summit A - 2500 M Key" },
 
+            { 0xCA1600D, "Farewell - Power Source Key 1" },
+            { 0xCA1600E, "Farewell - Power Source Key 2" },
+            { 0xCA1600F, "Farewell - Power Source Key 3" },
+            { 0xCA16010, "Farewell - Power Source Key 4" },
+            { 0xCA16011, "Farewell - Power Source Key 5" },
+
             { 0xCA16A00, "The Summit A - Gem 1" },
             { 0xCA16A01, "The Summit A - Gem 2" },
             { 0xCA16A02, "The Summit A - Gem 3" },

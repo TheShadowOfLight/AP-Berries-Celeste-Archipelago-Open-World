@@ -32,6 +32,13 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
 
             // The Summit
             { "7_0_f-05:700", "7_0_f-07:712" }, // 2500 M
+
+            // Farewell
+            { "10_0_d-00:197", "10_0_d-04:444" }, // Power Source 1
+            { "10_0_d-00:142", "10_0_d-03:315" }, // Power Source 2
+            { "10_0_d-00:144", "10_0_d-01:261" }, // Power Source 3
+            { "10_0_d-00:145", "10_0_d-02:70" }, // Power Source 4
+            { "10_0_d-00:471", "10_0_d-05:593" }, // Power Source 5
         };
 
         public override void Load()
