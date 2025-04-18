@@ -20,11 +20,13 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
         public void Load()
         {
             On.Celeste.OuiJournalProgress.ctor += modOuiJournalProgress_ctor;
+            On.Celeste.OuiJournalSpeedrun.ctor += modOuiJournalSpeedrun_ctor;
         }
 
         public void Unload()
         {
             On.Celeste.OuiJournalProgress.ctor -= modOuiJournalProgress_ctor;
+            On.Celeste.OuiJournalSpeedrun.ctor -= modOuiJournalSpeedrun_ctor;
         }
 
         private static void modOuiJournalProgress_ctor(On.Celeste.OuiJournalProgress.orig_ctor orig, OuiJournalProgress self, OuiJournal journal)
@@ -221,6 +223,182 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
                 row2.Add(new OuiJournalPage.TextCell(Dialog.Deaths(SaveData.Instance.TotalDeaths), self.TextJustify, 0.6f, self.TextColor, 0f, false));
 
                 self.table.AddRow();
+            }
+        }
+
+        private static void modOuiJournalSpeedrun_ctor(On.Celeste.OuiJournalSpeedrun.orig_ctor orig, OuiJournalSpeedrun self, OuiJournal journal)
+        {
+            MonoMod.Utils.DynamicData dynamicUI = MonoMod.Utils.DynamicData.For(self);
+            dynamicUI.Set("TextJustify", new Vector2(0.5f, 0.5f));
+            dynamicUI.Set("TextColor", Color.Black * 0.6f);
+            self.Journal = journal;
+
+            self.PageTexture = "page";
+            self.table = new OuiJournalPage.Table().AddColumn(new OuiJournalPage.TextCell("ITEMS", new Vector2(0f, 0.5f), 1f, Color.Black * 0.7f, 0f, false))
+                .AddColumn(new OuiJournalPage.EmptyCell(64f))
+                .AddColumn(new OuiJournalPage.EmptyCell(64f))
+                .AddColumn(new OuiJournalPage.EmptyCell(64f))
+                .AddColumn(new OuiJournalPage.EmptyCell(64f))
+                .AddColumn(new OuiJournalPage.EmptyCell(64f))
+                .AddColumn(new OuiJournalPage.EmptyCell(64f))
+                .AddColumn(new OuiJournalPage.EmptyCell(64f))
+                .AddColumn(new OuiJournalPage.EmptyCell(64f));
+
+            bool haveSpring = false;
+            bool haveTrafficBlock = false;
+            bool haveDashRefill = false;
+            bool haveDoubleDashRefill = false;
+            bool havePinkCassetteBlock = false;
+            bool haveBlueCassetteBlock = false;
+            bool haveYellowCassetteBlock = false;
+            bool haveGreenCassetteBlock = false;
+
+            bool haveDream = false;
+            bool haveCoins = false;
+            bool haveSeeds = false;
+            bool haveSinking = false;
+            bool haveMoving = false;
+            bool haveBlueBooster = false;
+            bool haveRedBooster = false;
+            bool haveMoveBlock = false;
+
+            bool haveBlueCloud = false;
+            bool havePinkCloud = false;
+            bool haveWhiteBlock = false;
+            bool haveSwapBlock = false;
+            bool haveDashSwitch = false;
+            bool haveSeekers = false;
+            bool haveTheo = false;
+            bool haveTorches = false;
+
+            bool haveFeather = false;
+            bool haveBumper = false;
+            bool haveKevin = false;
+            bool haveBadeline = false;
+
+            bool haveCoreBlock = false;
+            bool haveCoreToggle = false;
+            bool haveFireIce = false;
+
+            bool havePuffer = false;
+            bool haveJelly = false;
+            bool haveBreaker = false;
+            bool haveBird = false;
+
+            Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA12000, out haveSpring);
+            Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA12001, out haveTrafficBlock);
+            Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA12018, out haveDashRefill);
+            Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA12019, out haveDoubleDashRefill);
+            Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA12002, out havePinkCassetteBlock);
+            Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA12003, out haveBlueCassetteBlock);
+            Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA1201A, out haveYellowCassetteBlock);
+            Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA1201B, out haveGreenCassetteBlock);
+
+            Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA12004, out haveDream);
+            Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA12005, out haveCoins);
+            Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA1201F, out haveSeeds);
+            Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA12020, out haveSinking);
+            Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA12006, out haveMoving);
+            Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA12007, out haveBlueBooster);
+            Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA1200B, out haveRedBooster);
+            Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA12009, out haveMoveBlock);
+
+            Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA12008, out haveBlueCloud);
+            Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA12010, out havePinkCloud);
+            Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA12021, out haveWhiteBlock);
+            Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA1200A, out haveSwapBlock);
+            Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA1201C, out haveDashSwitch);
+            Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA1201D, out haveSeekers);
+            Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA1200C, out haveTheo);
+            Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA12022, out haveTorches);
+
+            Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA1200D, out haveFeather);
+            Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA1200E, out haveBumper);
+            Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA1200F, out haveKevin);
+            Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA12011, out haveBadeline);
+
+            Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA12014, out haveCoreBlock);
+            Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA12013, out haveCoreToggle);
+            Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA12012, out haveFireIce);
+
+            Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA12015, out havePuffer);
+            Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA12016, out haveJelly);
+            Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA12017, out haveBreaker);
+            Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA12023, out haveBird);
+
+            self.table.AddRow().Add(new OuiJournalPage.EmptyCell(64f));
+
+            OuiJournalPage.Row row1 = self.table.AddRow()
+                .Add(new OuiJournalPage.EmptyCell(64f))
+                .Add(new OuiJournalPage.IconsCell(haveSpring            ? "spring" : "spring_outline"))
+                .Add(new OuiJournalPage.IconsCell(haveTrafficBlock      ? "traffic" : "traffic_outline"))
+                .Add(new OuiJournalPage.IconsCell(haveDashRefill        ? "dash" : "dash_outline"))
+                .Add(new OuiJournalPage.IconsCell(havePinkCassetteBlock ? "pink_cassette" : "pink_cassette_outline"))
+                .Add(new OuiJournalPage.IconsCell(haveBlueCassetteBlock ? "blue_cassette" : "blue_cassette_outline"))
+                .Add(new OuiJournalPage.IconsCell(haveDream             ? "dream" : "dream_outline"))
+                .Add(new OuiJournalPage.IconsCell(haveCoins             ? "coin" : "coin_outline"))
+                .Add(new OuiJournalPage.IconsCell(haveSeeds             ? "seed" : "seed_outline"));
+
+            self.table.AddRow().Add(new OuiJournalPage.EmptyCell(64f));
+
+            OuiJournalPage.Row row2 = self.table.AddRow()
+                .Add(new OuiJournalPage.EmptyCell(64f))
+                .Add(new OuiJournalPage.IconsCell(haveSinking     ? "sinking" : "sinking_outline"))
+                .Add(new OuiJournalPage.IconsCell(haveMoving      ? "moving" : "moving_outline"))
+                .Add(new OuiJournalPage.IconsCell(haveBlueCloud   ? "cloud_blue" : "cloud_blue_outline"))
+                .Add(new OuiJournalPage.IconsCell(havePinkCloud   ? "cloud_pink" : "cloud_pink_outline"))
+                .Add(new OuiJournalPage.IconsCell(haveBlueBooster ? "booster_blue" : "booster_blue_outline"))
+                .Add(new OuiJournalPage.IconsCell(haveMoveBlock   ? "move_block" : "move_block_outline"))
+                .Add(new OuiJournalPage.IconsCell(haveWhiteBlock  ? "white_block" : "white_block_outline"));
+
+            self.table.AddRow().Add(new OuiJournalPage.EmptyCell(64f));
+
+            OuiJournalPage.Row row3 = self.table.AddRow()
+                .Add(new OuiJournalPage.EmptyCell(64f))
+                .Add(new OuiJournalPage.IconsCell(haveSwapBlock  ? "swap_block" : "swap_block_outline"))
+                .Add(new OuiJournalPage.IconsCell(haveRedBooster ? "booster_red" : "booster_red_outline"))
+                .Add(new OuiJournalPage.IconsCell(haveDashSwitch ? "dash_switch" : "dash_switch_outline"))
+                .Add(new OuiJournalPage.IconsCell(haveSeekers    ? "seeker" : "seeker_outline"))
+                .Add(new OuiJournalPage.IconsCell(haveTheo       ? "theo" : "theo_outline"))
+                .Add(new OuiJournalPage.IconsCell(haveTorches    ? "torch" : "torch_outline"));
+
+            self.table.AddRow().Add(new OuiJournalPage.EmptyCell(64f));
+
+            OuiJournalPage.Row row6 = self.table.AddRow()
+                .Add(new OuiJournalPage.EmptyCell(64f))
+                .Add(new OuiJournalPage.IconsCell(haveFeather ? "feather" : "feather_outline"))
+                .Add(new OuiJournalPage.IconsCell(haveBumper ? "bumper" : "bumper_outline"))
+                .Add(new OuiJournalPage.IconsCell(haveKevin ? "kevin" : "kevin_outline"))
+                .Add(new OuiJournalPage.IconsCell(haveBadeline ? "badeline" : "badeline_outline"));
+
+            if (ArchipelagoManager.Instance.ActiveLevels.Contains("9a"))
+            {
+                self.table.AddRow().Add(new OuiJournalPage.EmptyCell(64f));
+
+                OuiJournalPage.Row row8 = self.table.AddRow()
+                    .Add(new OuiJournalPage.EmptyCell(64f))
+                    .Add(new OuiJournalPage.IconsCell(haveCoreBlock ? "core_block" : "core_block_outline"))
+                    .Add(new OuiJournalPage.IconsCell(haveCoreToggle ? "core_toggle" : "core_toggle_outline"))
+                    .Add(new OuiJournalPage.IconsCell(haveFireIce ? "ice_ball" : "ice_ball_outline"));
+            }
+
+            if (ArchipelagoManager.Instance.ActiveLevels.Contains("10a"))
+            {
+                self.table.AddRow().Add(new OuiJournalPage.EmptyCell(64f));
+
+                OuiJournalPage.Row row9 = self.table.AddRow()
+                    .Add(new OuiJournalPage.EmptyCell(64f))
+                    .Add(new OuiJournalPage.IconsCell(haveDoubleDashRefill    ? "double_dash" : "double_dash_outline"))
+                    .Add(new OuiJournalPage.IconsCell(havePuffer              ? "puffer" : "puffer_outline"))
+                    .Add(new OuiJournalPage.IconsCell(haveJelly               ? "jelly" : "jelly_outline"));
+
+                if (ArchipelagoManager.Instance.ActiveLevels.Contains("10b"))
+                {
+                    row9.Add(new OuiJournalPage.IconsCell(haveBreaker             ? "breaker" : "breaker_outline"))
+                        .Add(new OuiJournalPage.IconsCell(haveBird                ? "bird" : "bird_outline"))
+                        .Add(new OuiJournalPage.IconsCell(haveYellowCassetteBlock ? "yellow_cassette" : "yellow_cassette_outline"))
+                        .Add(new OuiJournalPage.IconsCell(haveGreenCassetteBlock  ? "green_cassette" : "green_cassette_outline"));
+                }
             }
         }
     }
