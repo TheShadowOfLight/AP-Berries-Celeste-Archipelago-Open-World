@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Celeste.Mod.Celeste_Multiworld.Items;
 
 namespace Celeste.Mod.Celeste_Multiworld.Aesthetics
 {
@@ -81,14 +82,58 @@ namespace Celeste.Mod.Celeste_Multiworld.Aesthetics
 
         private static bool modAudio_SetMusic(On.Celeste.Audio.orig_SetMusic orig, string path, bool startPlaying = true, bool allowFadeOut = true)
         {
+            if (ArchipelagoManager.Instance.RequireCassettes)
+            {
+                if (SaveData.Instance == null || SaveData.Instance.CurrentSession_Safe == null || !SaveData.Instance.CurrentSession_Safe.InArea)
+                {
+                    return orig(path, startPlaying, allowFadeOut);
+                }
+
+                string AreaName = $"{SaveData.Instance.CurrentSession_Safe.Area.ID}";
+
+                switch (SaveData.Instance.CurrentSession_Safe.Area.Mode)
+                {
+                    case AreaMode.Normal:
+                    {
+                        AreaName += "a";
+                        break;
+                    }
+                    case AreaMode.BSide:
+                    {
+                        AreaName += "b";
+                        break;
+                    }
+                    case AreaMode.CSide:
+                    {
+                        AreaName += "c";
+                        break;
+                    }
+                }
+
+                if (!APItemData.AreaModeToCassetteID.ContainsKey(AreaName))
+                {
+                    return orig(path, startPlaying, allowFadeOut);
+                }
+
+                long cassetteID = APItemData.AreaModeToCassetteID[AreaName];
+
+                if (!Celeste_MultiworldModule.SaveData.CassetteItems.ContainsKey(cassetteID))
+                {
+                    return orig("", startPlaying, allowFadeOut);
+                }
+
+                if (!Celeste_MultiworldModule.SaveData.CassetteItems[cassetteID])
+                {
+                    return orig("", startPlaying, allowFadeOut);
+                }
+            }
+
             if (ArchipelagoManager.Instance.MusicShuffle == 0 || !shuffledSongs.Contains(path))
             {
-                Logger.Warn("AP", path);
                 return orig(path, startPlaying, allowFadeOut);
             }
             else
             {
-                Logger.Error("AP", path);
                 int index = shuffledSongs.IndexOf(path);
 
                 int shuffledIndex = ArchipelagoManager.Instance.MusicMap[index];
@@ -98,7 +143,6 @@ namespace Celeste.Mod.Celeste_Multiworld.Aesthetics
                     shuffledIndex = 0;
                 }
 
-                Logger.Error("AP", shuffledSongs[shuffledIndex]);
                 return orig(shuffledSongs[shuffledIndex], startPlaying, allowFadeOut);
             }
         }

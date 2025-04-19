@@ -104,6 +104,7 @@ namespace Celeste.Mod.Celeste_Multiworld
         public bool LockGoalLevel = true;
         public Dictionary<int, int> MusicMap { get; set; } = new();
         public int MusicShuffle = 0;
+        public bool RequireCassettes = false;
         #endregion
 
         private static string commandHolder = null;
@@ -220,6 +221,7 @@ namespace Celeste.Mod.Celeste_Multiworld
 
             MusicMap = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<int, int>>(((LoginSuccessful)result).SlotData["music_map"].ToString());
             MusicShuffle = Convert.ToInt32(((LoginSuccessful)result).SlotData.TryGetValue("music_shuffle", out value) ? value : 0);
+            RequireCassettes = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("require_cassettes", out value) ? value : false);
 
             // Initialize DeathLink service.
             _deathLinkService = _session.CreateDeathLinkService();
@@ -656,6 +658,17 @@ namespace Celeste.Mod.Celeste_Multiworld
                         }
                         break;
                     }
+                    case long id when id >= 0xCA11000 && id < 0xCA12000:
+                    {
+                        Celeste_MultiworldModule.SaveData.CassetteItems[id] = true;
+
+                        if (audioGuard < 3)
+                        {
+                            audioGuard++;
+                            Audio.Play(SFX.game_gen_cassette_get);
+                        }
+                        break;
+                    }
                     case long id when id >= 0xCA14000 && id < 0xCA15000:
                     {
                         Items.CheckpointItemData cp_data = Items.APItemData.CheckpointData[id];
@@ -668,7 +681,7 @@ namespace Celeste.Mod.Celeste_Multiworld
                         }
                         break;
                     }
-                    case long id when id >= 0xCA16000 && id < 0xCA160A0:
+                    case long id when id >= 0xCA16000 && id < 0xCA16A00:
                     {
                         Celeste_MultiworldModule.SaveData.KeyItems[id] = true;
 
@@ -679,7 +692,7 @@ namespace Celeste.Mod.Celeste_Multiworld
                         }
                         break;
                     }
-                    case long id when id >= 0xCA160A0 && id < 0xCA17000:
+                    case long id when id >= 0xCA16A00 && id < 0xCA17000:
                     {
                         Celeste_MultiworldModule.SaveData.GemItems[id] = true;
 
