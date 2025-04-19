@@ -70,6 +70,7 @@ namespace Celeste.Mod.Celeste_Multiworld
         public int DeathsCounted = 0;
         public bool IsDeathLinkSafe { get; set; }
         public bool Ready { get; private set; }
+        public bool WasConnected { get; private set; }
         public List<Tuple<int, ItemInfo>> ItemQueue { get; private set; } = new();
         public List<long> CollectedLocations { get; private set; } = new();
         public Dictionary<long, ItemInfo> LocationDictionary { get; private set; } = new();
@@ -119,9 +120,17 @@ namespace Celeste.Mod.Celeste_Multiworld
         {
             if (Ready)
             {
-                CheckReceivedItemQueue();
-                CheckLocationsToSend();
-                HandleCollectedLocations();
+                try
+                {
+                    CheckReceivedItemQueue();
+                    CheckLocationsToSend();
+                    HandleCollectedLocations();
+                }
+                catch (ArchipelagoSocketClosedException)
+                {
+                    // TODO: Send a message to the client that connection has been dropped.
+                    Disconnect();
+                }
             }
         }
 
@@ -140,6 +149,7 @@ namespace Celeste.Mod.Celeste_Multiworld
 
             // Watch for the following events.
             _session.Socket.ErrorReceived += OnError;
+            _session.Socket.SocketClosed += OnSocketClosed;
             _session.Socket.PacketReceived += OnPacketReceived;
             _session.MessageLog.OnMessageReceived += OnMessageReceived;
             _session.Items.ItemReceived += OnItemReceived;
@@ -230,10 +240,11 @@ namespace Celeste.Mod.Celeste_Multiworld
 
             // Return null to signify no error.
             Ready = true;
+            WasConnected = true;
             return null;
         }
 
-        public void Disconnect()
+        public async Task<LoginFailure> Disconnect(bool attemptReconnect = true)
         {
             this.Ready = false;
             this.SentLocations.Clear();
@@ -255,11 +266,21 @@ namespace Celeste.Mod.Celeste_Multiworld
             if (_session != null)
             {
                 _session.Socket.ErrorReceived -= OnError;
+                _session.Socket.SocketClosed -= OnSocketClosed;
                 _session.Items.ItemReceived -= OnItemReceived;
                 _session.Locations.CheckedLocationsUpdated -= OnLocationReceived;
                 _session.Socket.PacketReceived -= OnPacketReceived;
                 _session.Socket.DisconnectAsync(); // It'll disconnect on its own time.
                 _session = null;
+            }
+
+            if (this.WasConnected && attemptReconnect)
+            {
+                return await this.TryConnect();
+            }
+            else
+            {
+                return null;
             }
         }
 
@@ -294,12 +315,12 @@ namespace Celeste.Mod.Celeste_Multiworld
 
             DeathsCounted = 0;
 
-            // Log our current time so we can make sure we ignore our own DeathLink.
-            _lastDeath = DateTime.Now;
-            cause = $"{_session.Players.GetPlayerAlias(Slot)} {cause}.";
-
             try
             {
+                // Log our current time so we can make sure we ignore our own DeathLink.
+                _lastDeath = DateTime.Now;
+                cause = $"{_session.Players.GetPlayerAlias(Slot)} {cause}.";
+
                 _deathLinkService.SendDeathLink(new(_session.Players.GetPlayerAlias(Slot), cause));
             }
             catch (ArchipelagoSocketClosedException)
@@ -330,15 +351,23 @@ namespace Celeste.Mod.Celeste_Multiworld
         }
         public void UpdateGameStatus(ArchipelagoClientState state)
         {
-            if (state == ArchipelagoClientState.ClientGoal)
+            try
             {
-                if (GoalSent)
+                if (state == ArchipelagoClientState.ClientGoal)
                 {
-                    return;
+                    if (GoalSent)
+                    {
+                        return;
+                    }
+                    GoalSent = true;
                 }
-                GoalSent = true;
+                SendPacket(new StatusUpdatePacket { Status = state });
             }
-            SendPacket(new StatusUpdatePacket { Status = state });
+            catch (ArchipelagoSocketClosedException)
+            {
+                // TODO: Send a message to the client that connection has been dropped.
+                Disconnect();
+            }
         }
 
         public string GetPlayerName(int slot)
@@ -376,12 +405,30 @@ namespace Celeste.Mod.Celeste_Multiworld
 
         public int LocationsCheckedCount()
         {
-            return _session.Locations.AllLocationsChecked.Count();
+            try
+            {
+                return _session.Locations.AllLocationsChecked.Count();
+            }
+            catch (ArchipelagoSocketClosedException)
+            {
+                // TODO: Send a message to the client that connection has been dropped.
+                Disconnect();
+                return 0;
+            }
         }
 
         public int LocationsTotalCount()
         {
-            return _session.Locations.AllLocations.Count();
+            try
+            {
+                return _session.Locations.AllLocations.Count();
+            }
+            catch (ArchipelagoSocketClosedException)
+            {
+                // TODO: Send a message to the client that connection has been dropped.
+                Disconnect();
+                return 0;
+            }
         }
 
         private void SendPacket(ArchipelagoPacketBase packet)
@@ -530,6 +577,16 @@ namespace Celeste.Mod.Celeste_Multiworld
         {
             Logger.Error("AP", message);
             Monocle.Engine.Commands.Log(message, M_Color.Red);
+
+            ArchipelagoManager.Instance.Disconnect();
+        }
+
+        private static void OnSocketClosed(string reason)
+        {
+            Logger.Error("AP", reason);
+            Monocle.Engine.Commands.Log(reason, M_Color.Red);
+
+            ArchipelagoManager.Instance.Disconnect();
         }
         #endregion
 
@@ -879,39 +936,65 @@ namespace Celeste.Mod.Celeste_Multiworld
 
         public void SendTrapLink(Items.Traps.TrapType trapType)
         {
-            if (!this.Ready || !this.TrapLinkActive)
+            try
             {
-                return;
-            }
-
-            BouncePacket bouncePacket = new BouncePacket
-            {
-                Tags = new List<string> { "TrapLink" },
-                Data = new Dictionary<string, JToken>
+                if (!this.Ready || !this.TrapLinkActive)
                 {
-                    { "time", DateTime.UtcNow.ToUnixTimeStamp() },
-                    { "source", GetPlayerName(this.Slot) },
-                    { "trap_name", Items.APItemData.ItemIDToString[0xCA10000 + (int)trapType] }
+                    return;
                 }
-            };
 
-            _session.Socket.SendPacketAsync(bouncePacket);
+                BouncePacket bouncePacket = new BouncePacket
+                {
+                    Tags = new List<string> { "TrapLink" },
+                    Data = new Dictionary<string, JToken>
+                    {
+                        { "time", DateTime.UtcNow.ToUnixTimeStamp() },
+                        { "source", GetPlayerName(this.Slot) },
+                        { "trap_name", Items.APItemData.ItemIDToString[0xCA10000 + (int)trapType] }
+                    }
+                };
+
+                _session.Socket.SendPacketAsync(bouncePacket);
+            }
+            catch (ArchipelagoSocketClosedException)
+            {
+                // TODO: Send a message to the client that connection has been dropped.
+                Disconnect();
+            }
         }
 
         public int GetInt(string key)
         {
-            if (!_session.DataStorage[key])
+            try
             {
-                return 0;
+                if (!_session.DataStorage[key])
+                {
+                    return 0;
+                }
+
+                return _session.DataStorage[key];
+            }
+            catch (ArchipelagoSocketClosedException)
+            {
+                // TODO: Send a message to the client that connection has been dropped.
+                Disconnect();
             }
 
-            return _session.DataStorage[key];
+            return 0;
         }
 
         public void Set(string key, int value)
         {
-            var token = JToken.FromObject(value);
-            _session.DataStorage[key] = token;
+            try
+            {
+                var token = JToken.FromObject(value);
+                _session.DataStorage[key] = token;
+            }
+            catch (ArchipelagoSocketClosedException)
+            {
+                // TODO: Send a message to the client that connection has been dropped.
+                Disconnect();
+            }
         }
 
         public void AddItemsRcvCallback(string key, Action<int> callback)

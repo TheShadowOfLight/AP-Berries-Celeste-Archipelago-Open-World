@@ -24,7 +24,7 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
 
         private static System.Collections.IEnumerator modOuiMainMenu_Enter(On.Celeste.OuiMainMenu.orig_Enter orig, OuiMainMenu self, Oui from)
         {
-            ArchipelagoManager.Instance.Disconnect();
+            ArchipelagoManager.Instance.Disconnect(false);
 
             yield return orig(self, from);
         }

@@ -46,11 +46,11 @@
     </PropertyGroup>
     
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-      <NoWarn>1701;1702;CL0003</NoWarn>
+      <NoWarn>1701;1702;CL0003;CS4014</NoWarn>
     </PropertyGroup>
     
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-      <NoWarn>1701;1702;CL0003</NoWarn>
+      <NoWarn>1701;1702;CL0003;CS4014</NoWarn>
     </PropertyGroup>
 
     <!-- Inline task used to create a .zip for the mod -->
