@@ -102,6 +102,8 @@ namespace Celeste.Mod.Celeste_Multiworld
         public List<string> ActiveLevels { get; set; } = new();
         public string GoalLevel = "";
         public bool LockGoalLevel = true;
+        public Dictionary<int, int> MusicMap { get; set; } = new();
+        public int MusicShuffle = 0;
         #endregion
 
         private static string commandHolder = null;
@@ -215,6 +217,9 @@ namespace Celeste.Mod.Celeste_Multiworld
             ActiveLevels = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(((LoginSuccessful)result).SlotData["active_levels"].ToString());
             GoalLevel = Convert.ToString(((LoginSuccessful)result).SlotData.TryGetValue("goal_area", out value) ? value : false);
             LockGoalLevel = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("lock_goal_area", out value) ? value : false);
+
+            MusicMap = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<int, int>>(((LoginSuccessful)result).SlotData["music_map"].ToString());
+            MusicShuffle = Convert.ToInt32(((LoginSuccessful)result).SlotData.TryGetValue("music_shuffle", out value) ? value : 0);
 
             // Initialize DeathLink service.
             _deathLinkService = _session.CreateDeathLinkService();
