@@ -201,6 +201,8 @@ namespace Celeste.Mod.Celeste_Multiworld
             Player.FlyPowerHairColor = new M_Color((featherHairInt >> 16) & 0xFF, (featherHairInt >> 8) & 0xFF, (featherHairInt) & 0xFF);
 
             Items.Traps.TrapManager.EnabledTraps = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<int, int>>(((LoginSuccessful)result).SlotData["active_traps"].ToString());
+            Items.Traps.TrapManager.ExpirationAction = (Items.Traps.TrapExpirationAction)Convert.ToInt32(((LoginSuccessful)result).SlotData.TryGetValue("trap_expiration_action", out value) ? value : 100);
+            Items.Traps.TrapManager.ExpirationAmount = Convert.ToInt32(((LoginSuccessful)result).SlotData.TryGetValue("trap_expiration_amount", out value) ? value : 100);
 
             StrawberriesRequired = Convert.ToInt32(((LoginSuccessful)result).SlotData.TryGetValue("strawberries_required", out value) ? value : 100);
             DeathLinkActive = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("death_link", out value) ? value : false);
@@ -560,7 +562,7 @@ namespace Celeste.Mod.Celeste_Multiworld
                     if (itemSendMessage.IsRelatedToActivePlayer && !itemSendMessage.IsReceiverTheActivePlayer)
                     {
                         string itemColor = GetColorString(itemSendMessage.Item.Flags);
-                        string prettyMessage = $"Sent {{{itemColor}}}{Items.APItemData.ItemIDToString[itemSendMessage.Item.ItemId]}{{#}} to {{#FAFAD2}}{itemSendMessage.Receiver.Name}{{#}}.";
+                        string prettyMessage = $"Sent {{{itemColor}}}{itemSendMessage.Item.ItemName}{{#}} to {{#FAFAD2}}{itemSendMessage.Receiver.Name}{{#}}.";
 
                         MessageLog.Add(new ArchipelagoMessage(prettyMessage.ToString(), ArchipelagoMessage.MessageType.ItemSend, itemSendMessage.Item.Flags));
                         Logger.Log("AP", message.ToString());

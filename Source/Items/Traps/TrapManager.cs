@@ -252,7 +252,6 @@ namespace Celeste.Mod.Celeste_Multiworld.Items.Traps
             "{>> 0.25}Because I could not stop for death{n}He kindly stopped for me.{n}The carriage held but just ourselves{n}And immortality {n}-Dickinson",
             "{>> 0.25}For, like almost everyone else in our country, I started out with my share of optimism. I believed in hard work and progress and action, but now, after first being 'for' society and then 'against' it, I assign myself no rank or any limit, and such an attitude is very much against the trend of the times. But my world has become one of infinite possibilities. What a phrase - still it's a good phrase and a good view of life, and a man shouldn't accept any other; that much I've learned underground. Until some gang succeeds in putting the world in a strait jacket, its definition is possibility. {n}-Ellison",
             "{>> 0.25}Tarnished, a word.{n}{n}What if you booted up Resident Evil 4 Remake and Ashley was just a tiny mouse. What would you do?{n}{n}Just, imagine this: There she is standing there, cute as a button, and with a high-pitched voice she cries out: \"Leon! Help!I can't reach the Gorgonzola! Leon!\".{n}{n}And then after you have helped her up in some sort of quick-time mousecapade, she turns to you, looks you dead in the eyes and says: \"Cheese Whiz, mister! Thanks for the help!\". What would you do?{n}{n}{n}Anyways, find the Albinauric woman.",
-            "{>> 0.25}He-he-here we go!{n}{n}So they're finally here, performing for you. If you know the words, you can join in too. Put your hands together, if you want to clap. As we take you through this monkey rap! Huh!{n}{n}DK! Donkey Kong!{n}{n}He's the leader of the bunch, you know him well. He's finally back to kick some tail. His coconut gun can fire in spurts. If he shoots ya, it's gonna hurt! He's bigger, faster, and stronger too! He's the first member of the DK crew! Huh!{n}{n}DK! Donkey Kong! DK! Donkey Kong is here!{n}{n}This Kong's got style, so listen up dudes. She can shrink in size, to suit her mood. She's quick and nimble when she needs to be. She can float through the air and climb up trees! If you choose her, you'll not choose wrong; With a skip and a hop, she's one cool Kong! Huh!{n}{n}DK! Donkey Kong!{n}{n}He has no style, he has no grace. This Kong has a funny face. He can handstand when he needs to, And stretch his arms out, just for you. Inflate himself just like a balloon. This crazy Kong just digs this tune! Huh!{n}{n}DK! Donkey Kong! DK! Donkey Kong is here!{n}{n}He's back again and about time too, And this time he's in the mood! He can fly real high with his jetpack on; With his pistols out, he's one tough Kong! He'll make you smile when he plays his tune, But Kremlings beware 'cause he's after you! Huh!{n}{n}DK! Donkey Kong! Huh!{n}{n}Finally, he's here for you: It's the last member of the DK crew! This Kong's so strong, it isn't funny. Can make a Kremling cry out for mummy. Can pick up a boulder with relative ease. Makes crushing rocks seem such a breeze. He may move slow, he can't jump high, But this Kong's one hell of a guy!{n}{n}C'mon Cranky, take it to the fridge!{n}{n}Walnuts, peanuts, pineapple smells,{n}Grapes, melons, oranges and coconut shells. Aww yeah!{n}Walnuts, peanuts, pineapple smells,{n}Grapes, melons, oranges and coconut shells. Aww yeah!",
             "{>> 0.25}I'm fully aware of what I'm doing. Can't you see? Man committed a sin... disturbing the life cycle of nature... The original sin that man is responsible to... To protect the life cycle. I have made a creature to rule over mankind... This is the final battle. Show yourself! Our new ruler, the Emperor!",
             "{>> 0.25}Light thinks it travels faster than anything but it is wrong. No matter how fast light travels, it finds the darkness has always got there first, and is waiting for it. {n}-Pratchet",
             "{>> 0.25}It would be difficult for me to tell you what the moral of this story is. For some stories, it's easy. The moral of 'The Three Bears,' for instance, is 'Never break into someone else's house.' The moral of 'Snow White' is 'Never eat apples.' The moral of World War I is 'Never assassinate Archduke Ferdinand. {n}-Snicket",
@@ -299,8 +298,8 @@ namespace Celeste.Mod.Celeste_Multiworld.Items.Traps
 
         public static TrapManager Instance { get; private set; }
 
-        public TrapExpirationAction ExpirationAction { get; private set; } = TrapExpirationAction.Screens;
-        public int ExpirationAmount { get; private set; } = 5;
+        public static TrapExpirationAction ExpirationAction { get; set; } = TrapExpirationAction.Deaths;
+        public static int ExpirationAmount { get; set; } = 5;
 
         public List<BaseTrapInstance> ActiveTraps = new List<BaseTrapInstance>();
         public Queue<BaseTrapInstance> QueuedTraps = new Queue<BaseTrapInstance>();
@@ -524,12 +523,12 @@ namespace Celeste.Mod.Celeste_Multiworld.Items.Traps
 
         public void AddTrapToQueue(TrapType type, string message)
         {
-            this.QueuedTraps.Enqueue(new BaseTrapInstance(type, message, this.ExpirationAction, this.ExpirationAmount));
+            this.QueuedTraps.Enqueue(new BaseTrapInstance(type, message, ExpirationAction, ExpirationAmount));
         }
 
         public void SetPriorityTrap(TrapType type, string message)
         {
-            this.PriorityTrap = new BaseTrapInstance(type, message, this.ExpirationAction, this.ExpirationAmount, true);
+            this.PriorityTrap = new BaseTrapInstance(type, message, ExpirationAction, ExpirationAmount, true);
         }
 
         public bool IsTrapValid(TrapType type)
