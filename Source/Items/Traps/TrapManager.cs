@@ -312,7 +312,9 @@ namespace Celeste.Mod.Celeste_Multiworld.Items.Traps
 
         public static TrapExpirationAction ExpirationAction { get; set; } = TrapExpirationAction.Deaths;
         public static int ExpirationAmount { get; set; } = 5;
+        public static int TRAP_COOLDOWN = 120;
 
+        public int TrapCooldownTimer = TRAP_COOLDOWN;
         public List<BaseTrapInstance> ActiveTraps = new List<BaseTrapInstance>();
         public Queue<BaseTrapInstance> QueuedTraps = new Queue<BaseTrapInstance>();
         BaseTrapInstance PriorityTrap = null;
@@ -335,6 +337,13 @@ namespace Celeste.Mod.Celeste_Multiworld.Items.Traps
 
             if (level == null)
             {
+                return;
+            }
+
+            if (this.TrapCooldownTimer > 0)
+            {
+                this.TrapCooldownTimer--;
+                this.TickActiveTraps();
                 return;
             }
 
@@ -369,6 +378,8 @@ namespace Celeste.Mod.Celeste_Multiworld.Items.Traps
                     ArchipelagoManager.Instance.MessageLog.Insert(0, message);
                     Monocle.Engine.Commands.Log(newTrap.message, M_Color.DeepPink);
                     Audio.Play(SFX.game_gen_bird_squawk);
+
+                    this.TrapCooldownTimer = TRAP_COOLDOWN;
                 }
                 else
                 {
