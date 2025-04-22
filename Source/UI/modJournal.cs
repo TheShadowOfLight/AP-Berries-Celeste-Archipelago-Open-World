@@ -392,12 +392,12 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
                     .Add(new OuiJournalPage.EmptyCell(64f))
                     .Add(new OuiJournalPage.IconsCell(haveDoubleDashRefill    ? "double_dash" : "double_dash_outline"))
                     .Add(new OuiJournalPage.IconsCell(havePuffer              ? "puffer" : "puffer_outline"))
-                    .Add(new OuiJournalPage.IconsCell(haveJelly               ? "jelly" : "jelly_outline"));
+                    .Add(new OuiJournalPage.IconsCell(haveJelly               ? "jelly" : "jelly_outline"))
+                    .Add(new OuiJournalPage.IconsCell(haveBreaker             ? "breaker" : "breaker_outline"));
 
                 if (ArchipelagoManager.Instance.ActiveLevels.Contains("10b"))
                 {
-                    row9.Add(new OuiJournalPage.IconsCell(haveBreaker             ? "breaker" : "breaker_outline"))
-                        .Add(new OuiJournalPage.IconsCell(haveBird                ? "bird" : "bird_outline"))
+                    row9.Add(new OuiJournalPage.IconsCell(haveBird                ? "bird" : "bird_outline"))
                         .Add(new OuiJournalPage.IconsCell(haveYellowCassetteBlock ? "yellow_cassette" : "yellow_cassette_outline"))
                         .Add(new OuiJournalPage.IconsCell(haveGreenCassetteBlock  ? "green_cassette" : "green_cassette_outline"));
                 }
@@ -468,22 +468,25 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
 
             self.table.AddRow().Add(new OuiJournalPage.EmptyCell(64f));
 
-            bool have_5b_1 = false;
-            bool have_5b_2 = false;
+            if (ArchipelagoManager.Instance.ActiveLevels.Contains("5b"))
+            {
+                bool have_5b_1 = false;
+                bool have_5b_2 = false;
 
-            Celeste_MultiworldModule.SaveData.KeyItems.TryGetValue(0xCA1600A, out have_5b_1);
-            Celeste_MultiworldModule.SaveData.KeyItems.TryGetValue(0xCA1600B, out have_5b_2);
+                Celeste_MultiworldModule.SaveData.KeyItems.TryGetValue(0xCA1600A, out have_5b_1);
+                Celeste_MultiworldModule.SaveData.KeyItems.TryGetValue(0xCA1600B, out have_5b_2);
 
-            OuiJournalPage.Row row5b = self.table.AddRow()
-                .Add(new OuiJournalPage.TextCell($"Mirror Temple B", self.TextJustify, 0.5f, self.TextColor, 0f, false))
-                .Add(new OuiJournalPage.IconsCell(have_5b_1 ? "key" : "key_outline"))
-                .Add(new OuiJournalPage.IconsCell(have_5b_2 ? "key" : "key_outline"))
-                .Add(new OuiJournalPage.EmptyCell(64f))
-                .Add(new OuiJournalPage.EmptyCell(64f))
-                .Add(new OuiJournalPage.EmptyCell(64f))
-                .Add(new OuiJournalPage.EmptyCell(64f));
+                OuiJournalPage.Row row5b = self.table.AddRow()
+                    .Add(new OuiJournalPage.TextCell($"Mirror Temple B", self.TextJustify, 0.5f, self.TextColor, 0f, false))
+                    .Add(new OuiJournalPage.IconsCell(have_5b_1 ? "key" : "key_outline"))
+                    .Add(new OuiJournalPage.IconsCell(have_5b_2 ? "key" : "key_outline"))
+                    .Add(new OuiJournalPage.EmptyCell(64f))
+                    .Add(new OuiJournalPage.EmptyCell(64f))
+                    .Add(new OuiJournalPage.EmptyCell(64f))
+                    .Add(new OuiJournalPage.EmptyCell(64f));
 
-            self.table.AddRow().Add(new OuiJournalPage.EmptyCell(64f));
+                self.table.AddRow().Add(new OuiJournalPage.EmptyCell(64f));
+            }
 
             bool have_7_1 = false;
 
@@ -522,9 +525,6 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
                 .Add(new OuiJournalPage.IconsCell(have_gem_4 ? "gem4" : "gem4_outline"))
                 .Add(new OuiJournalPage.IconsCell(have_gem_5 ? "gem5" : "gem5_outline"))
                 .Add(new OuiJournalPage.IconsCell(have_gem_6 ? "gem6" : "gem6_outline"));
-
-
-
 
             if (ArchipelagoManager.Instance.ActiveLevels.Contains("10a"))
             {

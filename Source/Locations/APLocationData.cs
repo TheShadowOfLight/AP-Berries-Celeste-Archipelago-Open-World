@@ -41,7 +41,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
                 {
                     foreach (string location in Celeste_MultiworldModule.SaveData.CheckpointLocations)
                     {
-                        if (location.StartsWith(level_mode))
+                        if (location.StartsWith(level_mode) && CheckpointStringToID.Keys.Contains(location))
                         {
                             count++;
                         }

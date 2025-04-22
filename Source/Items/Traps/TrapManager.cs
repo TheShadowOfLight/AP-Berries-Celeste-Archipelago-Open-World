@@ -152,10 +152,22 @@ namespace Celeste.Mod.Celeste_Multiworld.Items.Traps
                 }
                 case TrapType.Fast:
                 {
+                    bool bOtherActive = TrapManager.Instance.IsTrapActive(TrapType.Slow);
+
+                    if (!bOtherActive)
+                    {
+                        Monocle.Engine.TimeRate = 1.0f;
+                    }
                     break;
                 }
                 case TrapType.Slow:
                 {
+                    bool bOtherActive = TrapManager.Instance.IsTrapActive(TrapType.Fast);
+
+                    if (!bOtherActive)
+                    {
+                        Monocle.Engine.TimeRate = 1.0f;
+                    }
                     break;
                 }
                 case TrapType.Ice:
@@ -414,15 +426,9 @@ namespace Celeste.Mod.Celeste_Multiworld.Items.Traps
                             break;
                         }
 
-                        bool bOtherActive = this.IsTrapActive(TrapType.Slow);
-
                         if (bActive)
                         {
                             Monocle.Engine.TimeRate = 2.0f;
-                        }
-                        else if (!bOtherActive)
-                        {
-                            Monocle.Engine.TimeRate = 1.0f;
                         }
 
                         break;
@@ -435,15 +441,9 @@ namespace Celeste.Mod.Celeste_Multiworld.Items.Traps
                             break;
                         }
 
-                        bool bOtherActive = this.IsTrapActive(TrapType.Fast);
-
                         if (bActive)
                         {
                             Monocle.Engine.TimeRate = 0.5f;
-                        }
-                        else if (!bOtherActive)
-                        {
-                            Monocle.Engine.TimeRate = 1.0f;
                         }
 
                         break;
