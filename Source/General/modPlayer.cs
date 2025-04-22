@@ -229,7 +229,7 @@ namespace Celeste.Mod.Celeste_Multiworld.General
                     if (ShouldShowMessage(message))
                     {
                         self.Scene.Add(new modMiniTextbox(message.Text, (message.Type == ArchipelagoMessage.MessageType.Literature)));
-                        Logger.Error("AP", message.Text);
+                        Logger.Verbose("AP", message.Text);
                     }
                 }
             }

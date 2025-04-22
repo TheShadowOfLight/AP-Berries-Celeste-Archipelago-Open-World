@@ -44,7 +44,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             string strawberryString = $"{SaveData.Instance.CurrentSession_Safe.Area.ID}_{(int)SaveData.Instance.CurrentSession_Safe.Area.Mode}_{self.ID}";
 
             Celeste_MultiworldModule.SaveData.StrawberryLocations.Add(strawberryString);
-            Logger.Error("AP", strawberryString);
+            Logger.Verbose("AP", strawberryString);
         }
 
         private static void modSaveData_AddStrawberry_AreaKey_EntityID_bool(On.Celeste.SaveData.orig_AddStrawberry_AreaKey_EntityID_bool orig, SaveData self, AreaKey area, EntityID strawberry, bool golden)
