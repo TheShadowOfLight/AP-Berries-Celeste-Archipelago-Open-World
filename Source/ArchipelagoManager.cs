@@ -59,6 +59,8 @@ namespace Celeste.Mod.Celeste_Multiworld
         public static ArchipelagoManager Instance { get; private set; }
 
         private static readonly Version _supportedArchipelagoVersion = new(7, 7, 7);
+        private static readonly int _modVersion = 900;
+        private static readonly int _minAPWorldVersion = 900;
 
         private ArchipelagoSession _session;
         private DeathLinkService _deathLinkService;
@@ -190,6 +192,29 @@ namespace Celeste.Mod.Celeste_Multiworld
 
             // Load randomizer data.
             object value;
+
+            int apworldVersion = Convert.ToInt32(((LoginSuccessful)result).SlotData.TryGetValue("apworld_version", out value) ? value : 0);
+            int minModVersion = Convert.ToInt32(((LoginSuccessful)result).SlotData.TryGetValue("min_mod_version", out value) ? value : 0);
+
+            if (apworldVersion < _minAPWorldVersion)
+            {
+                Disconnect();
+                int major = _minAPWorldVersion / 10000;
+                int minor = (_minAPWorldVersion / 100) % 100;
+                int bugfix = _minAPWorldVersion % 100;
+                Monocle.Engine.Commands.Log($"Mod is too new for APWorld.\nUpdate your APWorld to v{major}.{minor}.{bugfix} and regenerate, or downgrade your mod.", M_Color.Red);
+                return new("Mod Version Too New");
+            }
+            if (_modVersion < minModVersion)
+            {
+                Disconnect();
+                int major = minModVersion / 10000;
+                int minor = (minModVersion / 100) % 100;
+                int bugfix = minModVersion % 100;
+                Monocle.Engine.Commands.Log($"Mod is too old for APWorld.\nUpdate your mod to v{major}.{minor}.{bugfix}.", M_Color.Red);
+                return new("Mod Version Too Old");
+            }
+
             int hairLengthInt = Convert.ToInt32(((LoginSuccessful)result).SlotData.TryGetValue("madeline_hair_length", out value) ? value : 4);
             General.modPlayer.HairLength = hairLengthInt;
             int normalHairInt = Convert.ToInt32(((LoginSuccessful)result).SlotData.TryGetValue("madeline_one_dash_hair_color", out value) ? value : 0xdb2c00);
