@@ -105,6 +105,7 @@ namespace Celeste.Mod.Celeste_Multiworld
         public Dictionary<int, int> MusicMap { get; set; } = new();
         public int MusicShuffle = 0;
         public bool RequireCassettes = false;
+        public int ChosenPoem = 0;
         #endregion
 
         private static string commandHolder = null;
@@ -224,6 +225,8 @@ namespace Celeste.Mod.Celeste_Multiworld
             MusicMap = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<int, int>>(((LoginSuccessful)result).SlotData["music_map"].ToString());
             MusicShuffle = Convert.ToInt32(((LoginSuccessful)result).SlotData.TryGetValue("music_shuffle", out value) ? value : 0);
             RequireCassettes = Convert.ToBoolean(((LoginSuccessful)result).SlotData.TryGetValue("require_cassettes", out value) ? value : false);
+            ChosenPoem = Convert.ToInt32(((LoginSuccessful)result).SlotData.TryGetValue("chosen_poem", out value) ? value : 0);
+            ChosenPoem = ChosenPoem % UI.modJournal.Poems.Count;
 
             // Initialize DeathLink service.
             _deathLinkService = _session.CreateDeathLinkService();
@@ -668,6 +671,21 @@ namespace Celeste.Mod.Celeste_Multiworld
                         {
                             audioGuard++;
                             Audio.Play(SFX.game_gen_cassette_get);
+                        }
+                        break;
+                    }
+                    case long id when id >= 0xCA13000 && id < 0xCA14000:
+                    {
+                        string newPhrase = UI.modJournal.Poems[ChosenPoem][(int)(id - 0xCA13000)];
+                        if (!Celeste_MultiworldModule.SaveData.Poem.Contains(newPhrase))
+                        {
+                            Celeste_MultiworldModule.SaveData.Poem.Add(newPhrase);
+
+                            if (audioGuard < 3)
+                            {
+                                audioGuard++;
+                                Audio.Play(SFX.ui_postgame_crystalheart);
+                            }
                         }
                         break;
                     }

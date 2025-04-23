@@ -17,11 +17,77 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
             { 2, "c" },
         };
 
+        public static List<List<string>> Poems { get; set; } = new List<List<string>>
+        {
+            new List<string> {
+              "Know him well", "Has no style", "Finally back", "Fly real high",
+              "Back again", "Listen up dudes", "Shrink in size", "Kick some tail",
+              "Got style", "Pistols out", "About time too", "Leader of the bunch",
+              "Has no grace", "Funny face", "Digs this tune", "Suit her mood",
+            },
+            new List<string> {
+              "Tangle you up", "Hardly swallow", "Save your sorrow", "Paid in trade",
+              "Facedown on the floor", "Find your way", "Can't help but follow", "Feel life",
+              "Edge of tomorrow", "Back where you came", "Moving through your mind", "Slipping down your spine",
+              "Feel time", "Works of yesterday", "Beg or borrow", "Fears and pain",
+            },
+            new List<string> {
+              "Let you down", "Tell a lie", "Run around", "To shy to say it",
+              "Strangers to love", "What's been going on", "Gonna play it", "Desert you",
+              "Make you cry", "Say goodbye", "Give you up", "Hurt you",
+              "Any other guy", "For so long", "Know the rules", "What I'm thinking of",
+            },
+            new List<string> {
+              "History quickly crashing", "The school book", "Seldom mentioned", "Forcast to be falling",
+              "Build a tent",  "Using you to fall", "Made me cross", "Only in the past",
+              "Some stay dry", "A baby born", "The prisons", "It's the fear",
+              "Makes us happy", "Raised your neighborhood", "Made you turn", "Zoom the camera out",
+            },
+            new List<string> {
+              "She only knew", "Give up your children", "Act too soon", "Seal their fate",
+              "Prophesy come true", "Separate", "Bide your time", "Lie in wait",
+              "The children grow", "The throne awaits", "Learn what's right", "Seek their mother",
+              "Triplets born", "Freedom fight", "A seer warns", "A deadly fate",
+            },
+            new List<string> {
+              "Scaramouche", "Easy go", "Little high", "Need no sympathy",
+              "Little silhouetto", "Easy come", "Galileo Figaro", "Escape from reality",
+              "Open your eyes", "Real life", "Look up to the skies", "Just a poor boy",
+              "Thunderbolt and lightning", "Fantasy", "Caught in a landslide", "Little low",
+            },
+            new List<string> {
+              "Some new weyr", "Gone ahead", "Dead", "Dragons gone",
+              "Gone away", "Open", "Leaving weyrs", "Worlds away",
+              "Weyrfolk fled", "The empty weyr", "Cruel thread", "Herdbeasts free",
+              "Dusty", "Echoes roll", "Empty", "Unanswered",
+            },
+            new List<string> {
+              "The road has gone", "With eager feet", "I must follow", "I cannot say",
+              "Pursuing it", "Now far ahead", "Down from the door", "Some larger way",
+              "Where many paths", "Whether then", "If I can", "The road goes",
+              "Errands meet", "Until it finds", "Ever on and on", "Where it began",
+            },
+            new List<string> {
+              "Moonlight melts", "Ticking clock", "Lukewarm gloom", "Devouring moonlight",
+              "Dreamless dorm", "Clench my fists", "Windless night", "Far in mist",
+              "Voiceless town", "Tapping feet", "Pockets tight", "From the soundless room",
+              "Ghostly shadow", "Tower waits", "I walk away", "Merciless tomb",
+            },
+            new List<string> {
+              "The sun arising", "Greatness thrusts", "Into our lives", "Hear you breathing",
+              "Do you think", "Heart beats","Blowing me around", "Let destiny choose",
+              "Fire in the sky", "Makes me feel alive", "See you coming", "Only if I lose",
+              "Going fast", "You can win", "Hyperdrive", "Feel the wind",
+            }
+        };
+
         public void Load()
         {
             On.Celeste.OuiJournalProgress.ctor += modOuiJournalProgress_ctor;
             On.Celeste.OuiJournalSpeedrun.ctor += modOuiJournalSpeedrun_ctor;
             On.Celeste.OuiJournalDeaths.ctor += modOuiJournalDeaths_ctor;
+            On.Celeste.OuiJournalPoem.ctor += modOuiJournalPoem_ctor;
+            On.Celeste.OuiJournalPoem.Swap += modOuiJournalPoem_Swap;
         }
 
         public void Unload()
@@ -29,6 +95,7 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
             On.Celeste.OuiJournalProgress.ctor -= modOuiJournalProgress_ctor;
             On.Celeste.OuiJournalSpeedrun.ctor -= modOuiJournalSpeedrun_ctor;
             On.Celeste.OuiJournalDeaths.ctor -= modOuiJournalDeaths_ctor;
+            On.Celeste.OuiJournalPoem.ctor -= modOuiJournalPoem_ctor;
         }
 
         private static void modOuiJournalProgress_ctor(On.Celeste.OuiJournalProgress.orig_ctor orig, OuiJournalProgress self, OuiJournal journal)
@@ -551,6 +618,58 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
                     .Add(new OuiJournalPage.IconsCell(have_10_5 ? "key" : "key_outline"))
                     .Add(new OuiJournalPage.EmptyCell(64f));
             }
+        }
+
+        private static void modOuiJournalPoem_ctor(On.Celeste.OuiJournalPoem.orig_ctor orig, OuiJournalPoem self, OuiJournal journal)
+        {
+            MonoMod.Utils.DynamicData dynamicUI = MonoMod.Utils.DynamicData.For(self);
+            dynamicUI.Set("TextJustify", new Vector2(0.5f, 0.5f));
+            dynamicUI.Set("TextColor", Color.Black * 0.6f);
+            self.Journal = journal;
+
+            self.lines = new List<OuiJournalPoem.PoemLine>();
+            self.swapRoutine = new Monocle.Coroutine(true);
+            self.wiggler = Monocle.Wiggler.Create(0.4f, 4f, null, false, false);
+
+            self.PageTexture = "page";
+            self.swapRoutine.RemoveOnComplete = false;
+            float num = 0f;
+            foreach (string phrase in Celeste_MultiworldModule.SaveData.Poem)
+            {
+                int phraseIndex = Poems[ArchipelagoManager.Instance.ChosenPoem].IndexOf(phrase);
+                self.lines.Add(new OuiJournalPoem.PoemLine
+                {
+                    Text = phrase,
+                    Index = num,
+                    Remix = phraseIndex < 8
+                });
+                num += 1f;
+            }
+        }
+
+        private static System.Collections.IEnumerator modOuiJournalPoem_Swap(On.Celeste.OuiJournalPoem.orig_Swap orig, OuiJournalPoem self, int a, int b)
+        {
+            string text = Celeste_MultiworldModule.SaveData.Poem[a];
+            Celeste_MultiworldModule.SaveData.Poem[a] = Celeste_MultiworldModule.SaveData.Poem[b];
+            Celeste_MultiworldModule.SaveData.Poem[b] = text;
+            OuiJournalPoem.PoemLine poemA = self.lines[a];
+            OuiJournalPoem.PoemLine poemB = self.lines[b];
+            OuiJournalPoem.PoemLine poemLine = self.lines[a];
+            self.lines[a] = self.lines[b];
+            self.lines[b] = poemLine;
+            self.tween = Monocle.Tween.Create(Monocle.Tween.TweenMode.Oneshot, Monocle.Ease.CubeInOut, 0.125f, true);
+            self.tween.OnUpdate = delegate (Monocle.Tween t)
+            {
+                poemA.Index = MathHelper.Lerp((float)a, (float)b, t.Eased);
+                poemB.Index = MathHelper.Lerp((float)b, (float)a, t.Eased);
+            };
+            self.tween.OnComplete = delegate (Monocle.Tween t)
+            {
+                self.tween = null;
+            };
+            yield return self.tween.Wait();
+            self.swapping = false;
+            yield break;
         }
     }
 }

@@ -14,6 +14,7 @@ public class Celeste_MultiworldModuleSaveData : EverestModuleSaveData
 
     public Dictionary<long, bool> Interactables { get; set; } = new Dictionary<long, bool>();
     public Dictionary<long, bool> CassetteItems { get; set; } = new Dictionary<long, bool>();
+    public List<string> Poem { get; set; } = new List<string>();
     public Dictionary<long, bool> KeyItems { get; set; } = new Dictionary<long, bool>();
     public Dictionary<long, bool> GemItems { get; set; } = new Dictionary<long, bool>();
     #endregion
