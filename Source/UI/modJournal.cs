@@ -96,6 +96,7 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
             On.Celeste.OuiJournalSpeedrun.ctor -= modOuiJournalSpeedrun_ctor;
             On.Celeste.OuiJournalDeaths.ctor -= modOuiJournalDeaths_ctor;
             On.Celeste.OuiJournalPoem.ctor -= modOuiJournalPoem_ctor;
+            On.Celeste.OuiJournalPoem.Swap -= modOuiJournalPoem_Swap;
         }
 
         private static void modOuiJournalProgress_ctor(On.Celeste.OuiJournalProgress.orig_ctor orig, OuiJournalProgress self, OuiJournal journal)
