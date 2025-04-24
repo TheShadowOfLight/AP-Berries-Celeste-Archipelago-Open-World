@@ -30,7 +30,8 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
         {
             orig(self, data, offset, gid);
 
-            if (self.Golden && !ArchipelagoManager.Instance.IncludeGoldens)
+            if (self.Golden && !ArchipelagoManager.Instance.IncludeGoldens
+                && !(SaveData.Instance.CurrentSession_Safe.Area.ID == 10 && ArchipelagoManager.Instance.GoalLevel == "10c"))
             {
                 self.Active = false;
                 self.Visible = false;

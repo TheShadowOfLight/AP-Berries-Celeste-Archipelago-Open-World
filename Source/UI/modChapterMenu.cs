@@ -85,11 +85,14 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
                 }
             }
 
+            bool isGoalArea = (AreaName == ArchipelagoManager.Instance.GoalLevel ||
+                              (AreaName == "10a" && (ArchipelagoManager.Instance.GoalLevel == "10b" || ArchipelagoManager.Instance.GoalLevel == "10c")));
+
             if (!ArchipelagoManager.Instance.ActiveLevels.Contains(AreaName))
             {
                 Audio.Play("event:/ui/main/button_back");
             }
-            else if (AreaName == ArchipelagoManager.Instance.GoalLevel)
+            else if (isGoalArea)
             {
                 if (!ArchipelagoManager.Instance.LockGoalLevel || (Celeste_MultiworldModule.SaveData.Strawberries >= ArchipelagoManager.Instance.StrawberriesRequired))
                 {
@@ -266,15 +269,16 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
                 flag = true;
             }
 
-            // TODO: "Farewell Golden" might be too long for the UI widget
             // A Side Option
             string LevelNameA = $"{self.Area.ID}a";
             string DisplayStringA = Dialog.Clean(self.Data.Interlude_Safe ? "FILE_BEGIN" : "overworld_normal", null).ToUpper();
+            bool isGoalArea = (LevelNameA == ArchipelagoManager.Instance.GoalLevel ||
+                              (LevelNameA == "10a" && (ArchipelagoManager.Instance.GoalLevel == "10b" || ArchipelagoManager.Instance.GoalLevel == "10c")));
             if (!ArchipelagoManager.Instance.ActiveLevels.Contains(LevelNameA))
             {
                 DisplayStringA = "NOT ACTIVE";
             }
-            else if (LevelNameA == ArchipelagoManager.Instance.GoalLevel && ArchipelagoManager.Instance.LockGoalLevel)
+            else if (isGoalArea && ArchipelagoManager.Instance.LockGoalLevel)
             {
                 DisplayStringA = $"Strawberries: {Celeste_MultiworldModule.SaveData.Strawberries}/{ArchipelagoManager.Instance.StrawberriesRequired}";
             }
