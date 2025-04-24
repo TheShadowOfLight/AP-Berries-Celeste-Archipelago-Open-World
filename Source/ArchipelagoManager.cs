@@ -134,7 +134,6 @@ namespace Celeste.Mod.Celeste_Multiworld
                 }
                 catch (ArchipelagoSocketClosedException)
                 {
-                    // TODO: Send a message to the client that connection has been dropped.
                     Disconnect();
                 }
             }
@@ -175,7 +174,7 @@ namespace Celeste.Mod.Celeste_Multiworld
             }
 
             var result = await _session.LoginAsync(
-                "Celeste",
+                "Celeste (Open World)",
                 Celeste_MultiworldModule.Settings.SlotName,
                 ItemsHandlingFlags.AllItems,
                 _supportedArchipelagoVersion,
@@ -362,7 +361,6 @@ namespace Celeste.Mod.Celeste_Multiworld
             }
             catch (ArchipelagoSocketClosedException)
             {
-                // TODO: Send a message to the client that connection has been dropped.
                 Disconnect();
             }
 
@@ -382,7 +380,6 @@ namespace Celeste.Mod.Celeste_Multiworld
             }
             catch (ArchipelagoSocketClosedException)
             {
-                // TODO: Send a message to the client that connection has been dropped.
                 Disconnect();
             }
         }
@@ -402,7 +399,6 @@ namespace Celeste.Mod.Celeste_Multiworld
             }
             catch (ArchipelagoSocketClosedException)
             {
-                // TODO: Send a message to the client that connection has been dropped.
                 Disconnect();
             }
         }
@@ -448,7 +444,6 @@ namespace Celeste.Mod.Celeste_Multiworld
             }
             catch (ArchipelagoSocketClosedException)
             {
-                // TODO: Send a message to the client that connection has been dropped.
                 Disconnect();
                 return 0;
             }
@@ -462,7 +457,6 @@ namespace Celeste.Mod.Celeste_Multiworld
             }
             catch (ArchipelagoSocketClosedException)
             {
-                // TODO: Send a message to the client that connection has been dropped.
                 Disconnect();
                 return 0;
             }
@@ -476,7 +470,6 @@ namespace Celeste.Mod.Celeste_Multiworld
             }
             catch (ArchipelagoSocketClosedException)
             {
-                // TODO: Send a message to the client that connection has been dropped.
                 Disconnect();
             }
         }
@@ -1021,7 +1014,6 @@ namespace Celeste.Mod.Celeste_Multiworld
             }
             catch (ArchipelagoSocketClosedException)
             {
-                // TODO: Send a message to the client that connection has been dropped.
                 Disconnect();
             }
         }
@@ -1039,7 +1031,6 @@ namespace Celeste.Mod.Celeste_Multiworld
             }
             catch (ArchipelagoSocketClosedException)
             {
-                // TODO: Send a message to the client that connection has been dropped.
                 Disconnect();
             }
 
@@ -1055,7 +1046,6 @@ namespace Celeste.Mod.Celeste_Multiworld
             }
             catch (ArchipelagoSocketClosedException)
             {
-                // TODO: Send a message to the client that connection has been dropped.
                 Disconnect();
             }
         }

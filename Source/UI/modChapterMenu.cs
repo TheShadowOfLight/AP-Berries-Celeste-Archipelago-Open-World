@@ -280,7 +280,7 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
             }
             else if (LevelNameA == "8a")
             {
-                DisplayStringA = $"{modChapterMenu.LevelNameToDisplayName[ArchipelagoManager.Instance.GoalLevel]} | Strawberries: {Celeste_MultiworldModule.SaveData.Strawberries}/{ArchipelagoManager.Instance.StrawberriesRequired}";
+                DisplayStringA = $"{modChapterMenu.LevelNameToDisplayName[ArchipelagoManager.Instance.GoalLevel]} | {Celeste_MultiworldModule.SaveData.Strawberries}/{ArchipelagoManager.Instance.StrawberriesRequired}";
             }
             self.modes.Add(new OuiChapterPanel.Option
             {
