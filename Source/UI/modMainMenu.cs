@@ -10,6 +10,7 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
     {
         public void Load()
         {
+            On.Celeste.OuiTitleScreen.ctor += modOuiTitleScreen_ctor;
             On.Celeste.OuiMainMenu.Enter += modOuiMainMenu_Enter;
             On.Celeste.MainMenuClimb.Render += modMainMenuClimb_Render;
             On.Celeste.MainMenuClimb.Confirm += modMainMenuClimb_Confirm;
@@ -17,9 +18,20 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
 
         public void Unload()
         {
+            On.Celeste.OuiTitleScreen.ctor -= modOuiTitleScreen_ctor;
             On.Celeste.OuiMainMenu.Enter -= modOuiMainMenu_Enter;
             On.Celeste.MainMenuClimb.Render -= modMainMenuClimb_Render;
             On.Celeste.MainMenuClimb.Confirm -= modMainMenuClimb_Confirm;
+        }
+
+        private void modOuiTitleScreen_ctor(On.Celeste.OuiTitleScreen.orig_ctor orig, OuiTitleScreen self)
+        {
+            orig(self);
+
+            int major = ArchipelagoManager._modVersion / 10000;
+            int minor = (ArchipelagoManager._modVersion / 100) % 100;
+            int bugfix = ArchipelagoManager._modVersion % 100;
+            self.version += string.Format("\nArchipelago Open World v{0}.{1}.{2}", major, minor, bugfix);
         }
 
         private static System.Collections.IEnumerator modOuiMainMenu_Enter(On.Celeste.OuiMainMenu.orig_Enter orig, OuiMainMenu self, Oui from)
