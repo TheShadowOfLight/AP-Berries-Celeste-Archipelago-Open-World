@@ -31,5 +31,7 @@ public class Celeste_MultiworldModuleSettings : EverestModuleSettings
     }
 
     public ItemSendStyle ItemSendMessages { get; set; } = ItemSendStyle.All;
+
+    public bool ChatMessages { get; set; } = true;
     #endregion
 }

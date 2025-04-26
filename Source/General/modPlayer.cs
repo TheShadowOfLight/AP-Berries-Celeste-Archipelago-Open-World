@@ -175,6 +175,10 @@ namespace Celeste.Mod.Celeste_Multiworld.General
             {
                 return true;
             }
+            else if (message.Type == ArchipelagoMessage.MessageType.Chat)
+            {
+                return Celeste_MultiworldModule.Settings.ChatMessages;
+            }
             else if (message.Type == ArchipelagoMessage.MessageType.ItemReceive)
             {
                 Celeste_MultiworldModuleSettings.ItemReceiveStyle style = Celeste_MultiworldModule.Settings.ItemReceiveMessages;

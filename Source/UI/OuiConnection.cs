@@ -114,6 +114,8 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
                 {
                     this.connectMenu.Selection += 2;
                 }
+
+                Core.CoreModule.Settings.DebugConsole.Keys.Remove(Microsoft.Xna.Framework.Input.Keys.OemPeriod);
             }
 
             Celeste_MultiworldModule.Settings.Address = (this.connectMenu.items[1] as TextMenu.Button).Label;
@@ -168,14 +170,14 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
 
         public void BeginGame()
         {
-            SaveData.TryDelete(0);
-            SaveData.TryDeleteModSaveData(0);
+            SaveData.TryDelete(144);
+            SaveData.TryDeleteModSaveData(144);
             SaveData.Start(new SaveData
             {
                 Name = Celeste_MultiworldModule.Settings.SlotName,
                 AssistMode = false,
                 VariantMode = false
-            }, 0);
+            }, 144);
 
 
             if (SaveData.Instance != null)

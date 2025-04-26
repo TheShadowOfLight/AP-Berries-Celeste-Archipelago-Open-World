@@ -33,6 +33,8 @@ namespace Celeste.Mod.Celeste_Multiworld
         public enum MessageType
         {
             General,
+            Chat,
+            Server,
             ItemReceive,
             ItemSend,
             ItemHint,
@@ -572,7 +574,10 @@ namespace Celeste.Mod.Celeste_Multiworld
 
                     if (hintItemSendMessage.IsRelatedToActivePlayer)
                     {
-                        MessageLog.Add(new ArchipelagoMessage(message.ToString(), ArchipelagoMessage.MessageType.ItemHint));
+                        if (!hintItemSendMessage.IsFound)
+                        {
+                            MessageLog.Add(new ArchipelagoMessage(message.ToString(), ArchipelagoMessage.MessageType.ItemHint));
+                        }
                         Logger.Log("AP", message.ToString());
                         Monocle.Engine.Commands.Log(message.ToString(), M_Color.Orange);
                     }
@@ -590,11 +595,15 @@ namespace Celeste.Mod.Celeste_Multiworld
                         Monocle.Engine.Commands.Log(message.ToString(), M_Color.Lime);
                     }
                     break;
+                case CommandResultLogMessage:
                 case ServerChatLogMessage:
-                case ChatLogMessage:
                 case CountdownLogMessage:
                     Monocle.Engine.Commands.Log(message.ToString());
-                    MessageLog.Add(new ArchipelagoMessage(message.ToString()));
+                    MessageLog.Add(new ArchipelagoMessage(message.ToString(), ArchipelagoMessage.MessageType.Server));
+                    break;
+                case ChatLogMessage:
+                    Monocle.Engine.Commands.Log(message.ToString());
+                    MessageLog.Add(new ArchipelagoMessage(message.ToString(), ArchipelagoMessage.MessageType.Chat));
                     break;
                 case GoalLogMessage:
                     Monocle.Engine.Commands.Log(message.ToString(), M_Color.Gold);
