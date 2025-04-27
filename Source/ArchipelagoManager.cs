@@ -581,7 +581,14 @@ namespace Celeste.Mod.Celeste_Multiworld
                     {
                         if (!hintItemSendMessage.IsFound)
                         {
-                            MessageLog.Add(new ArchipelagoMessage(message.ToString(), ArchipelagoMessage.MessageType.ItemHint));
+                            var item = hintItemSendMessage.Item;
+
+                            string itemColor = GetColorString(item.Flags);
+                            string sendPlayerColor = (hintItemSendMessage.Sender == this.Slot) ? "#EE00EE" : "#FAFAD2";
+                            string recvPlayerColor = (hintItemSendMessage.Receiver == this.Slot) ? "#EE00EE" : "#FAFAD2";
+                            string prettyMessage = $"{{{recvPlayerColor}}}{hintItemSendMessage.Receiver.Name}{{#}}'s {{{itemColor}}}{item.ItemName}{{#}} is at {{#00FF7F}}{hintItemSendMessage.Item.LocationName}{{#}} in {{{sendPlayerColor}}}{hintItemSendMessage.Sender.Name}{{#}}'s World.";
+
+                            MessageLog.Add(new ArchipelagoMessage(prettyMessage, ArchipelagoMessage.MessageType.ItemHint));
                         }
                         Logger.Log("AP", message.ToString());
                         Monocle.Engine.Commands.Log(message.ToString(), M_Color.Orange);
