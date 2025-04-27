@@ -24,7 +24,7 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
             On.Celeste.MainMenuClimb.Confirm -= modMainMenuClimb_Confirm;
         }
 
-        private void modOuiTitleScreen_ctor(On.Celeste.OuiTitleScreen.orig_ctor orig, OuiTitleScreen self)
+        private static void modOuiTitleScreen_ctor(On.Celeste.OuiTitleScreen.orig_ctor orig, OuiTitleScreen self)
         {
             orig(self);
 

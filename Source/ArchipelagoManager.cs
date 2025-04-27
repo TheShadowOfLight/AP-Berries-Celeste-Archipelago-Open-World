@@ -293,6 +293,11 @@ namespace Celeste.Mod.Celeste_Multiworld
             this.DeathsCounted = 0;
             this.ItemQueue.Clear();
 
+            if (!attemptReconnect)
+            {
+                this.WasConnected = false;
+            }
+
             // Clear DeathLink events.
             if (_deathLinkService != null)
             {

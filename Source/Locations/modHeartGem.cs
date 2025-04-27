@@ -13,11 +13,14 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
         {
             On.Celeste.HeartGem.Collect += modHeartGem_Collect;
             On.Celeste.HeartGem.SkipFakeHeartCutscene += modHeartGem_SkipFakeHeartCutscene;
+            On.Celeste.Level.RegisterAreaComplete += modLevel_RegisterAreaComplete;
         }
 
         public override void Unload()
         {
             On.Celeste.HeartGem.Collect -= modHeartGem_Collect;
+            On.Celeste.HeartGem.SkipFakeHeartCutscene -= modHeartGem_SkipFakeHeartCutscene;
+            On.Celeste.Level.RegisterAreaComplete -= modLevel_RegisterAreaComplete;
         }
 
         private static void modHeartGem_Collect(On.Celeste.HeartGem.orig_Collect orig, HeartGem self, Player player)
@@ -80,6 +83,17 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
                 }
 
                 self.RemoveSelf();
+            }
+        }
+
+        private static void modLevel_RegisterAreaComplete(On.Celeste.Level.orig_RegisterAreaComplete orig, Level self)
+        {
+            orig(self);
+
+            if (SaveData.Instance.CurrentSession_Safe.Area.Mode != AreaMode.Normal)
+            {
+                string AP_ID = $"{SaveData.Instance.CurrentSession_Safe.Area.ID}_{(int)SaveData.Instance.CurrentSession_Safe.Area.Mode}_Clear";
+                Celeste_MultiworldModule.SaveData.LevelClearLocations.Add(AP_ID);
             }
         }
     }
