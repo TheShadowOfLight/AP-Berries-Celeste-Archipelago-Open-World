@@ -84,7 +84,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Aesthetics
         {
             if (ArchipelagoManager.Instance.RequireCassettes)
             {
-                if (SaveData.Instance == null || SaveData.Instance.CurrentSession_Safe == null || !SaveData.Instance.CurrentSession_Safe.InArea)
+                if (SaveData.Instance == null || SaveData.Instance.CurrentSession_Safe == null || !SaveData.Instance.CurrentSession_Safe.InArea || path == "event:/music/lvl0/bridge")
                 {
                     return orig(path, startPlaying, allowFadeOut);
                 }
