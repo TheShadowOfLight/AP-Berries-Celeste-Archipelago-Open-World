@@ -305,6 +305,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Items.Traps
             { "Possession Trap",    TrapType.Invisible },
             { "Ghost Trap",         TrapType.Invisible },
             { "Fire Trap",          TrapType.Fast },
+            { "Jump Trap",          TrapType.Hiccup },
         };
         public static Dictionary<int, int> EnabledTraps = new Dictionary<int, int>();
 
