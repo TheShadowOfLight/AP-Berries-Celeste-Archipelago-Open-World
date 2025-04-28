@@ -58,7 +58,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
 
             if (HaveReceived(self.fragile ? CloudColor.Pink : CloudColor.Blue))
             {
-                if (!self.fragile || self.respawnTimer <= 0.0f)
+                if (!self.fragile || (self.waiting && self.respawnTimer <= 0.0f))
                 {
                     self.Collidable = true;
                 }
