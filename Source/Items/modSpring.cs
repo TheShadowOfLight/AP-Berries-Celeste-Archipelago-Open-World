@@ -15,12 +15,18 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
         {
             On.Celeste.Spring.Render += modSpring_Render;
             On.Celeste.Spring.OnCollide += modSpring_OnCollide;
+            On.Celeste.Spring.OnHoldable += modSpring_OnHoldable;
+            On.Celeste.Spring.OnPuffer += modSpring_OnPuffer;
+            On.Celeste.Spring.OnSeeker += modSpring_OnSeeker;
         }
 
         public override void Unload()
         {
             On.Celeste.Spring.Render -= modSpring_Render;
             On.Celeste.Spring.OnCollide -= modSpring_OnCollide;
+            On.Celeste.Spring.OnHoldable -= modSpring_OnHoldable;
+            On.Celeste.Spring.OnPuffer -= modSpring_OnPuffer;
+            On.Celeste.Spring.OnSeeker -= modSpring_OnSeeker;
         }
 
         public static bool HaveReceived()
@@ -55,6 +61,30 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
             if (HaveReceived())
             {
                 orig(self, player);
+            }
+        }
+
+        private static void modSpring_OnHoldable(On.Celeste.Spring.orig_OnHoldable orig, Spring self, Holdable h)
+        {
+            if (HaveReceived())
+            {
+                orig(self, h);
+            }
+        }
+
+        private static void modSpring_OnPuffer(On.Celeste.Spring.orig_OnPuffer orig, Spring self, Puffer p)
+        {
+            if (HaveReceived())
+            {
+                orig(self, p);
+            }
+        }
+
+        private static void modSpring_OnSeeker(On.Celeste.Spring.orig_OnSeeker orig, Spring self, Seeker seeker)
+        {
+            if (HaveReceived())
+            {
+                orig(self, seeker);
             }
         }
     }
