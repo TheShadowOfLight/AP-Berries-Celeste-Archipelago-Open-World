@@ -303,7 +303,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Items.Traps
             { "Banana Trap",        TrapType.Ice },
             { "Bonk Trap",          TrapType.Hiccup },
             { "Possession Trap",    TrapType.Invisible },
-            { "Ghost Trap",         TrapType.Invisible },
+            { "Ghost",              TrapType.Invisible },
             { "Fire Trap",          TrapType.Fast },
             { "Jump Trap",          TrapType.Hiccup },
         };

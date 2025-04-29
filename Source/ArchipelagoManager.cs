@@ -1097,16 +1097,20 @@ namespace Celeste.Mod.Celeste_Multiworld
                 if (bouncedPacket.Tags.Contains("TrapLink") && this.TrapLinkActive && bouncedPacket.Data["source"].ToString() != GetPlayerName(this.Slot))
                 {
                     string trap_name = bouncedPacket.Data["trap_name"].ToString();
-                    string message = $"Received Linked {{#FA8072}}{trap_name}{{#}} from {{#FAFAD2}}{bouncedPacket.Data["source"].ToString()}{{#}}.";
 
-                    Items.Traps.TrapType type = Items.Traps.TrapManager.TrapLinkNames[trap_name];
-
-                    if (Items.Traps.TrapManager.EnabledTraps[(int)(type)] == 0)
+                    if (Items.Traps.TrapManager.TrapLinkNames.ContainsKey(trap_name))
                     {
-                        return;
-                    }
+                        string message = $"Received Linked {{#FA8072}}{trap_name}{{#}} from {{#FAFAD2}}{bouncedPacket.Data["source"].ToString()}{{#}}.";
 
-                    Items.Traps.TrapManager.Instance.SetPriorityTrap(type, message);
+                        Items.Traps.TrapType type = Items.Traps.TrapManager.TrapLinkNames[trap_name];
+
+                        if (Items.Traps.TrapManager.EnabledTraps[(int)(type)] == 0)
+                        {
+                            return;
+                        }
+
+                        Items.Traps.TrapManager.Instance.SetPriorityTrap(type, message);
+                    }
                 }
             }
             else if (packet.PacketType == ArchipelagoPacketType.Retrieved)
