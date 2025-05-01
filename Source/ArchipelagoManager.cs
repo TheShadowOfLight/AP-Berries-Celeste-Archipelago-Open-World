@@ -90,6 +90,8 @@ namespace Celeste.Mod.Celeste_Multiworld
         public int ServerItemsRcv = -1;
         private bool ItemRcvCallbackSet = false;
 
+        public string StoredRoom = "";
+
         #region Slot Data
         public int StrawberriesRequired { get; set; }
         public bool DeathLinkActive { get; set; }
@@ -133,6 +135,13 @@ namespace Celeste.Mod.Celeste_Multiworld
                     CheckReceivedItemQueue();
                     CheckLocationsToSend();
                     HandleCollectedLocations();
+
+                    Level level = (Monocle.Engine.Scene as Level);
+
+                    if (level == null)
+                    {
+                        this.SetRoomStorage("");
+                    }
                 }
                 catch (ArchipelagoSocketClosedException)
                 {
@@ -290,6 +299,7 @@ namespace Celeste.Mod.Celeste_Multiworld
 
             this.GoalSent = false;
             this.ServerItemsRcv = -1;
+            this.StoredRoom = "";
             this.DeathsCounted = 0;
             this.ItemQueue.Clear();
 
@@ -1071,6 +1081,19 @@ namespace Celeste.Mod.Celeste_Multiworld
             }
         }
 
+        public void Set(string key, string value)
+        {
+            try
+            {
+                var token = JToken.FromObject(value);
+                _session.DataStorage[key] = token;
+            }
+            catch (ArchipelagoSocketClosedException)
+            {
+                Disconnect();
+            }
+        }
+
         public void AddItemsRcvCallback(string key, Action<int> callback)
         {
             if (!ItemRcvCallbackSet)
@@ -1086,6 +1109,16 @@ namespace Celeste.Mod.Celeste_Multiworld
         public void ItemsRcvUpdated(int newItemsRcv)
         {
             this.ServerItemsRcv = newItemsRcv;
+        }
+
+        public void SetRoomStorage(string newRoom)
+        {
+            if (newRoom != this.StoredRoom)
+            {
+                this.StoredRoom = newRoom;
+                this.Set($"Celeste_Open_Room_{_session.Players.GetPlayerName(this.Slot)}", newRoom);
+                Logger.Verbose("AP", $"Set Celeste_Open_Room_{_session.Players.GetPlayerName(this.Slot)} to {newRoom}");
+            }
         }
 
         private void OnPacketReceived(ArchipelagoPacketBase packet)

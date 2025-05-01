@@ -83,6 +83,8 @@ namespace Celeste.Mod.Celeste_Multiworld.General
                 string AP_ID = $"{SaveData.Instance.CurrentSession_Safe.Area.ID}_{(int)SaveData.Instance.CurrentSession_Safe.Area.Mode}_{SaveData.Instance.CurrentSession_Safe.Level}";
                 Items.Traps.TrapManager.Instance.AddScreenToActiveTraps(AP_ID);
 
+                ArchipelagoManager.Instance.SetRoomStorage(AP_ID);
+
                 if (ArchipelagoManager.Instance.Roomsanity)
                 {
                     Celeste_MultiworldModule.SaveData.RoomLocations.Add(AP_ID);
