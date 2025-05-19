@@ -65,6 +65,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Locations
             if (!areaModeStats.Strawberries.Contains(strawberry))
             {
                 areaModeStats.Strawberries.Add(strawberry);
+                areaModeStats.TotalStrawberries += 1;
             }
             Stats.Increment(golden ? Stat.GOLDBERRIES : Stat.BERRIES, 1);
         }
