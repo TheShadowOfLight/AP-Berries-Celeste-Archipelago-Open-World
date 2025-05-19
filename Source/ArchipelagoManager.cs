@@ -999,8 +999,10 @@ namespace Celeste.Mod.Celeste_Multiworld
                     string[] level_EntityID = area_mode_levelEntityID[2].Split(":");
                     int ID = Int32.Parse(level_EntityID[1]);
 
-                    SaveData.Instance.Areas_Safe[area].Modes[mode].TotalStrawberries += 1;
-                    SaveData.Instance.Areas_Safe[area].Modes[mode].Strawberries.Add(new EntityID(level_EntityID[0], ID));
+                    if (SaveData.Instance.Areas_Safe[area].Modes[mode].Strawberries.Add(new EntityID(level_EntityID[0], ID)))
+                    {
+                        SaveData.Instance.Areas_Safe[area].Modes[mode].TotalStrawberries += 1;
+                    }
                 }
 
                 if (Locations.APLocationData.BinocularsAPToID.ContainsKey(newLoc))
