@@ -70,7 +70,7 @@ namespace Celeste.Mod.Celeste_Multiworld.General
 
             if (ArchipelagoManager.Instance.DeathLinkData != null)
             {
-                if (self.InControl && !self.Dead)
+                if (self.InControl && !self.Dead && !(self.Scene as Level).InCredits)
                 {
                     self.Die(Vector2.Zero, true, false);
 

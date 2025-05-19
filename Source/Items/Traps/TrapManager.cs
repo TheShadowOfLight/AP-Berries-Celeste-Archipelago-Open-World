@@ -306,6 +306,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Items.Traps
             { "Ghost",              TrapType.Invisible },
             { "Fire Trap",          TrapType.Fast },
             { "Jump Trap",          TrapType.Hiccup },
+            { "Animal Bonus Trap",  TrapType.Literature },
         };
         public static Dictionary<int, int> EnabledTraps = new Dictionary<int, int>();
 
@@ -587,6 +588,11 @@ namespace Celeste.Mod.Celeste_Multiworld.Items.Traps
                 }
                 case TrapType.Stun:
                 {
+                    if (level.InCredits)
+                    {
+                        return false;
+                    }
+
                     break;
                 }
                 case TrapType.Invisible:
@@ -623,10 +629,20 @@ namespace Celeste.Mod.Celeste_Multiworld.Items.Traps
                 }
                 case TrapType.Ice:
                 {
+                    if (level.InCredits)
+                    {
+                        return false;
+                    }
+
                     break;
                 }
                 case TrapType.Reverse:
                 {
+                    if (level.InCredits)
+                    {
+                        return false;
+                    }
+
                     break;
                 }
                 case TrapType.Screen_Flip:
@@ -644,10 +660,20 @@ namespace Celeste.Mod.Celeste_Multiworld.Items.Traps
                 }
                 case TrapType.Hiccup:
                 {
+                    if (level.InCredits)
+                    {
+                        return false;
+                    }
+
                     break;
                 }
                 case TrapType.Zoom:
                 {
+                    if (level.InCredits)
+                    {
+                        return false;
+                    }
+
                     break;
                 }
             }
