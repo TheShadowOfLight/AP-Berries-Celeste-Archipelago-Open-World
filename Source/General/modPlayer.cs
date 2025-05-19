@@ -92,9 +92,7 @@ namespace Celeste.Mod.Celeste_Multiworld.General
             }
             else if (!self.InControl)
             {
-                string AP_ID = $"{SaveData.Instance.CurrentSession_Safe.Area.ID}_{(int)SaveData.Instance.CurrentSession_Safe.Area.Mode}_{SaveData.Instance.CurrentSession_Safe.Level}";
-
-                if (AP_ID == "7_0_credits-summit")
+                if (SaveData.Instance.CurrentSession_Safe.Area.ID == 8 && (self.Scene as Level).Completed)
                 {
                     ArchipelagoManager.Instance.UpdateGameStatus(Archipelago.MultiClient.Net.Enums.ArchipelagoClientState.ClientGoal);
                 }
