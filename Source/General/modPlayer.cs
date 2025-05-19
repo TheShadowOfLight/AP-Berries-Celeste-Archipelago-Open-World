@@ -63,9 +63,9 @@ namespace Celeste.Mod.Celeste_Multiworld.General
             {
                 self.Sprite.HairCount = 0;
             }
-            else if ((modPlayer.HairLength != 4 || self.Sprite.HairCount != modPlayer.HairLength) && self.Sprite != null)
+            else if (self.Sprite != null)
             {
-                self.Sprite.HairCount = modPlayer.HairLength;
+                self.Sprite.HairCount = self.StateMachine.state == 19 ? (int)(modPlayer.HairLength * 1.75f) : modPlayer.HairLength;
             }
 
             if (ArchipelagoManager.Instance.DeathLinkData != null)
