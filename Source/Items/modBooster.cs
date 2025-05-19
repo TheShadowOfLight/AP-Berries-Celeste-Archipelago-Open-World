@@ -42,6 +42,9 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
         {
             orig(self);
 
+            self.Ch9HubBooster = false;
+            self.Ch9HubTransition = false;
+
             if (HaveReceived(self.red ? BoosterColor.Red : BoosterColor.Blue))
             {
                 self.Collidable = true;
