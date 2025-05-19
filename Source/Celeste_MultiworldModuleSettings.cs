@@ -21,7 +21,7 @@ public class Celeste_MultiworldModuleSettings : EverestModuleSettings
         Progression,
         All
     }
-    public ItemReceiveStyle ItemReceiveMessages { get; set; } = ItemReceiveStyle.Non_Strawberry_Progression;
+    public ItemReceiveStyle ItemReceiveMessages { get; set; } = ItemReceiveStyle.All;
 
     public enum ItemSendStyle
     {
