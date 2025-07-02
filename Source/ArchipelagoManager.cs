@@ -654,7 +654,7 @@ namespace Celeste.Mod.Celeste_Multiworld
 
         public void CheckReceivedItemQueue()
         {
-            if (SaveData.Instance == null || Celeste_MultiworldModule.SaveData == null)
+            if (this.Slot != -1 || SaveData.Instance == null || Celeste_MultiworldModule.SaveData == null)
             {
                 return;
             }
@@ -1115,7 +1115,7 @@ namespace Celeste.Mod.Celeste_Multiworld
 
         public void SetRoomStorage(string newRoom)
         {
-            if (newRoom != this.StoredRoom)
+            if (this.Slot != -1 && newRoom != this.StoredRoom)
             {
                 this.StoredRoom = newRoom;
                 this.Set($"Celeste_Open_Room_{_session.Players.GetPlayerName(this.Slot)}", newRoom);
@@ -1125,6 +1125,11 @@ namespace Celeste.Mod.Celeste_Multiworld
 
         private void OnPacketReceived(ArchipelagoPacketBase packet)
         {
+            if (this.Slot != -1)
+            {
+                return;
+            }
+
             if (packet.PacketType == ArchipelagoPacketType.Bounced)
             {
                 BouncedPacket bouncedPacket = packet as BouncedPacket;
