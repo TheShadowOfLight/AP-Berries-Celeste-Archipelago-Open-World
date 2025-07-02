@@ -659,7 +659,7 @@ namespace Celeste.Mod.Celeste_Multiworld
 
         public void CheckReceivedItemQueue()
         {
-            if (this.Slot != -1 || SaveData.Instance == null || Celeste_MultiworldModule.SaveData == null)
+            if (this.Slot == -1 || SaveData.Instance == null || Celeste_MultiworldModule.SaveData == null)
             {
                 return;
             }
@@ -1130,7 +1130,7 @@ namespace Celeste.Mod.Celeste_Multiworld
 
         private void OnPacketReceived(ArchipelagoPacketBase packet)
         {
-            if (this.Slot != -1)
+            if (this.Slot == -1)
             {
                 return;
             }
