@@ -225,6 +225,11 @@ namespace Celeste.Mod.Celeste_Multiworld
                 return new("Mod Version Too Old");
             }
 
+            int apworld_major = apworldVersion / 10000;
+            int apworld_minor = (apworldVersion / 100) % 100;
+            int apworld_bugfix = apworldVersion % 100;
+            Monocle.Engine.Commands.Log($"Connected to APWorld v{apworld_major}.{apworld_minor}.{apworld_bugfix}.", M_Color.Green);
+
             int hairLengthInt = Convert.ToInt32(((LoginSuccessful)result).SlotData.TryGetValue("madeline_hair_length", out value) ? value : 4);
             General.modPlayer.HairLength = hairLengthInt;
             int normalHairInt = Convert.ToInt32(((LoginSuccessful)result).SlotData.TryGetValue("madeline_one_dash_hair_color", out value) ? value : 0xdb2c00);
