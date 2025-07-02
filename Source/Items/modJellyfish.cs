@@ -31,7 +31,7 @@ namespace Celeste.Mod.Celeste_Multiworld.Items
                 self.sprite.Color.A = (byte)(0.3f * 255.0f);
                 self.Hold.cannotHoldTimer = 1.0f;
             }
-            else
+            else if (!self.destroyed)
             {
                 self.Collidable = true;
                 self.sprite.Color.R = (byte)255;
