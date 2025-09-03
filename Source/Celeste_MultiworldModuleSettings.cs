@@ -34,5 +34,6 @@ public class Celeste_MultiworldModuleSettings : EverestModuleSettings
 
     public bool ChatMessages { get; set; } = true;
     public bool ServerMessages { get; set; } = true;
+    public bool RoomPopups { get; set; } = true;
     #endregion
 }

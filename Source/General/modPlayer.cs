@@ -9,6 +9,59 @@ using Celeste.Mod.Celeste_Multiworld.UI;
 
 namespace Celeste.Mod.Celeste_Multiworld.General
 {
+
+    public class RoomDisplay : Monocle.Entity
+    {
+        public static string CurrentRoom = "";
+        public static int RoomDisplayTimer = 0;
+
+        public RoomDisplay()
+        {
+            base.Y = 196f;
+            base.Depth = -101;
+            base.Tag = Tags.HUD | Tags.Global | Tags.PauseUpdate | Tags.TransitionUpdate;
+        }
+
+        public override void Render()
+        {
+            if (!Celeste_MultiworldModule.Settings.RoomPopups)
+            {
+                return;
+            }
+
+            if (SaveData.Instance == null || SaveData.Instance.CurrentSession_Safe == null)
+            {
+                return;
+            }
+
+            if (SaveData.Instance.CurrentSession_Safe.Level != CurrentRoom && SaveData.Instance.CurrentSession_Safe.Level != "")
+            {
+                CurrentRoom = SaveData.Instance.CurrentSession_Safe.Level;
+
+                RoomDisplayTimer = 180;
+            }
+
+            if (RoomDisplayTimer >= 0)
+            {
+                float alpha = 1.0f;
+
+                if (RoomDisplayTimer > 150)
+                {
+                    alpha = (float)(180.0f - RoomDisplayTimer) / 30.0f;
+                }
+                else if (RoomDisplayTimer < 30)
+                {
+                    alpha = (float)(RoomDisplayTimer) / 30.0f;
+                }
+
+                Color TextColor = new Color(0.96078f, 0.25882f, 0.78431f, alpha);
+
+                ActiveFont.Draw($"Room: {CurrentRoom}", new Vector2(50f, 1030f), new Vector2(0.0f, 0.5f), Vector2.One, TextColor, 5.0f, new Color(0.0f, 0.0f, 0.0f, alpha), 0.0f, new Color(1.0f, 0.0f, 0.0f, 0.0f));
+                RoomDisplayTimer--;
+            }
+        }
+    }
+
     internal class modPlayer
     {
         public static int HairLength = 4;
@@ -97,6 +150,14 @@ namespace Celeste.Mod.Celeste_Multiworld.General
                     ArchipelagoManager.Instance.UpdateGameStatus(Archipelago.MultiClient.Net.Enums.ArchipelagoClientState.ClientGoal);
                 }
             }
+
+            if ($"{SaveData.Instance.CurrentSession_Safe.Area.ID}_{(int)SaveData.Instance.CurrentSession_Safe.Area.Mode}_{SaveData.Instance.CurrentSession_Safe.Level}" == "10_0_f-door")
+            {
+                if (self.Position.X < 18980)
+                {
+                    self.Position.X = 18980;
+                }
+            }
         }
 
         private static void modPlayerSeeker_Update(On.Celeste.PlayerSeeker.orig_Update orig, PlayerSeeker self)
@@ -153,6 +214,10 @@ namespace Celeste.Mod.Celeste_Multiworld.General
             if (ArchipelagoManager.Instance.DeathLinkActive && self.Entities.FindFirst<DeathDisplay>() == null)
             {
                 self.Entities.Add(new DeathDisplay());
+            }
+            if (self.Entities.FindFirst<RoomDisplay>() == null)
+            {
+                self.Entities.Add(new RoomDisplay());
             }
 
             self.SaveQuitDisabled = true;

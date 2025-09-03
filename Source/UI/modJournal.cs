@@ -105,7 +105,7 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
             On.Celeste.OuiJournalGlobal.Redraw -= modOuiJournalGlobal_Redraw;
         }
 
-        private System.Collections.IEnumerator modOuiJournal_Enter(On.Celeste.OuiJournal.orig_Enter orig, OuiJournal self, Oui from)
+        private static System.Collections.IEnumerator modOuiJournal_Enter(On.Celeste.OuiJournal.orig_Enter orig, OuiJournal self, Oui from)
         {
             yield return orig(self, from);
 
@@ -759,7 +759,7 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
             yield break;
         }
 
-        private void modOuiJournalGlobal_ctor(On.Celeste.OuiJournalGlobal.orig_ctor orig, OuiJournalGlobal self, OuiJournal journal)
+        private static void modOuiJournalGlobal_ctor(On.Celeste.OuiJournalGlobal.orig_ctor orig, OuiJournalGlobal self, OuiJournal journal)
         {
             self.PageTexture = "page";
             self.table = new OuiJournalPage.Table().AddColumn(new OuiJournalPage.TextCell("RASPBERRIES", new Vector2(0f, 0.5f), 1f, Color.Black * 0.7f, 0f, false));
@@ -771,7 +771,7 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
             Monocle.Draw.SpriteBatch.End();
         }
 
-        private void modOuiJournalGlobal_Redraw(On.Celeste.OuiJournalGlobal.orig_Redraw orig, OuiJournalGlobal self, Monocle.VirtualRenderTarget buffer)
+        private static void modOuiJournalGlobal_Redraw(On.Celeste.OuiJournalGlobal.orig_Redraw orig, OuiJournalGlobal self, Monocle.VirtualRenderTarget buffer)
         {
             orig(self, buffer);
 
