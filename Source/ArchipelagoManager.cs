@@ -704,6 +704,11 @@ namespace Celeste.Mod.Celeste_Multiworld
                         Celeste_MultiworldModule.SaveData.Strawberries += 1;
                         break;
                     }
+                    case 0xCA10001:
+                    {
+                        Celeste_MultiworldModule.SaveData.Raspberries += 1;
+                        break;
+                    }
                     case 0xCA10010:
                     {
                         Celeste_MultiworldModule.SaveData.GoalItem = true;

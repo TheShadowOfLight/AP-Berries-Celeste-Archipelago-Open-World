@@ -83,20 +83,38 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
 
         public void Load()
         {
+            On.Celeste.OuiJournal.Enter += modOuiJournal_Enter;
             On.Celeste.OuiJournalProgress.ctor += modOuiJournalProgress_ctor;
             On.Celeste.OuiJournalSpeedrun.ctor += modOuiJournalSpeedrun_ctor;
             On.Celeste.OuiJournalDeaths.ctor += modOuiJournalDeaths_ctor;
             On.Celeste.OuiJournalPoem.ctor += modOuiJournalPoem_ctor;
             On.Celeste.OuiJournalPoem.Swap += modOuiJournalPoem_Swap;
+            On.Celeste.OuiJournalGlobal.ctor += modOuiJournalGlobal_ctor;
+            On.Celeste.OuiJournalGlobal.Redraw += modOuiJournalGlobal_Redraw;
         }
 
         public void Unload()
         {
+            On.Celeste.OuiJournal.Enter -= modOuiJournal_Enter;
             On.Celeste.OuiJournalProgress.ctor -= modOuiJournalProgress_ctor;
             On.Celeste.OuiJournalSpeedrun.ctor -= modOuiJournalSpeedrun_ctor;
             On.Celeste.OuiJournalDeaths.ctor -= modOuiJournalDeaths_ctor;
             On.Celeste.OuiJournalPoem.ctor -= modOuiJournalPoem_ctor;
             On.Celeste.OuiJournalPoem.Swap -= modOuiJournalPoem_Swap;
+            On.Celeste.OuiJournalGlobal.ctor -= modOuiJournalGlobal_ctor;
+            On.Celeste.OuiJournalGlobal.Redraw -= modOuiJournalGlobal_Redraw;
+        }
+
+        private System.Collections.IEnumerator modOuiJournal_Enter(On.Celeste.OuiJournal.orig_Enter orig, OuiJournal self, Oui from)
+        {
+            yield return orig(self, from);
+
+            if (self.Pages.Count == 5)
+            {
+                self.Pages.Add(new OuiJournalGlobal(self));
+            }
+
+            yield break;
         }
 
         private static void modOuiJournalProgress_ctor(On.Celeste.OuiJournalProgress.orig_ctor orig, OuiJournalProgress self, OuiJournal journal)
@@ -396,7 +414,16 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
             Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA12017, out haveBreaker);
             Celeste_MultiworldModule.SaveData.Interactables.TryGetValue(0xCA12023, out haveBird);
 
-            self.table.AddRow().Add(new OuiJournalPage.EmptyCell(64f));
+            self.table.AddRow()
+                .Add(new OuiJournalPage.EmptyCell(64f))
+                .Add(new OuiJournalPage.TextCell("Springs",                new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true))
+                .Add(new OuiJournalPage.TextCell("Traffic\nBlocks",        new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true))
+                .Add(new OuiJournalPage.TextCell("Dash\nRefills",          new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true))
+                .Add(new OuiJournalPage.TextCell("Pink\nCassette\nBlocks", new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true))
+                .Add(new OuiJournalPage.TextCell("Blue\nCassette\nBlocks", new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true))
+                .Add(new OuiJournalPage.TextCell("Dream\nBlocks",          new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true))
+                .Add(new OuiJournalPage.TextCell("Coins",                  new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true))
+                .Add(new OuiJournalPage.TextCell("Strawberry\nSeeds",      new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true));
 
             OuiJournalPage.Row row1 = self.table.AddRow()
                 .Add(new OuiJournalPage.EmptyCell(64f))
@@ -409,7 +436,15 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
                 .Add(new OuiJournalPage.IconsCell(haveCoins             ? "coin" : "coin_outline"))
                 .Add(new OuiJournalPage.IconsCell(haveSeeds             ? "seed" : "seed_outline"));
 
-            self.table.AddRow().Add(new OuiJournalPage.EmptyCell(64f));
+            self.table.AddRow()
+                .Add(new OuiJournalPage.EmptyCell(64f))
+                .Add(new OuiJournalPage.TextCell("Sinking\nPlatforms", new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true))
+                .Add(new OuiJournalPage.TextCell("Moving\nPlatforms",  new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true))
+                .Add(new OuiJournalPage.TextCell("Blue\nClouds",       new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true))
+                .Add(new OuiJournalPage.TextCell("Pink\nClouds",       new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true))
+                .Add(new OuiJournalPage.TextCell("Blue\nBoosters",     new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true))
+                .Add(new OuiJournalPage.TextCell("Move\nBlocks",       new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true))
+                .Add(new OuiJournalPage.TextCell("White\nBlock",       new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true));
 
             OuiJournalPage.Row row2 = self.table.AddRow()
                 .Add(new OuiJournalPage.EmptyCell(64f))
@@ -421,7 +456,14 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
                 .Add(new OuiJournalPage.IconsCell(haveMoveBlock   ? "move_block" : "move_block_outline"))
                 .Add(new OuiJournalPage.IconsCell(haveWhiteBlock  ? "white_block" : "white_block_outline"));
 
-            self.table.AddRow().Add(new OuiJournalPage.EmptyCell(64f));
+            self.table.AddRow()
+                .Add(new OuiJournalPage.EmptyCell(64f))
+                .Add(new OuiJournalPage.TextCell("Swap\nBlocks",   new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true))
+                .Add(new OuiJournalPage.TextCell("Red\nBoosters",  new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true))
+                .Add(new OuiJournalPage.TextCell("Dash\nSwitches", new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true))
+                .Add(new OuiJournalPage.TextCell("Seekers",        new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true))
+                .Add(new OuiJournalPage.TextCell("Theo\nCrystal",  new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true))
+                .Add(new OuiJournalPage.TextCell("Torches",        new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true));
 
             OuiJournalPage.Row row3 = self.table.AddRow()
                 .Add(new OuiJournalPage.EmptyCell(64f))
@@ -432,7 +474,12 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
                 .Add(new OuiJournalPage.IconsCell(haveTheo       ? "theo" : "theo_outline"))
                 .Add(new OuiJournalPage.IconsCell(haveTorches    ? "torch" : "torch_outline"));
 
-            self.table.AddRow().Add(new OuiJournalPage.EmptyCell(64f));
+            self.table.AddRow()
+                .Add(new OuiJournalPage.EmptyCell(64f))
+                .Add(new OuiJournalPage.TextCell("Feathers",           new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true))
+                .Add(new OuiJournalPage.TextCell("Bumpers",            new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true))
+                .Add(new OuiJournalPage.TextCell("Kevins",             new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true))
+                .Add(new OuiJournalPage.TextCell("Badeline\nBoosters", new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true));
 
             OuiJournalPage.Row row6 = self.table.AddRow()
                 .Add(new OuiJournalPage.EmptyCell(64f))
@@ -443,7 +490,11 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
 
             if (ArchipelagoManager.Instance.ActiveLevels.Contains("9a"))
             {
-                self.table.AddRow().Add(new OuiJournalPage.EmptyCell(64f));
+                self.table.AddRow()
+                    .Add(new OuiJournalPage.EmptyCell(64f))
+                    .Add(new OuiJournalPage.TextCell("Core\nBlocks",         new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true))
+                    .Add(new OuiJournalPage.TextCell("Core\nToggles",        new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true))
+                    .Add(new OuiJournalPage.TextCell("Fire\nand Ice\nBalls", new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true));
 
                 OuiJournalPage.Row row8 = self.table.AddRow()
                     .Add(new OuiJournalPage.EmptyCell(64f))
@@ -454,7 +505,19 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
 
             if (ArchipelagoManager.Instance.ActiveLevels.Contains("10a"))
             {
-                self.table.AddRow().Add(new OuiJournalPage.EmptyCell(64f));
+                OuiJournalPage.Row row8_5 = self.table.AddRow()
+                    .Add(new OuiJournalPage.EmptyCell(64f))
+                    .Add(new OuiJournalPage.TextCell("Double\nDash\nRefills", new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true))
+                    .Add(new OuiJournalPage.TextCell("Pufferfish",            new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true))
+                    .Add(new OuiJournalPage.TextCell("Jellyfish",             new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true))
+                    .Add(new OuiJournalPage.TextCell("Breaker\nBoxes",        new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true));
+
+                if (ArchipelagoManager.Instance.ActiveLevels.Contains("10b"))
+                {
+                    row8_5.Add(new OuiJournalPage.TextCell("Bird", new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true))
+                        .Add(new OuiJournalPage.TextCell("Yellow\nCassette\nBlocks", new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true))
+                        .Add(new OuiJournalPage.TextCell("Green\nCassette\nBlocks",  new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true));
+                }
 
                 OuiJournalPage.Row row9 = self.table.AddRow()
                     .Add(new OuiJournalPage.EmptyCell(64f))
@@ -488,7 +551,13 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
                 .AddColumn(new OuiJournalPage.EmptyCell(64f))
                 .AddColumn(new OuiJournalPage.EmptyCell(64f));
 
-            self.table.AddRow().Add(new OuiJournalPage.EmptyCell(64f));
+            self.table.AddRow()
+                .Add(new OuiJournalPage.EmptyCell(64f))
+                .Add(new OuiJournalPage.TextCell("Front\nDoor Key",         new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true))
+                .Add(new OuiJournalPage.TextCell("Hallway\nKey 1",          new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true))
+                .Add(new OuiJournalPage.TextCell("Hallway\nKey 2",          new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true))
+                .Add(new OuiJournalPage.TextCell("Huge\nMess Key",          new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true))
+                .Add(new OuiJournalPage.TextCell("Presidential\nSuite Key", new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true));
 
             bool have_3_1 = false;
             bool have_3_2 = false;
@@ -511,7 +580,13 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
                 .Add(new OuiJournalPage.IconsCell(have_3_5 ? "key" : "key_outline"))
                 .Add(new OuiJournalPage.EmptyCell(64f));
 
-            self.table.AddRow().Add(new OuiJournalPage.EmptyCell(64f));
+            self.table.AddRow()
+                .Add(new OuiJournalPage.EmptyCell(64f))
+                .Add(new OuiJournalPage.TextCell("Entrance\nKey", new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true))
+                .Add(new OuiJournalPage.TextCell("Depths\nKey",   new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true))
+                .Add(new OuiJournalPage.TextCell("Search\nKey 1", new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true))
+                .Add(new OuiJournalPage.TextCell("Search\nKey 2", new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true))
+                .Add(new OuiJournalPage.TextCell("Search\nKey 3", new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true));
 
             bool have_5_1 = false;
             bool have_5_2 = false;
@@ -534,10 +609,13 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
                 .Add(new OuiJournalPage.IconsCell(have_5_5 ? "key" : "key_outline"))
                 .Add(new OuiJournalPage.EmptyCell(64f));
 
-            self.table.AddRow().Add(new OuiJournalPage.EmptyCell(64f));
-
             if (ArchipelagoManager.Instance.ActiveLevels.Contains("5b"))
             {
+                self.table.AddRow()
+                    .Add(new OuiJournalPage.EmptyCell(64f))
+                    .Add(new OuiJournalPage.TextCell("Central\nChamber\nKey 1", new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true))
+                    .Add(new OuiJournalPage.TextCell("Central\nChamber\nKey 2", new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true));
+
                 bool have_5b_1 = false;
                 bool have_5b_2 = false;
 
@@ -552,9 +630,11 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
                     .Add(new OuiJournalPage.EmptyCell(64f))
                     .Add(new OuiJournalPage.EmptyCell(64f))
                     .Add(new OuiJournalPage.EmptyCell(64f));
-
-                self.table.AddRow().Add(new OuiJournalPage.EmptyCell(64f));
             }
+
+            self.table.AddRow()
+                .Add(new OuiJournalPage.EmptyCell(64f))
+                .Add(new OuiJournalPage.TextCell("2500M\nKey", new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true));
 
             bool have_7_1 = false;
 
@@ -596,7 +676,13 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
 
             if (ArchipelagoManager.Instance.ActiveLevels.Contains("10a"))
             {
-                self.table.AddRow().Add(new OuiJournalPage.EmptyCell(64f));
+                self.table.AddRow()
+                    .Add(new OuiJournalPage.EmptyCell(64f))
+                    .Add(new OuiJournalPage.TextCell("Power\nSource\nKey 1", new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true))
+                    .Add(new OuiJournalPage.TextCell("Power\nSource\nKey 2", new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true))
+                    .Add(new OuiJournalPage.TextCell("Power\nSource\nKey 3", new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true))
+                    .Add(new OuiJournalPage.TextCell("Power\nSource\nKey 4", new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true))
+                    .Add(new OuiJournalPage.TextCell("Power\nSource\nKey 5", new Vector2(0.5f, 0.5f), 0.32f, Color.Black * 0.9f, 64f, true));
 
                 bool have_10_1 = false;
                 bool have_10_2 = false;
@@ -671,6 +757,30 @@ namespace Celeste.Mod.Celeste_Multiworld.UI
             yield return self.tween.Wait();
             self.swapping = false;
             yield break;
+        }
+
+        private void modOuiJournalGlobal_ctor(On.Celeste.OuiJournalGlobal.orig_ctor orig, OuiJournalGlobal self, OuiJournal journal)
+        {
+            self.PageTexture = "page";
+            self.table = new OuiJournalPage.Table().AddColumn(new OuiJournalPage.TextCell("RASPBERRIES", new Vector2(0f, 0.5f), 1f, Color.Black * 0.7f, 0f, false));
+
+            Monocle.Draw.SpriteBatch.Begin();
+            MTN.Journal["strawberry"].DrawCentered(new Vector2(100, 150));
+            MTN.Journal["strawberry"].DrawCentered(new Vector2(1500, 750));
+            MTN.Journal["raspberry"].DrawCentered(new Vector2(Monocle.Calc.Random.Next(100, 1600), Monocle.Calc.Random.Next(150, 750)));
+            Monocle.Draw.SpriteBatch.End();
+        }
+
+        private void modOuiJournalGlobal_Redraw(On.Celeste.OuiJournalGlobal.orig_Redraw orig, OuiJournalGlobal self, Monocle.VirtualRenderTarget buffer)
+        {
+            orig(self, buffer);
+
+            Monocle.Draw.SpriteBatch.Begin();
+            for (int i = 0; i < Celeste_MultiworldModule.SaveData.Raspberries; i++)
+            {
+                MTN.Journal["raspberry"].DrawCentered(new Vector2(Monocle.Calc.Random.Next(100, 1500), Monocle.Calc.Random.Next(150, 800)));
+            }
+            Monocle.Draw.SpriteBatch.End();
         }
     }
 }
