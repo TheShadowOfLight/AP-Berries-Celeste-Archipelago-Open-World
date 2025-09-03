@@ -558,6 +558,11 @@ namespace Celeste.Mod.Celeste_Multiworld.Items.Traps
                 return false;
             }
 
+            if (SaveData.Instance.CurrentSession_Safe.Level == "void")
+            {
+                return false;
+            }
+
             Player player = level.Entities.FindFirst<Player>();
 
             if (player == null)
