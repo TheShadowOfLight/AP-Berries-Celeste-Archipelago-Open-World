@@ -1,6 +1,6 @@
 - Name: Archipelago Open World
-  Version: 1.0.4
+  Version: 1.0.5
   DLL: bin/Celeste_Multiworld.dll
   Dependencies:
     - Name: EverestCore
-      Version: 1.4673.0
+      Version: 1.5752.0
